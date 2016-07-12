@@ -3,10 +3,10 @@
     <head>
         <!-- Basic -->
         <meta http-equiv="content-type" content="text/html; charset=utf-8" /> <!-- Meta -->
-        <script src="../js/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
-        <link href="../css/style.css" rel="stylesheet" type="text/css"> <!-- CSS -->
-        <script>$(function(){$("#footer").load("../footer.html");});</script> <!-- Footer -->
-        <link rel="shortcut icon" href="../img/favicon.png" /> <!-- Favicon -->
+        <script src="js/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
+        <link href="css/style.css" rel="stylesheet" type="text/css"> <!-- CSS -->
+        <!-- <link rel="shortcut icon" href="../img/favicon.png" /> -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap -->
 
         <!-- Advanced -->
         <!-- JQuery -->
@@ -16,13 +16,43 @@
         <script src="../jquery-ui/scripts/jquery-ui.min.js" type="text/javascript" defer></script> -->
 
         <!-- Title -->
-        <title></title>
+        <title>Second Hand Exchange Platform</title>
     </head>
 
     <body>
-        <h1><!-- h1 --></h1>
+        <h1>TextBook Exchange</h1>
         <!-- Body -->
 
-        <section id="footer"></section>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">BUY!</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Sign Up</a></li>
+                    <li><a href="#">Sign In</a></li>
+                    <li><a href="#">Sign Out</a></li>
+                    <li><a href="#">My Profile</a></li>
+                    <li><a href="#">Search Item</a></li>
+                    <li><a href="#">Recommand Item</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Feedback</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <section class="search">
+            <input type="text" name="bookname" placeholder="Book Name">
+            <input type="text" name="author" placeholder="Author">
+            <input type="text" name="publisher" placeholder="Pubisher">
+            <input type="number" name="ISBN" placeholder="ISBN">
+            <input type="text" name="course" placeholder="course">
+            <button>Search!</button>
+
+        </section>
+        <footer></footer>
     </body>
+
 </html>
