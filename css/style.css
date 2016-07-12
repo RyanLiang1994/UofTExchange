@@ -7,7 +7,7 @@ body {
     font-family: 'Orbitron', sans-serif;
     font-size: 60%;
     margin: 20px;
-    padding-top: 150px;
+    padding-top: 120px;
 }
 
 h1.header {
@@ -79,7 +79,7 @@ button#signin, input#namefield, input#passwordfield {
 
 
 section#home {
-	padding-top:100px;
+
 }
 
 footer {
