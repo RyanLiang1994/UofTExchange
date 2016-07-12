@@ -130,6 +130,24 @@ footer {
 		font-size: 100%;
 	}
 
+	button#sign {
+		width: 160px;
+		margin-left: 370px;
+	}
+
+	input#signupname, input#signuppassword, input#signupconfirm {
+		width: 500px;
+	}
+
+	form.signupform {
+		margin: 100px;
+		margin-top: 50px;
+	}
+
+	label.label {
+		width: 150px;
+		font-size: 150%;
+	}
 
 }
 
