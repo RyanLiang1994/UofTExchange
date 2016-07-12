@@ -77,8 +77,9 @@ button#signin, input#namefield, input#passwordfield {
 	float: right;
 }
 
+
 section#home {
-	
+	padding-top:100px;
 }
 
 footer {

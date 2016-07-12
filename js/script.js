@@ -1,11 +1,4 @@
 $(document).ready(function() {
-    // $('#signup').hide();
-    // $('#signout').hide();
-    // $('#myprofile').hide();
-    // $('#search').hide();
-    // $('#recommend').hide();
-    // $('#help').hide();
-    // $('#feedback').hide();
     $('section').hide();
     $('#home').show();
 });
