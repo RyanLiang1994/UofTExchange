@@ -6,7 +6,7 @@
 
         <script src="js/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
         <link href="css/style.css" rel="stylesheet" type="text/css">
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap -->
+
 
         <script src="js/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
         <link href="css/style.css" rel="stylesheet" type="text/css"> <!-- CSS -->
@@ -25,27 +25,24 @@
     </head>
 
     <body>
-        <h1>TextBook Exchange</h1>
+        <h1 class="header">TextBook Exchange</h1>
 
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">BUY BUY BUY!</a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <li id="btnHome" class="active"><a href="#">Home</a></li>
-                    <li id="btnSignup"><a href="#">Sign Up</a></li>
-                    <li id="btnSignout"><a href="#">Sign Out</a></li>
-                    <li id="btnMyProfile"><a href="#">My Profile</a></li>
-                    <li id="btnSearch"><a href="#">Search Item</a></li>
-                    <li id="btnRecommend"><a href="#">Recommended Items</a></li>
-                    <li id="btnHelp"><a href="#">Help</a></li>
-                    <li id="btnFeedback"><a href="#">Feedback</a></li>
-                </ul>
-                <input type="text" name="username" placeholder="Username">
-                <input type="password" name="password" placeholder="Password">
-                <button id="signin">Sign In</button>
-            </div>
+        <nav class="navbar">
+            <ul class="nav_list">
+                <li id="btnHome"><a href="#">Home</a></li>
+                <li id="btnSignup"><a href="#">Sign Up</a></li>
+
+                <li id="btnSignout"><a href="#">Sign Out</a></li>
+                <li id="btnMyProfile"><a href="#">My Profile</a></li>
+                <li id="btnSearch"><a href="#">Search Item</a></li>
+                <li id="btnRecommend"><a href="#">Recommended Items</a></li>
+                <li id="btnHelp"><a href="#">Help</a></li>
+                <li id="btnFeedback"><a href="#">Feedback</a></li>
+            </ul>
+            <input type="text" name="username" placeholder="Username" id="namefield">
+            <input type="password" name="password" placeholder="Password" id="passwordfield">
+            <button id="signin">Sign In</button>
+
         </nav>
 
         <section id="home">
