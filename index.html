@@ -5,17 +5,17 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" /> <!-- Meta -->
 
         <script src="js/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
-        <link href="css/style.css" rel="stylesheet" type="text/css"> <!-- CSS -->
-        <!-- <link rel="shortcut icon" href="../img/favicon.png" /> -->
+        <link href="css/style.css" rel="stylesheet" type="text/css">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap -->
 
-        <script src="../js/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
-        <link href="../css/style.css" rel="stylesheet" type="text/css"> <!-- CSS -->
-        <link rel="shortcut icon" href="../img/favicon.png" /> <!-- Favicon -->
+        <script src="js/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
+        <link href="css/style.css" rel="stylesheet" type="text/css"> <!-- CSS -->
+        <!-- <link rel="shortcut icon" href="../img/favicon.png" />  -->
+        <!-- Favicon -->
 
         <!-- Advanced -->
         <!-- JQuery -->
-        <!-- <script src="../js/jquery-2.2.4.min.js" type="text/javascript" defer></script> -->
+        <script src="js/jquery-2.2.4.min.js" type="text/javascript"></script>
         <!-- JQuery UI -->
         <!-- <link href="../jquery-ui/css/jquery-ui.css" type="text/css" rel="stylesheet">
         <script src="../jquery-ui/scripts/jquery-ui.min.js" type="text/javascript" defer></script> -->
@@ -36,11 +36,11 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
                     <li><a href="#">Sign Up</a></li>
-                    
+
                     <li><a href="#">Sign Out</a></li>
                     <li><a href="#">My Profile</a></li>
                     <li><a href="#">Search Item</a></li>
-                    <li><a href="#">Recommand Item</a></li>
+                    <li><a href="#">Recommended Items</a></li>
                     <li><a href="#">Help</a></li>
                     <li><a href="#">Feedback</a></li>
                 </ul>
@@ -50,7 +50,7 @@
             </div>
         </nav>
 
-        <section class="home">
+        <section id="home">
             <h2>A platform to search your textbook</h2>
             <h3>Convenient, fast, cheap and refundable.</h3>
             <h3>You can almost always find the textbook you want here.</h3>
@@ -63,7 +63,7 @@
                 Find the textbook by the filter and just click "Search!", you can find all the corresponding results.
             </article>
         </section>
-        <section class="search">
+        <section id="search">
             <input type="text" name="bookname" placeholder="Book Name">
             <input type="text" name="author" placeholder="Author">
             <input type="text" name="publisher" placeholder="Publisher">
@@ -72,7 +72,7 @@
             <button>Search!</button>
         </section>
 
-        <section class="signup">
+        <section id="signup">
             <input type="text" name="uname" required="true" placeholder="username">
             <input type="password" name="pword" required="true" placeholder="password">
             <input type="password" name="confirm" required="true" placeholder="confirm password">
