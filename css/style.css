@@ -7,9 +7,11 @@ body {
     font-family: 'Orbitron', sans-serif;
     font-size: 60%;
     margin: 20px;
+    padding-top: 150px;
 }
 
 h1.header {
+
 	position: fixed;
 	width: 100%;
 	top: 0;
@@ -18,37 +20,56 @@ h1.header {
 	padding: 30px;
 	background-color: white;
 	text-align: center;
+	z-index: 3;
 
 }
 
 nav.navbar {
+
 	position: fixed;
 	width: 100%;
+	top: 80px;
 	left: 0;
-	margin-top: 50px;
-	margin-bottom: 20px;
 	background-color: black;
+	z-index: 3;
+
 
 }
 
 ul.nav_list {
-	position: fixed;
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	padding-left: 30px;
 	list-style-type: none;
 }
 
-nav ul li {
+nav li {
 	position: relative;
 	display: inline-block;
+	float: left;
+	line-height: 36px;
 	text-align: center;
+	padding-left: 10px;
+	padding-right: 10px;
 	font-size: 150%;
-	padding-left: 15px;
+	
 
-	color: white;
+}
+
+a {
+	color: grey;
+}
+
+nav li:hover, a:hover {
+	background-color: #F5F3EE;
+	color: black;
 }
 
 li#btnMyProfile, li#btnSignout {
 	display: none;
 }
+
 button#signin, input#namefield, input#passwordfield {
     display: inline-block;
 	margin: 10px;
@@ -57,18 +78,32 @@ button#signin, input#namefield, input#passwordfield {
 }
 
 section#home {
-	padding-top:100px;
+	
 }
 
-a {
-	color: grey;
+footer {
+	
 }
+
+
+
+
 
 @media screen and (max-width: 1080px) {
 
 	nav ul li {
-		font-size: 120%;
+		font-size: 100%;
 	}
 
 
 }
+
+
+@media screen and (max-width: 768px) {
+
+	nav ul li {
+		font-size: 80%;
+	}
+}
+
+
