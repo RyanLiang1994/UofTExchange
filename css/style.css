@@ -46,7 +46,11 @@ nav ul li {
 	color: white;
 }
 
-#signin, #namefield, #passwordfield {
+li#btnMyProfile, li#btnSignout {
+	display: none;
+}
+
+button#signin, input#namefield, input#passwordfield {
     display: inline-block;
 	margin: 10px;
 	position: relative;
@@ -59,4 +63,13 @@ nav ul li {
 
 a {
 	color: grey;
+}
+
+@media screen and (max-width: 1080px) {
+
+	nav ul li {
+		font-size: 120%;
+	}
+
+
 }
