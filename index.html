@@ -71,10 +71,15 @@
         </section>
 
         <section id="signup">
-            <input type="text" name="uname" required="true" placeholder="username">
-            <input type="password" name="pword" required="true" placeholder="password">
-            <input type="password" name="confirm" required="true" placeholder="confirm password">
-            <button>Sign Up</button>
+            <form action="/signup" method="post" class="signupform">
+                <label class="label">Username</label>
+                <input type="text" name="uname" required="true" placeholder="username" id="signupname"><br>
+                <label class="label">Password</label>
+                <input type="password" name="pword" required="true" placeholder="password" id="signuppassword"><br>
+                <label class="label">Confirm Password</label>
+                <input type="password" name="confirm" required="true" placeholder="confirm password" id="signupconfirm"> <br>
+                <button id="sign">Sign Up</button>
+            </form>
         </section>
 
         <hr/>
