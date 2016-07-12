@@ -46,14 +46,14 @@ nav ul li {
 	color: white;
 }
 
-button#signin, input#namefield, input#passwordfield {
+#signin, #namefield, #passwordfield {
     display: inline-block;
 	margin: 10px;
 	position: relative;
 	float: right;
 }
 
-section#home {
+#home {
 	padding-top:100px;
 }
 
