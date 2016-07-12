@@ -26,7 +26,6 @@
 
     <body>
         <h1>TextBook Exchange</h1>
-        <!-- Body -->
 
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
@@ -34,15 +33,14 @@
                     <a class="navbar-brand" href="#">BUY BUY BUY!</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">Sign Up</a></li>
-
-                    <li><a href="#">Sign Out</a></li>
-                    <li><a href="#">My Profile</a></li>
-                    <li><a href="#">Search Item</a></li>
-                    <li><a href="#">Recommended Items</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Feedback</a></li>
+                    <li id="btnHome" class="active"><a href="#">Home</a></li>
+                    <li id="btnSignup"><a href="#">Sign Up</a></li>
+                    <li id="btnSignout"><a href="#">Sign Out</a></li>
+                    <li id="btnMyProfile"><a href="#">My Profile</a></li>
+                    <li id="btnSearch"><a href="#">Search Item</a></li>
+                    <li id="btnRecommend"><a href="#">Recommended Items</a></li>
+                    <li id="btnHelp"><a href="#">Help</a></li>
+                    <li id="btnFeedback"><a href="#">Feedback</a></li>
                 </ul>
                 <input type="text" name="username" placeholder="Username">
                 <input type="password" name="password" placeholder="Password">
@@ -63,6 +61,7 @@
                 Find the textbook by the filter and just click "Search!", you can find all the corresponding results.
             </article>
         </section>
+
         <section id="search">
             <input type="text" name="bookname" placeholder="Book Name">
             <input type="text" name="author" placeholder="Author">
@@ -78,8 +77,10 @@
             <input type="password" name="confirm" required="true" placeholder="confirm password">
             <button>Sign Up</button>
         </section>
-        <hr>
-        <footer class="footer">
+
+        <hr/>
+
+        <footer id="footer">
             <h4>Contact Us</h4>
             <dl>
                 <h3>
