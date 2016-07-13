@@ -28,9 +28,9 @@ $('#btnSearch').click(function() {
     $('#search').show();
 });
 
-$('#btnRecommend').click(function() {
+$('#btnExchangeCourse').click(function() {
     $('section').hide();
-    $('#recommend').show();
+    $('#exchangecourse').show();
 });
 
 $('#btnHelp').click(function() {
