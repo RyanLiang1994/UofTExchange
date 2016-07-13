@@ -25,7 +25,7 @@
     </head>
 
     <body>
-        <h1 class="header">TextBook Exchange</h1>
+        <h1 class="header">TextBook and Course Exchange</h1>
 
         <nav class="navbar">
             <ul class="nav_list">
@@ -35,7 +35,7 @@
                 <li id="btnSignout"><a href="#">Sign Out</a></li>
                 <li id="btnMyProfile"><a href="#">My Profile</a></li>
                 <li id="btnSearch"><a href="#">Search Item</a></li>
-                <li id="btnRecommend"><a href="#">Recommended Items</a></li>
+                <li id="btnRecommend"><a href="#">Exchange Course</a></li>
                 <li id="btnHelp"><a href="#">Help</a></li>
                 <li id="btnFeedback"><a href="#">Feedback</a></li>
             </ul>
@@ -94,6 +94,18 @@
                 <label class="label">Confirm Password</label>
                 <input type="password" name="confirm" required="true" placeholder="confirm password" id="signupconfirm"> <br>
                 <button id="sign">Sign Up</button>
+            </form>
+        </section>
+
+        <section id="exchangecourse">
+            <form action="/signup" method="post" class="courseexchangeform">
+                <label class="label">Department</label>
+                <input type="text" name="department" required="true" placeholder="Department" id="department"><br>
+                <label class="label">Course Code</label>
+                <input type="text" name="code" required="true" placeholder="Course Code" id="code"><br>
+                <label class="label">Section</label>
+                <input type="text" name="section" required="true" placeholder="Section" id="section"> <br>
+                <button id="searchCourse">Search Course</button>
             </form>
         </section>
 
