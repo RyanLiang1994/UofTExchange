@@ -108,10 +108,7 @@ button#sign, button#search {
 	text-align: center;
 }
 
-form.signupform {
-	margin: 100px;
-	margin-top: 50px;
-}
+
 label.label {
 	position: relative;
 	display: inline-block;

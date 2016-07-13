@@ -62,12 +62,19 @@
         </section>
 
         <section id="search">
-            <input type="text" name="bookname" placeholder="Book Name">
-            <input type="text" name="author" placeholder="Author">
-            <input type="text" name="publisher" placeholder="Publisher">
-            <input type="number" name="ISBN" placeholder="ISBN">
-            <input type="text" name="course" placeholder="course">
-            <button>Search!</button>
+            <form action="/signup" method="post" class="searchform">
+               <label class="label">Bookname: </label>
+                <input type="text" name="bookname" placeholder="Book Name" id="bookname"><br>
+                <label class="label">Author: </label>
+                <input type="text" name="author" placeholder="Author" id="author"><br>
+                <label class="label">Publisher: </label>
+                <input type="text" name="publisher" placeholder="Publisher" id="publisher"><br>
+                <label class="label">ISBN: </label>
+                <input type="Integer" name="ISBN" placeholder="ISBN" id="isbn"><br>
+                <label class="label">Course: </label>
+                <input type="text" name="course" placeholder="course" id="course"><br>
+                <button id="search">Search!</button>
+            </form>
         </section>
 
         <section id="recommend">
