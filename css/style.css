@@ -94,7 +94,7 @@ input#signupname, input#signuppassword, input#signupconfirm, input#bookname, inp
 	position: relative;
 	margin: 10px;
 	padding: 8px;
-	width: 700px;
+	width: 550px;
 	border: thin solid grey;
 	text-align: left;
 
@@ -115,7 +115,7 @@ form.signupform {
 label.label {
 	position: relative;
 	display: inline-block;
-	width: 280px;
+	width: 230px;
 	font-size: 200%;
 	padding: 20px;
 	text-align: right;
@@ -149,7 +149,7 @@ footer {
 	}
 
 	label.label {
-		width: 150px;
+		width: 100px;
 		font-size: 150%;
 	}
 
@@ -160,6 +160,10 @@ footer {
 
 	nav ul li {
 		font-size: 80%;
+	}
+
+	input#signupname, input#signuppassword, input#signupconfirm, input#bookname, input#author, input#publisher, input#isbn, input#course {
+		width: 300px;
 	}
 }
 
