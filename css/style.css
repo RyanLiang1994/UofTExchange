@@ -88,7 +88,7 @@ textarea {
 	height: 200px;
 }
 
-input#signupname, input#signuppassword, input#signupconfirm, input#bookname, input#author, input#publisher, input#isbn, input#course{
+section input{
 
 	display: inline-block;
 	position: relative;
@@ -100,7 +100,7 @@ input#signupname, input#signuppassword, input#signupconfirm, input#bookname, inp
 
 }
 
-button#sign, button#search {
+section button {
 	margin: 20px;
 	padding: 15px;
 	width: 200px;
