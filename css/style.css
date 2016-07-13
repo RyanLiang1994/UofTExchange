@@ -79,10 +79,14 @@ button#signin, input#namefield, input#passwordfield {
 }
 
 
-section#home {
-
+section#feedback {
+	text-align: center;
 }
 
+textarea {
+	width: 600px;
+	height: 200px;
+}
 
 input#signupname, input#signuppassword, input#signupconfirm {
 
