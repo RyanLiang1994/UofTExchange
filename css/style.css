@@ -7,17 +7,17 @@ body {
     font-family: 'Orbitron', sans-serif;
     font-size: 60%;
     margin: 20px;
-    padding-top: 120px;
+    padding-top: 160px;
 }
 
 h1.header {
-
+	font-size: 500%;
 	position: fixed;
 	width: 100%;
 	top: 0;
 	left: 0;
 	margin: 0;
-	padding: 30px;
+	padding: 50px;
 	background-color: white;
 	text-align: center;
 	z-index: 3;
@@ -28,7 +28,7 @@ nav.navbar {
 
 	position: fixed;
 	width: 100%;
-	top: 80px;
+	top: 140px;
 	left: 0;
 	background-color: black;
 	z-index: 3;
@@ -83,9 +83,14 @@ section#feedback {
 	text-align: center;
 }
 
+section#home {
+	font-size: 160%;
+}
+
 textarea {
 	width: 600px;
 	height: 200px;
+	border: grey solid thin;
 }
 
 section input{
@@ -94,7 +99,7 @@ section input{
 	position: relative;
 	margin: 10px;
 	padding: 8px;
-	width: 550px;
+	width: 480px;
 	border: thin solid grey;
 	text-align: left;
 
@@ -104,21 +109,24 @@ section button {
 	margin: 20px;
 	padding: 15px;
 	width: 200px;
-	margin-left: 540px;
+	margin-left: 630px;
 	text-align: center;
 }
 
+button#feedbackSubmit {
+	margin-left: 20px;
+}
 
 label.label {
 	position: relative;
 	display: inline-block;
-	width: 230px;
+	width: 460px;
 	font-size: 200%;
 	padding: 20px;
 	text-align: right;
 }
 footer {
-	
+	font-size: 120%;
 }
 
 
@@ -131,23 +139,21 @@ footer {
 		font-size: 100%;
 	}
 
-	button#sign {
-		width: 160px;
-		margin-left: 370px;
-	}
+	
 
-	input#signupname, input#signuppassword, input#signupconfirm, input#bookname, input#author, input#publisher, input#isbn, input#course {
+	section input {
 		width: 500px;
 	}
 
-	form.signupform {
-		margin: 100px;
-		margin-top: 50px;
-	}
 
 	label.label {
 		width: 100px;
 		font-size: 150%;
+	}
+
+	section button {
+		margin-left: 290px;
+
 	}
 
 }
@@ -159,8 +165,13 @@ footer {
 		font-size: 80%;
 	}
 
-	input#signupname, input#signuppassword, input#signupconfirm, input#bookname, input#author, input#publisher, input#isbn, input#course {
+	section input {
 		width: 300px;
+	}
+
+	section button {
+		margin-left: 320px;
+
 	}
 }
 
