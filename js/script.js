@@ -4,9 +4,12 @@ $(document).ready(function() {
 
     hamburgerMenu();
     displayMenu();
+    
 
     $(window).resize(function() {
+        displayMenu();
         hamburgerMenu();
+        showMenu();
     });
 
 });
@@ -45,6 +48,12 @@ function displayMenu() {
         $('nav.navbar button#hamburger-menu').click(function() {
             $("nav.navbar ul").show();
         })
+    }
+}
+
+function showMenu() {
+    if ($(window).width() > 480){
+        $("nav.navbar ul").show();
     }
 }
 
