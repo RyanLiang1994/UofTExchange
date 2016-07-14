@@ -129,17 +129,11 @@ footer {
 	font-size: 120%;
 }
 
-
-
-
-
 @media screen and (max-width: 1080px) {
 
 	nav ul li {
 		font-size: 100%;
 	}
-
-	
 
 	section input {
 		width: 500px;
@@ -158,7 +152,6 @@ footer {
 
 }
 
-
 @media screen and (max-width: 768px) {
 
 	nav ul li {
@@ -175,4 +168,59 @@ footer {
 	}
 }
 
+@media screen and (max-width: 480px) {
+
+	textarea {
+		width: 100%;
+		margin-top: 30px;	
+	}
+
+	section input {
+		width: 100%;
+	}
+
+	nav button#hamburger-menu {
+		margin-left: 50px;
+		margin-top: 10px;
+	}
+
+	nav.navbar ul.nav_list {
+		display: none;
+		z-index: 5;
+	}
+
+	nav.navbar ul.open {
+		display: block;
+	}
+	nav li {
+		display: block;
+		float: none;
+		background-color: black;
+	}
+
+	nav.navbar input{
+		display: block;
+	}
+
+	button#searchCourse, button#search, button#sign{
+		margin-left: 2.5%;
+	}
+}
+
+@media screen and (max-width: 320px) {
+	h1.header {
+		font-size: 25pt;
+		padding-left: 20px;
+	}
+
+	section {
+		padding-top: 30px;
+	}
+
+	nav input, nav button#signin {
+		display: block;
+		margin-left: 150px;
+	}
+
+}
 
