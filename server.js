@@ -1,5 +1,9 @@
 var http = require("http");
 var fs = require("fs");
+var express = require("express");
+var app = express();
+var expressValidator = require("express-validator");
+var bodyParser = require('body-parser');
 
 /*
 	this is a list of url to save url which we
@@ -17,6 +21,8 @@ var url_lst = [
 /*
 	Main function to start the server at 127.0.0.1:8080
 */
+
+/*
 function startServer() {
 	var hostname = '127.0.0.1';
   	var port = 3000;
@@ -60,3 +66,26 @@ function startServer() {
 // start the server
 exports.startServer = startServer();
 console.log('Server running at http://localhost:3000/');
+*/
+
+app.use(express.static(__dirname));
+app.engine('.html', require('ejs').__express);
+app.set('views', __dirname);
+app.set('view engine', 'html');
+
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
+
+app.get('/', function(req, res) {
+    res.render('index', {  // Note that .html is assumed.
+        errors: ''
+    });
+});
+
+var server = app.listen(3000, function()
+{
+  var port = server.address().port;
+  console.log('Running on 127.0.0.1:%s', port);
+});
