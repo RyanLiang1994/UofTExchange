@@ -78,10 +78,63 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
+
+app.use(expressValidator({
+	customValidators: {
+		isUserName: function(value) {
+			var reg = /^[0-9A-Za-z_]{1,32}$/;
+
+			return String(value).search(reg) >= 0;
+		},
+
+		isPassword: function(value) {
+			var reg = /^[a-zA-Z0-9]{8,32}$/;
+			return String(value).search(reg) >= 0;
+
+		},
+
+		isSamePwd: function(value) {
+			//not implemented yet
+		}
+	}
+}));
+
 app.get('/', function(req, res) {
     res.render('index', {  // Note that .html is assumed.
         errors: ''
     });
+});
+
+
+app.post('/signup', function(req, res)
+{
+	req.assert('uname', 'Username is required').notEmpty();
+	req.assert('pword', 'Password is required').notEmpty();
+
+	req.checkBody('uname', 'Username is not valid').isUserName();
+	req.checkBody('pword', 'Password is not valid').isPassword();
+
+
+	var err = req.validationErrors();
+    var mappedErrors = req.validationErrors(true);
+
+    if (err) // If errors exist, send them back to the form:
+    {
+        var msgs = { "errors": {} };
+
+        if ( mappedErrors.uname )
+            msgs.errors.error_uname = mappedErrors.uname.msg;
+
+        if ( mappedErrors.pword )
+            msgs.errors.error_pword = mappedErrors.pword.msg;
+
+
+        res.render('index', msgs);
+
+    } else {
+		//submit the data to database
+		console.log("signup");
+	}
 });
 
 var server = app.listen(3000, function()

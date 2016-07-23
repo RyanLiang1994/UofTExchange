@@ -4,18 +4,15 @@
         <!-- Basic -->
         <meta http-equiv="content-type" content="text/html; charset=utf-8" /> <!-- Meta -->
 
-        <script src="js/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
+        <script src="scripts/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
         <link href="css/style.css" rel="stylesheet" type="text/css">
 
-
-        <script src="js/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
-        <link href="css/style.css" rel="stylesheet" type="text/css"> <!-- CSS -->
         <!-- <link rel="shortcut icon" href="../img/favicon.png" />  -->
         <!-- Favicon -->
 
         <!-- Advanced -->
         <!-- JQuery -->
-        <script src="js/jquery-2.2.4.min.js" type="text/javascript"></script>
+        <script src="scripts/jquery-2.2.4.min.js" type="text/javascript"></script>
         <!-- JQuery UI -->
         <!-- <link href="../jquery-ui/css/jquery-ui.css" type="text/css" rel="stylesheet">
         <script src="../jquery-ui/scripts/jquery-ui.min.js" type="text/javascript" defer></script> -->
@@ -87,13 +84,22 @@
 
         <section id="signup">
             <form action="/signup" method="post" class="signupform">
-                <label class="label">Username</label>
-                <input type="text" name="uname" required="true" placeholder="username" id="signupname"><br>
-                <label class="label">Password</label>
-                <input type="password" name="pword" required="true" placeholder="password" id="signuppassword"><br>
-                <label class="label">Confirm Password</label>
-                <input type="password" name="confirm" required="true" placeholder="confirm password" id="signupconfirm"> <br>
-                <button id="sign">Sign Up</button>
+                <label class="label">Username
+                <input type="text" name="uname" required="true" placeholder="username" id="signupname">
+                <span class="error"><%- errors.error_uname %></span>
+                </label>
+                <br>
+                <label class="label">Password
+                <input type="password" name="pword" required="true" placeholder="password" id="signuppassword">
+                <span class="error"><%- errors.error_pword %></span>
+                </label>
+                <br>
+                <label class="label">Confirm Password
+                <input type="password" name="confirm" required="true" placeholder="confirm password" id="signupconfirm">
+                <span class="error"></span>
+                </label>
+                <br>
+                <button id="sign" type="submit" value="Submit">Sign Up</button>
             </form>
         </section>
 
