@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     $(window).resize(function()
     {
-       if ($(window).width() >= 1024) {
+       if ($(window).width() >= 768) {
             stickyNav();
 
             $(window).scroll(function() {

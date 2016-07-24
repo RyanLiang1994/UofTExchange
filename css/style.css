@@ -131,4 +131,20 @@ section#contact dd {
 	font-style: italic;
 }
 
+@media screen and (max-width: 1024px) {
+	div#profile {
+		margin-left: 20px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	section.menu-item, section#signup {
+		margin-left: 30%;
+	}
+
+	section textarea {
+		width: 90%;
+	}
+}
+
 
