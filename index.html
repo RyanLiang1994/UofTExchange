@@ -4,10 +4,10 @@
         <!-- Basic -->
         <meta http-equiv="content-type" content="text/html" charset="utf-8" /> <!-- Meta -->
 
-        <link href="css/style.css" rel="stylesheet" type="text/css"> 
+        <link href="css/style.css" rel="stylesheet" type="text/css">
          <!-- CSS -->
         <script src="scripts/script.js" type="text/javascript" charset="utf-8" defer></script> <!-- JavaScript -->
-       
+
         <!-- <link rel="shortcut icon" href="../images/favicon.png" />  -->
         <!-- Favicon -->
 
@@ -122,12 +122,17 @@
         <section id="signup">
             <h2>Sign Up</h2>
             <form action="/signup" method="post" class="signupform">
-                <label class="label">Username: </label>
-                <input type="text" name="username" required="true" placeholder="Username" id="signupname"><br>
-                <label class="label">Password: </label>
-                <input type="password" name="pword" required="true" placeholder="Password" id="signuppassword"><br>
-                <label class="label">Confirm Password: </label>
-                <input type="password" name="confirm" required="true" placeholder="Confirm Password" id="signupconfirm"> <br>
+                <label class="label">Username:
+                    <input type="text" name="username" required="true" placeholder="Username" id="signupname" pattern="^[0-9A-Za-z_]{1,32}$"><br>
+                    <span class="error"><%- errors.error_uname %></span>
+                </label><br>
+                <label class="label">Password:
+                    <input type="password" name="pword" required="true" placeholder="Password" id="signuppassword" pattern="^[a-zA-Z0-9]{8,32}$"><br>
+                    <span class="error"><%- errors.error_pword %></span>
+                </label><br>
+                <label class="label">Confirm Password:
+                    <input type="password" name="confirm" required="true" placeholder="Confirm Password" id="signupconfirm"> <br>
+                </label><br>
                 <button id="submit-sign-up">Sign Up</button>
             </form>
         </section>

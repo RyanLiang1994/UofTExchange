@@ -12,8 +12,8 @@ var bodyParser = require('body-parser');
 var url_lst = [
 		'/',
 		'/index.html',
-		'/js/script.js',
-		'/js/jquery-2.2.4.min.js',
+		'/scripts/script.js',
+		'/scripts/jquery-2.2.4.min.js',
 		'/css/style.css'
 ];
 
@@ -68,7 +68,7 @@ exports.startServer = startServer();
 console.log('Server running at http://localhost:3000/');
 */
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + '/assets'));
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname);
 app.set('view engine', 'html');
@@ -99,11 +99,14 @@ app.use(expressValidator({
 	}
 }));
 
-app.get('/', function(req, res) {
+
+app.get(url_lst[0] || url_lst[1], function(req, res) {
     res.render('index', {  // Note that .html is assumed.
-        errors: ''
+        "errors": ''
     });
+	console.log('hi');
 });
+
 
 
 app.post('/signup', function(req, res)
