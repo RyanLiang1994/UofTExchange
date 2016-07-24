@@ -1,226 +1,134 @@
-html {
-    width: 100%;
-}
-
-
-body {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 60%;
-    margin: 20px;
-    padding-top: 160px;
-}
-
-h1.header {
-	font-size: 500%;
-	position: fixed;
-	width: 100%;
-	top: 0;
-	left: 0;
-	margin: 0;
-	padding: 50px;
-	background-color: white;
+h1#title {
+	font-family: 'Orbitron', sans-serif;
+	margin-left: 15%;
+	margin-right: 15%;
+	font-size: 30pt;
 	text-align: center;
-	z-index: 3;
-
+	padding-top: 10px;
 }
 
-nav.navbar {
-
-	position: fixed;
-	width: 100%;
-	top: 140px;
-	left: 0;
-	background-color: black;
-	z-index: 3;
-
-
-}
-
-ul.nav_list {
-	position: absolute;
-	padding: 0;
-	margin: 0;
-	padding-left: 30px;
+nav#navbar ul {
 	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	background-color: black;
 }
 
-nav li {
-	position: relative;
+nav#navbar ul li {
+	font-family: 'Orbitron', sans-serif;
 	display: inline-block;
-	float: left;
-	line-height: 36px;
-	text-align: center;
-	padding-left: 10px;
-	padding-right: 10px;
-	font-size: 150%;
-	vertical-align: middle;
-	
-
-}
-
-a {
-	color: grey;
-}
-
-nav li:hover, a:hover {
-	background-color: #F5F3EE;
-	color: black;
-}
-
-li#btnMyProfile, li#btnSignout {
-	display: none;
-}
-
-button#signin, input#namefield, input#passwordfield {
-    display: inline-block;
-	margin: 10px;
-	position: relative;
-	float: right;
-}
-
-
-section#feedback {
-	text-align: center;
-}
-
-section#home {
-	font-size: 160%;
-}
-
-textarea {
-	width: 600px;
-	height: 200px;
-	border: grey solid thin;
-}
-
-section input{
-
-	display: inline-block;
-	position: relative;
-	margin: 10px;
-	padding: 8px;
-	width: 480px;
-	border: thin solid grey;
-	text-align: left;
-
-}
-
-section button {
-	margin: 20px;
 	padding: 15px;
-	width: 200px;
-	margin-left: 630px;
+	color: white;
+
+}
+
+.sticky {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+
+nav#navbar ul li:hover {
+	background-color: white;
+	color: black;
+	cursor: pointer;
+}
+
+nav#navbar ul li#btn-home {
+	margin-left: 18.75%;
+}
+
+div#profile {
+	float: left;
+	margin-left: 35px;
+	padding-top: 20px;
+}
+
+div#profile ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+div#profile ul li#btn-signup{
+	font-family: 'Orbitron', sans-serif;
+	display: block;
 	text-align: center;
+	padding: 15px;
+	background-color: Gold;
+	border-radius: 12px;
+	font-weight: bolder;
+	cursor: pointer;
 }
 
-button#feedbackSubmit {
-	margin-left: 20px;
+div#profile form#signin {
+	padding-top: 20px;
 }
 
-label.label {
-	position: relative;
-	display: inline-block;
-	width: 460px;
-	font-size: 200%;
-	padding: 20px;
-	text-align: right;
+div#profile form#signin input {
+	margin: 10px;
+	padding: 10px;
 }
+
+div#profile form#signin button {
+	margin: 10px;
+	padding: 10px;
+}
+
+section.menu-item, section#signup{
+	font-family: 'Orbitron', sans-serif;
+	margin-left: 20%;
+	padding-left: 20px;
+	display: block;
+	border-left: solid;
+	border-width: 1px;
+}
+
 footer {
-	font-size: 120%;
+	margin-top: 15px;
+	border-top: solid;
+	border-width: 1px;
 }
 
-@media screen and (max-width: 1080px) {
-
-	nav ul li {
-		font-size: 100%;
-	}
-
-	section input {
-		width: 500px;
-	}
-
-
-	label.label {
-		width: 100px;
-		font-size: 150%;
-	}
-
-	section button {
-		margin-left: 290px;
-
-	}
-
+section.menu-item h2, section#signup h2{
+	padding: 10px;
 }
 
-@media screen and (max-width: 768px) {
-
-	nav ul li {
-		font-size: 80%;
-	}
-
-	section input {
-		width: 300px;
-	}
-
-	section button {
-		margin-left: 320px;
-
-	}
+section.menu-item form, section#signup form{
+	padding-left: 10px;
 }
 
-@media screen and (max-width: 480px) {
-
-	textarea {
-		width: 100%;
-		margin-top: 30px;	
-	}
-
-	section input {
-		width: 100%;
-	}
-
-	nav button#hamburger-menu {
-		margin-left: 50px;
-		margin-top: 10px;
-	}
-
-	nav.navbar ul.nav_list {
-		display: none;
-		z-index: 5;
-	}
-
-	nav.navbar ul.open {
-		display: block;
-	}
-	nav li {
-		display: block;
-		float: none;
-		background-color: black;
-	}
-
-	nav.navbar input{
-		display: block;
-	}
-
-	button#searchCourse, button#search, button#sign{
-		margin-left: 2.5%;
-	}
+section.menu-item form input, section#signup form input{
+	margin: 10px;
+	padding: 10px;
+	width: 50%;
 }
 
-@media screen and (max-width: 320px) {
-	h1.header {
-		font-size: 25pt;
-		padding-left: 20px;
-	}
-
-	section {
-		padding-top: 30px;
-	}
-
-	nav input, nav button#signin {
-		display: block;
-		margin-left: 150px;
-	}
-
+section.menu-item form button, section#signup form button{
+	margin-top: 25px;
+	margin-left: 20%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
 }
+
+section#contact h2 {
+	padding-bottom: 0;
+}
+section#contact dl {
+	margin: 10px;
+}
+
+section#contact dt {
+	font-weight: bold;
+	padding-top: 15px;
+}
+
+section#contact dd {
+	font-style: italic;
+}
+
 

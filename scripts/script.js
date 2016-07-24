@@ -2,105 +2,117 @@ $(document).ready(function() {
     $('section').hide();
     $('#home').show();
 
-    hamburgerMenu();
-    displayMenu();
-    
+    $(window).resize(function()
+    {
+       if ($(window).width() >= 1024) {
+            stickyNav();
 
-    $(window).resize(function() {
-        displayMenu();
-        hamburgerMenu();
-        showMenu();
+            $(window).scroll(function() {
+                stickyNav();
+            });
+        }
     });
 
+    // hamburgerMenu();
+    // displayMenu();
+    
+
+    // $(window).resize(function() {
+    //     displayMenu();
+    //     hamburgerMenu();
+    //     showMenu();
+    // });
+
 });
 
-function hamburgerMenu() {
-    if ($(window).width() <= 480){
+// function hamburgerMenu() {
+//     if ($(window).width() <= 480){
 
-        if ($("nav.navbar button#hamburger-menu").length === 0){
-            var $button = $("<button>", {
-                id: 'hamburger-menu',
-                text: 'Menu',
-                display: 'block'
-            }).click(function(){
-                $("nav.navbar ul").toggleClass("open");
-            }).appendTo('nav.navbar');
-        }
+//         if ($("nav.navbar button#hamburger-menu").length === 0){
+//             var $button = $("<button>", {
+//                 id: 'hamburger-menu',
+//                 text: 'Menu',
+//                 display: 'block'
+//             }).click(function(){
+//                 $("nav.navbar ul").toggleClass("open");
+//             }).appendTo('nav.navbar');
+//         }
 
-        $("nav.navbar").attr('id', "hamburgerMenu");
-    } else {
-        $("nav.navbar").attr('id', "hamburgerMenu");
+//         $("nav.navbar").attr('id', "hamburgerMenu");
+//     } else {
+//         $("nav.navbar").attr('id', "hamburgerMenu");
         
-        if ($("nav.navbar button#hamburger-menu").length > 0) {
-            $("nav.navbar button#hamburger-menu").remove();
-        }
-    }
-}
+//         if ($("nav.navbar button#hamburger-menu").length > 0) {
+//             $("nav.navbar button#hamburger-menu").remove();
+//         }
+//     }
+// }
 
-function displayHamburger() {
-    if ($(window).width() <= 480){
-        $("nav.navbar ul").hide();
-    }
-}
+// function displayHamburger() {
+//     if ($(window).width() <= 480){
+//         $("nav.navbar ul").hide();
+//     }
+// }
 
-function displayMenu() {
-    if ($(window).width() <= 480){
-        $('nav.navbar button#hamburger-menu').click(function() {
-            $("nav.navbar ul").show();
-        })
-    }
-}
+// function displayMenu() {
+//     if ($(window).width() <= 480){
+//         $('nav.navbar button#hamburger-menu').click(function() {
+//             $("nav.navbar ul").show();
+//         })
+//     }
+// }
 
-function showMenu() {
-    if ($(window).width() > 480){
-        $("nav.navbar ul").show();
-    }
-}
+// function showMenu() {
+//     if ($(window).width() > 480){
+//         $("nav.navbar ul").show();
+//     }
+// }
 
-$('#btnHome').click(function() {
+$('#btn-home').click(function() {
     $('section').hide();
     $('#home').show();
-    displayHamburger();
+    $('#profile').show();
 });
 
-$('#btnSignup').click(function() {
+$('#btn-books').click(function() {
     $('section').hide();
-    $('#signup').show();
-    displayHamburger();
+    $('#search-books').show();
+    $('#profile').show();
 });
 
-$('#btnSignout').click(function() {
+$('#btn-courses').click(function() {
     $('section').hide();
-    $('#signout').show();
-    displayHamburger();
+    $('#search-courses').show();
+    $('#profile').show();
 });
 
-$('#btnMyprofile').click(function() {
-    $('section').hide();
-    $('#myprofile').show();
-    displayHamburger();
-});
-
-$('#btnSearch').click(function() {
-    $('section').hide();
-    $('#search').show();
-    displayHamburger();
-});
-
-$('#btnExchangeCourse').click(function() {
-    $('section').hide();
-    $('#exchangecourse').show();
-    displayHamburger();
-});
-
-$('#btnHelp').click(function() {
-    $('section').hide();
-    $('#help').show();
-    displayHamburger();
-});
-
-$('#btnFeedback').click(function() {
+$('#btn-feedback').click(function() {
     $('section').hide();
     $('#feedback').show();
-    displayHamburger();
+    $('#profile').show();
 });
+
+$('#btn-contact').click(function() {
+    $('section').hide();
+    $('#contact').show();
+    $('#profile').show();
+});
+
+$('#btn-signup').click(function() {
+    $('section').hide();
+    $('#profile').hide();
+    $('#signup').show();
+});
+
+function stickyNav(){
+    var navPosition = $('#navbar').position();
+    var scrollTop = $(window).scrollTop();
+  
+    if (scrollTop > navPosition.top) { 
+        $('#navbar').addClass('sticky');
+    } else {
+        $('#navbar').removeClass('sticky'); 
+    }
+};
+
+

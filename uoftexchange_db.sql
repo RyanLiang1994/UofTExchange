@@ -5,7 +5,8 @@ CREATE TABLE users {
 	email VARCHAR(64),
 	phone INT,
 	year_of_study INT CHECK (year_of_study BETWEEN 1 AND 4),
-	major VARCHAR(32)
+	major VARCHAR(32),
+	is_admin INT NOT NULL CHECK （is_admin BETWEEN 0 AND 1）
 }
 
 DROP TABLE IF EXISTS books;
