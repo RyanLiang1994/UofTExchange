@@ -147,4 +147,61 @@ section#contact dd {
 	}
 }
 
+@media screen and (max-width: 480px) {
+	nav#navbar ul li#btn-home {
+		margin-left: 0;
+	}
+
+	nav#navbar ul li {
+		padding-left: 33px;
+		padding-right: 33px;
+	}
+
+	nav#navbar ul li#btn-feedback {
+		margin-left: 75px;
+	}
+
+	div#profile {
+		float: none;
+	}
+
+	section.menu-item, section#signup {
+		margin-left: 0;
+		border-left: none;
+		border-top: solid;
+		border-width: 1px;
+	}
+
+	div#profile ul li#btn-signup {
+		margin-right: 4%;
+	}
+
+	div#profile form#signin input {
+		width: 85%;
+	}
+
+	div#profile form#signin button {
+		margin-bottom: 20px;
+		padding-left: 30px;
+		padding-right: 30px;
+		margin-left: 35%;
+	}
+
+}
+
+@media screen and (max-width: 320px) {
+	nav#navbar ul li {
+		display: block;
+		text-align: center;
+	}
+
+	nav#navbar ul li#btn-feedback {
+		margin-left: 0;
+	}
+
+	div#profile form#signin button {
+		margin-left: 30%;
+	}
+}
+
 
