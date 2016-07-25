@@ -42,13 +42,13 @@
 
             <form action="/signin" id="signin" method="post">
                 <label>
-                    <input type="text" name="username" placeholder="Username" pattern="^[0-9A-Za-z_]{1,32}$"><br>
-                    <span class="error"><%- errors.error_username %></span>
+                    <input type="text" name="email" placeholder="Email" pattern="^[0-9A-Za-z_]{1,32}$"><br>
+                    <!-- <span class="error"><%- errors.error_username %></span> -->
                 </label>
                     <br>
                 <label>
                     <input type="password" name="password" placeholder="Password" pattern="^[a-zA-Z0-9]{8,32}$"><br>
-                    <span class="error"><%- errors.error_password %></span>
+                    <!-- <span class="error"><%- errors.error_password %></span> -->
                 </label>
                 <br>
                 <button>Sign In</button>
@@ -128,13 +128,13 @@
         <section id="signup">
             <h2>Sign Up</h2>
             <form action="/signup" method="post" class="signupform">
-                <label class="label">Username:
-                    <input type="text" name="username" required="true" placeholder="Username" id="signupname" pattern="^[0-9A-Za-z_]{1,32}$"><br>
-                    <span class="error"><%- errors.error_uname %></span>
+                <label class="label">Email:
+                    <input type="text" name="email" required="true" placeholder="Email" id="signupemail" pattern="^[0-9A-Za-z_]{1,32}$"><br>
+                    <!-- <span class="error"><%- errors.error_uname %></span> -->
                 </label><br>
                 <label class="label">Password:
-                    <input type="password" name="pword" required="true" placeholder="Password" id="signuppassword" pattern="^[a-zA-Z0-9]{8,32}$"><br>
-                    <span class="error"><%- errors.error_pword %></span>
+                    <input type="password" name="pword" required="true" placeholder="Password" id="signupword" pattern="^[a-zA-Z0-9]{8,32}$"><br>
+                    <!-- <span class="error"><%- errors.error_pword %></span> -->
                 </label><br>
                 <label class="label">Confirm Password:
                     <input type="password" name="confirm" required="true" placeholder="Confirm Password" id="signupconfirm"> <br>
