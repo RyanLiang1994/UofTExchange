@@ -138,6 +138,11 @@ app.post('/signin', function(req, res)
 
             if (rows.length === 1 && req.body.password === rows[0].password) {
                 console.log("do something");
+            } else {
+                var err = req.validationErrors();
+                var msgs = { "errors": {} };
+                msgs.errors.error_password = "Password is not correct!";
+                res.render('index', msgs);
             }
         })
 	}

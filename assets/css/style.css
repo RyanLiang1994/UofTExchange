@@ -131,6 +131,12 @@ section#contact dd {
 	font-style: italic;
 }
 
+span.error {
+	color: red;
+	font-size: 60%;
+	padding-left: 20px;
+}
+
 @media screen and (max-width: 1024px) {
 	div#profile {
 		margin-left: 20px;
@@ -203,5 +209,3 @@ section#contact dd {
 		margin-left: 30%;
 	}
 }
-
-
