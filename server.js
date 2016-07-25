@@ -12,8 +12,8 @@ var bodyParser = require('body-parser');
 var url_lst = [
 		'/',
 		'/index.html',
-		'/scripts/script.js',
 		'/scripts/jquery-2.2.4.min.js',
+		'/scripts/script.js',
 		'/css/style.css'
 ];
 
@@ -104,7 +104,7 @@ app.get(url_lst[0] || url_lst[1], function(req, res) {
     res.render('index', {  // Note that .html is assumed.
         "errors": ''
     });
-	console.log('hi');
+	// console.log('hi');
 });
 
 
