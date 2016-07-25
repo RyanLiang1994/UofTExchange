@@ -46,12 +46,12 @@
             <form action="/signin" id="signin" method="post">
                 <label>
                     <input type="email" name="email" placeholder="Email"><br>
-                    <!-- <span class="error"><%- errors.error_username %></span> -->
+                    <span class="error"><%- errors.error_username %></span>
                 </label>
                     <br>
                 <label>
                     <input type="password" name="password" placeholder="Password" pattern="^[a-zA-Z0-9]{8,32}$"><br>
-                    <!-- <span class="error"><%- errors.error_password %></span> -->
+                    <span class="error"><%- errors.error_password %></span>
                 </label>
                 <br>
                 <!-- Google Login -->
@@ -138,11 +138,11 @@
             <form action="/signup" method="post" class="signupform">
                 <label class="label">Email:
                     <input type="email" name="email" required="true" placeholder="Email" id="signupemail"><br>
-                    <!-- <span class="error"><%- errors.error_uname %></span> -->
+                    <span class="error"><%- errors.error_uname %></span>
                 </label><br>
                 <label class="label">Password:
                     <input type="password" name="pword" required="true" placeholder="Password" id="signupword" pattern="^[a-zA-Z0-9]{8,32}$"><br>
-                    <!-- <span class="error"><%- errors.error_pword %></span> -->
+                    <span class="error"><%- errors.error_pword %></span>
                 </label><br>
                 <label class="label">Confirm Password:
                     <input type="password" name="confirm" required="true" placeholder="Confirm Password" id="signupconfirm"> <br>
