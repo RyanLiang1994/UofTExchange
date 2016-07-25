@@ -146,6 +146,8 @@
                 </label><br>
                 <label class="label">Confirm Password:
                     <input type="password" name="confirm" required="true" placeholder="Confirm Password" id="signupconfirm"> <br>
+                    <span class="error"><%- errors.error_confirm %></span>
+
                 </label><br>
                 <button id="submit-sign-up">Sign Up</button>
             </form>
