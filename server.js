@@ -156,10 +156,10 @@ app.post('/signin', function(req, res)
     {
         var msgs = { "errors": {} };
 
-        if ( mappedErrors.uname )
+        if ( mappedErrors.username )
             msgs.errors.error_username = mappedErrors.username.msg;
 
-        if ( mappedErrors.pword )
+        if ( mappedErrors.password )
             msgs.errors.error_password = mappedErrors.password.msg;
 
 
