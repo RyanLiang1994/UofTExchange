@@ -67,7 +67,7 @@ DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
 	user1 VARCHAR(64) REFERENCES users(email) ON DELETE CASCADE,
 	user2 VARCHAR(64) REFERENCES users(email) ON DELETE CASCADE,
-	message VARCHAR(128), 
+	message VARCHAR(128),
 	PRIMARY KEY (user1, user2),
 	CHECK(user1 <> user2)
 );

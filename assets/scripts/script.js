@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     $('section').hide();
     $('#home').show();
 
@@ -12,6 +13,15 @@ $(document).ready(function() {
             });
         }
     });
+
+    // TODO Maybe it is already signed in.
+    $('#alreadySignedIn').hide();
+
+    // var auth2 = gapi.auth2.getAuthInstance();
+    // if (auth2.isSignedIn.get()) {
+    //     console.log("haha");
+    //     $('#unSignedIn').hide();
+    // }
 
     // hamburgerMenu();
     // displayMenu();
@@ -104,6 +114,11 @@ $('#btn-signup').click(function() {
     $('#signup').show();
 });
 
+$('#btn-profile').click(function() {
+    $('section').hide();
+    $('#userProfile').show();
+});
+
 function stickyNav(){
     var navPosition = $('#navbar').position();
     var scrollTop = $(window).scrollTop();
@@ -112,22 +127,44 @@ function stickyNav(){
         $('#navbar').addClass('sticky');
     } else {
         $('#navbar').removeClass('sticky');
-        // comment.
     }
 };
 
+// The following code is used to check
+// if the user has signed in
+// var auth2 = gapi.auth2.getAuthInstance();
+// if (auth2.isSignedIn.get()) {
+//     // Statements
+// }
+
 // Google SignIn
 function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail());
+    var auth2 = gapi.auth2.getAuthInstance();
+    if (auth2.isSignedIn.get()) {
+        $('#alreadySignedIn').show();
+        $('#unSignedIn').hide();
+        var profile = auth2.currentUser.get().getBasicProfile();
+        $('#greeting').html("Hi, " + profile.getEmail());
+
+        $("#email").html("Email: " + profile.getEmail());
+        $("#phone").html("Phone: " + ""); // Empty for now
+        $("#year_of_study").html("");
+        $("#major").html();
+        $("#is_admin").html();
+        console.log('ID: ' + profile.getId());
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail());
+    }
 }
 // Google SignOut
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
+      $('#alreadySignedIn').hide();
+      $('#unSignedIn').show();
     });
 }

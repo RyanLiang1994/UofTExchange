@@ -39,28 +39,35 @@
         </nav>
 
         <div id="profile">
-            <ul>
-                <li id="btn-signup"> Sign Up</li>
-            </ul>
 
-            <form action="/signin" id="signin" method="post">
-                <label>
-                    <input type="email" name="email" placeholder="Email"><br>
-                    <!-- <span class="error"><%- errors.error_username %></span> -->
-                </label>
-                    <br>
-                <label>
-                    <input type="password" name="password" placeholder="Password" pattern="^[a-zA-Z0-9]{8,32}$"><br>
-                    <!-- <span class="error"><%- errors.error_password %></span> -->
-                </label>
-                <br>
-                <!-- Google Login -->
-                <div class="g-signin2" data-onsuccess="onSignIn"></div>
-                <br>
-                <a href="#" onclick="signOut();">Sign out</a>
-                <br>
-                <button>Sign In</button>
-            </form>
+            <div id="unSignedIn">
+                <ul>
+                    <li id="btn-signup"> Sign Up</li>
+                </ul>
+
+                <form action="/signin" id="signin" method="post">
+                    <label>
+                        <input type="email" name="email" placeholder="Email"><br>
+                        <!-- <span class="error"><%- errors.error_username %></span> -->
+                    </label>
+                        <br>
+                    <label>
+                        <input type="password" name="password" placeholder="Password" pattern="^[a-zA-Z0-9]{8,32}$"><br>
+                        <!-- <span class="error"><%- errors.error_password %></span> -->
+                    </label>
+                    <br><button>Sign In</button>
+                    <!-- Google Login -->
+                    <br><br><div class="g-signin2" data-onsuccess="onSignIn"></div>
+                </form>
+            </div>
+            <div id="alreadySignedIn">
+                <h2 id="greeting"></h2>
+                <br><br><button type="button" name="profile" id="btn-profile">Profile</button>
+                <br><br><button type="button" name="message" id="btn-message">Message</button>
+                <br><br><button type="button" name="following" id="btn-following">Following</button>
+                <br><br><button type="button" name="follower" id="btn-follower">Follower</button>
+                <br><br><a href="#" onclick="signOut();">Sign out</a>
+            </div>
         </div>
 
 
@@ -149,6 +156,19 @@
                 </label><br>
                 <button id="submit-sign-up">Sign Up</button>
             </form>
+        </section>
+        <section id="userProfile">
+            <p id="email"></p>
+            <p id="phone"></p>
+            <p id="year_of_study"></p>
+            <p id="major"></p>
+            <p id="is_admin"></p>
+        </section>
+        <section id="message">
+        </section>
+        <section id="following">
+        </section>
+        <section id="follower">
         </section>
 
         <footer>
