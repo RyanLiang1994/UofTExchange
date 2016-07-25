@@ -140,6 +140,37 @@ app.post('/signup', function(req, res)
 	}
 });
 
+
+app.post('/signin', function(req, res)
+{
+	req.assert('username', 'Username is required').notEmpty();
+	req.assert('password', 'Password is required').notEmpty();
+
+	req.checkBody('username', 'Username is not valid').isUserName();
+	req.checkBody('password', 'Password is not valid').isPassword();
+
+	var err = req.validationErrors();
+    var mappedErrors = req.validationErrors(true);
+
+    if (err) // If errors exist, send them back to the form:
+    {
+        var msgs = { "errors": {} };
+
+        if ( mappedErrors.uname )
+            msgs.errors.error_username = mappedErrors.username.msg;
+
+        if ( mappedErrors.pword )
+            msgs.errors.error_password = mappedErrors.password.msg;
+
+
+        res.render('index', msgs);
+
+    } else {
+		//submit the data to database
+		console.log("signin");
+	}
+});
+
 var server = app.listen(3000, function()
 {
   var port = server.address().port;

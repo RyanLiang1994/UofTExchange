@@ -40,12 +40,18 @@
                 <li id="btn-signup"> Sign Up</li>
             </ul>
 
-            <form id="signin">
-                <input type="text" name="username" placeholder="Username">
+            <form action="/signin" id="signin" method="post">
+                <label>
+                    <input type="text" name="username" placeholder="Username" pattern="^[0-9A-Za-z_]{1,32}$"><br>
+                    <span class="error"><%- errors.error_username %></span>
+                </label>
+                    <br>
+                <label>
+                    <input type="password" name="password" placeholder="Password" pattern="^[a-zA-Z0-9]{8,32}$"><br>
+                    <span class="error"><%- errors.error_password %></span>
+                </label>
                 <br>
-                <input type="password" name="password" placeholder="Password">
-                <br>
-                <button type="submit">Sign In</button>
+                <button>Sign In</button>
             </form>
         </div>
 
