@@ -15,7 +15,7 @@ $(document).ready(function() {
 
     // hamburgerMenu();
     // displayMenu();
-    
+
 
     // $(window).resize(function() {
     //     displayMenu();
@@ -41,7 +41,7 @@ $(document).ready(function() {
 //         $("nav.navbar").attr('id', "hamburgerMenu");
 //     } else {
 //         $("nav.navbar").attr('id', "hamburgerMenu");
-        
+
 //         if ($("nav.navbar button#hamburger-menu").length > 0) {
 //             $("nav.navbar button#hamburger-menu").remove();
 //         }
@@ -107,12 +107,26 @@ $('#btn-signup').click(function() {
 function stickyNav(){
     var navPosition = $('#navbar').position();
     var scrollTop = $(window).scrollTop();
-  
-    if (scrollTop > navPosition.top) { 
+
+    if (scrollTop > navPosition.top) {
         $('#navbar').addClass('sticky');
     } else {
-        $('#navbar').removeClass('sticky'); 
+        $('#navbar').removeClass('sticky');
     }
 };
 
-
+// Google SignIn
+function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail());
+}
+// Google SignOut
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+}
