@@ -71,15 +71,13 @@ CREATE TABLE messages (
 	PRIMARY KEY (user1, user2),
 	CHECK(user1 <> user2)
 );
-<<<<<<< HEAD
-=======
+
 
 DROP TABLE IF EXISTS feedbacks;
 CREATE TABLE feedbacks (
 	feedback TEXT
 );
 
-INSERT INTO users VALUES ('water@ryan.com', 'asdasdasd', NULL, NULL, NULL, 1), 
+INSERT INTO users VALUES ('water@ryan.com', 'asdasdasd', NULL, NULL, NULL, 1),
 						 ('handsome@ryan.com', 'ryanleung123', NULL, NULL, NULL, 1),
 						 ('mizu@ryan.com', 'mizukami', NULL, NULL, NULL, 0);
->>>>>>> 3983d6693a838a56d71f9ef3bb17c93df289ed65

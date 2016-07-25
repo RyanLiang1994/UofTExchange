@@ -31,11 +31,11 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 app.use(expressValidator({
 	customValidators: {
-		isUserName: function(value) {
-			var reg = /^[0-9A-Za-z_]{1,32}$/;
-
-			return String(value).search(reg) >= 0;
-		},
+		// isUserName: function(value) {
+		// 	var reg = /^[0-9A-Za-z_]{1,32}$/;
+        //
+		// 	return String(value).search(reg) >= 0;
+		// },
 
 		isPassword: function(value) {
 			var reg = /^[a-zA-Z0-9]{8,32}$/;
@@ -61,10 +61,10 @@ app.get(url_list[0] || url_list[1], function(req, res) {
 
 app.post('/signup', function(req, res)
 {
-	req.assert('uname', 'Username is required').notEmpty();
+	req.assert('mail', 'Username is required').notEmpty();
 	req.assert('pword', 'Password is required').notEmpty();
 
-	req.checkBody('uname', 'Username is not valid').isUserName();
+	req.checkBody('mail', 'Username is not valid').isEmail();
 	req.checkBody('pword', 'Password is not valid').isPassword();
     req.check('confirm', 'password is not matched').equals(req.body.pword);
 
@@ -76,8 +76,8 @@ app.post('/signup', function(req, res)
         var msgs = { "errors": {} };
 
 
-        if ( mappedErrors.uname )
-            msgs.errors.error_uname = mappedErrors.uname.msg;
+        if ( mappedErrors.mail )
+            msgs.errors.error_mail = mappedErrors.mail.msg;
 
         if ( mappedErrors.pword )
             msgs.errors.error_pword = mappedErrors.pword.msg;
@@ -98,13 +98,12 @@ app.post('/signup', function(req, res)
 
 app.post('/signin', function(req, res)
 {
-	req.assert('username', 'Username is required').notEmpty();
+	req.assert('email', 'Username is required').notEmpty();
 	req.assert('password', 'Password is required').notEmpty();
 
 
-	req.checkBody('username', 'Username is not valid').isUserName();
+	req.checkBody('email', 'Username is not valid').isEmail();
 	req.checkBody('password', 'Password is not valid').isPassword();
-
 
 
 	var err = req.validationErrors();
@@ -115,8 +114,8 @@ app.post('/signin', function(req, res)
         var msgs = { "errors": {} };
 
 
-        if ( mappedErrors.username )
-            msgs.errors.error_username = mappedErrors.username.msg;
+        if ( mappedErrors.email )
+            msgs.errors.error_email = mappedErrors.email.msg;
 
         if ( mappedErrors.password )
             msgs.errors.error_password = mappedErrors.password.msg;
@@ -127,7 +126,8 @@ app.post('/signin', function(req, res)
 
     } else {
 		//submit the data to database
-        var username = req.body.username;
+        console.log("blahblah");
+        var username = req.body.email;
         db.all("SELECT email, password, is_admin FROM users WHERE email = '" + username + "'", function(err, rows) {
             if (err) {
                 throw err;
