@@ -44,3 +44,14 @@ CREATE TABLE offers_course {
 	PRIMARY KEY (username, dept, num),
 	FOREIGN KEY (dept, num) REFERENCES courses(dept, num) ON DELETE CASCADE
 }
+
+DROP TABLE IF EXISTS course_textbook;
+CREATE TABLE course_textbook {
+	dept CHAR(3),
+	num INT,
+	title VARCHAR(64),
+	author VARCHAR(32),
+	PRIMARY KEY (dept, num, title, author),
+	FOREIGN KEY (dept, num) REFERENCES courses(dept, num) ON DELETE CASCADE,
+	FOREIGN KEY (title, author) REFERENCES books(title, author) ON DELETE CASCADE
+}
