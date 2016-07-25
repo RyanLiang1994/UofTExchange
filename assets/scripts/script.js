@@ -112,6 +112,7 @@ function stickyNav(){
         $('#navbar').addClass('sticky');
     } else {
         $('#navbar').removeClass('sticky');
+        // comment.
     }
 };
 
