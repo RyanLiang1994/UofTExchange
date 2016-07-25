@@ -42,7 +42,7 @@
 
             <form action="/signin" id="signin" method="post">
                 <label>
-                    <input type="text" name="email" placeholder="Email" pattern="^[0-9A-Za-z_]{1,32}$"><br>
+                    <input type="email" name="email" placeholder="Email"><br>
                     <!-- <span class="error"><%- errors.error_username %></span> -->
                 </label>
                     <br>
@@ -129,7 +129,7 @@
             <h2>Sign Up</h2>
             <form action="/signup" method="post" class="signupform">
                 <label class="label">Email:
-                    <input type="text" name="email" required="true" placeholder="Email" id="signupemail" pattern="^[0-9A-Za-z_]{1,32}$"><br>
+                    <input type="email" name="email" required="true" placeholder="Email" id="signupemail"><br>
                     <!-- <span class="error"><%- errors.error_uname %></span> -->
                 </label><br>
                 <label class="label">Password:
