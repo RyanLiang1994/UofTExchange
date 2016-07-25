@@ -95,7 +95,6 @@ app.use(expressValidator({
 	}
 }));
 
-
 app.get(url_list[0] || url_list[1], function(req, res) {
  //    res.render('index', {  // Note that .html is assumed.
  //        "errors": ''
