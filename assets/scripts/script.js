@@ -130,8 +130,10 @@ function stickyNav(){
     }
 };
 
+// Google Login:
+// Source: https://developers.google.com/identity/sign-in/web/sign-in
 // The following code is used to check
-// if the user has signed in
+// if the user has signed in for Google
 // var auth2 = gapi.auth2.getAuthInstance();
 // if (auth2.isSignedIn.get()) {
 //     // Statements
