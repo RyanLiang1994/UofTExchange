@@ -149,6 +149,7 @@ app.post('/signin', function(req, res)
             if (rows.length === 1 && req.body.password === rows[0].password) {
                 console.log("do something");
                 req.session.username = username;
+                console.log('username')
                 res.redirect('/');
             } else {
                 var err = req.validationErrors();
@@ -160,6 +161,8 @@ app.post('/signin', function(req, res)
 	}
 });
 
+
+
 app.get('/signout', function(req, res) {
   req.session.destroy();
   res.redirect('/');
@@ -170,3 +173,14 @@ var server = app.listen(3000, function()
   var port = server.address().port;
   console.log('Running on 127.0.0.1:%s', port);
 });
+
+
+app.get('/googlelogin', function(req, res) {
+    req.session.username = "Ryan";
+    res.render('index.html');
+});
+
+app.get("/googlelogout", function(req, res) {
+    req.session.destroy();
+    res.redirect('/');
+})
