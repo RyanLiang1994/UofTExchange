@@ -19,19 +19,25 @@
                 <input type="password" name="password" placeholder="Password" pattern="^[a-zA-Z0-9]{8,32}$"><br>
                 <span class="error"> {{ errors.error_password }}</span>
             </label>
+                <br>
+            <label>
+                <input type="date" name="dob" placeholder="birthday"><br>
+                <span class="error"> {{ errors.error_birthday }}</span>
+            </label>
             <br><button>Sign In</button>
             <!-- Google Login -->
-            <br><br><div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <!-- <br><br><div class="g-signin2" data-onsuccess="onSignIn"></div> -->
         </form>
     </div>
     {% else %}
     <div id="alreadySignedIn">
         <h2 id="greeting"></h2>
         <br><br><button type="button" name="profile" id="btn-profile">Profile</button>
+        <br><br><button type="button" name="profile" id="btn-profile">Add Books/Courses</button>
         <br><br><button type="button" name="message" id="btn-message">Message</button>
         <br><br><button type="button" name="following" id="btn-following">Following</button>
         <br><br><button type="button" name="follower" id="btn-follower">Follower</button>
-        <br><br><a href="/signout" onclick="signOut();">Sign out</a>
+        <br><br><a href="/signout" >Sign out</a>
     </div>
     {% endif %}
 
@@ -55,15 +61,16 @@
 
         <section id="search-books" class="menu-item">
             <h2>Search Books</h2>
-            <form action="/search_books" method="get">
+            <span class="error">{{ errors.error_empty }}</span>
+            <form action="/search_books" method="post">
                <label class="label">Title: </label>
-                <input type="text" name="title" placeholder="Title" id="title" pattern="[a-z]{4}"><br>
+                <input type="text" name="title" placeholder="Title" id="title"><br>
                 <label class="label">Author: </label>
                 <input type="text" name="author" placeholder="Author" id="author"><br>
                 <label class="label">Publisher: </label>
                 <input type="text" name="publisher" placeholder="Publisher" id="publisher"><br>
                 <label class="label">ISBN: </label>
-                <input type="text" name="ISBN" placeholder="ISBN" id="isbn" pattern="\d{13}"><br>
+                <input type="text" name="isbn" placeholder="ISBN" id="isbn" pattern="\d{13}"><br>
                 <label class="label">Course: </label>
                 <input type="text" name="course" placeholder="Course" id="course"><br>
                 <button id="search-book">Search!</button>
@@ -73,12 +80,18 @@
          <section id="search-courses" class="menu-item">
             <h2>Search Courses</h2>
             <form action="/search_courses" method="get">
-                <label class="label">Department: </label>
-                <input type="text" name="department" required="true" placeholder="Department" id="department"><br>
-                <label class="label">Course Code: </label>
-                <input type="text" name="code" required="true" placeholder="Course Code" id="code"><br>
-                <label class="label">Section: </label>
-                <input type="text" name="section" placeholder="Section" id="section"> <br>
+                <label class="label">Department: 
+                    <input type="text" name="department" required="true" placeholder="Department" id="department">
+                </label>
+                <br>
+                <label class="label">Course Code: 
+                    <input type="text" name="code" required="true" placeholder="Course Code" id="code">
+                </label>
+                <br>
+                <label class="label">Section: 
+                    <input type="text" name="section" placeholder="Section" id="section">
+                </label>
+                 <br>
                 <button id="search-course">Search Course</button>
             </form>
         </section>

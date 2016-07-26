@@ -4,12 +4,12 @@ var express = require("express");
 var app = express();
 var expressValidator = require("express-validator");
 var bodyParser = require('body-parser');
-var expressSession = require("express-session");
 var sqlite3 = require('sqlite3').verbose();
 var bcrypt = require('bcryptjs');
 var path = require('path');
 var nunjucks = require('nunjucks');
-var session = require('express-session')
+var session = require('express-session');
+var sequelize = require('sequelize');
 
 /*
 	this is a list of url to save url which we
@@ -32,10 +32,8 @@ app.use(function(req, res, next) {
 });
 
 
-app.use(bodyParser.json());       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-    extended: true
-}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 
 app.use(expressValidator({
@@ -50,10 +48,6 @@ app.use(expressValidator({
 			var reg = /^[a-zA-Z0-9]{8,32}$/;
 			return String(value).search(reg) >= 0;
 
-		},
-
-		isSamePwd: function(value) {
-			//not implemented yet
 		}
 	}
 }));
@@ -105,6 +99,63 @@ app.post('/signup', function(req, res)
 	}
 });
 
+app.post('/search_books', function(req, res) {
+	req.assert('title', '').notEmpty();
+	req.assert('author', '').notEmpty();
+	req.assert('publisher', '').notEmpty();
+	req.assert('isbn', '').notEmpty();
+	req.assert('course', '').notEmpty();
+
+	var mappedErrors = req.validationErrors(true);
+
+	var msgs = {"errors": {}};
+
+	if (mappedErrors.title && mappedErrors.author && mappedErrors.publisher
+		&& mappedErrors.isbn && mappedErrors.course) {
+		msgs.errors.error_empty = "Please enter in at least 1 field";
+		res.render('index', msgs);
+	} else {
+		var where = '';
+		if (req.body.title.length > 0) {
+			if (where.length > 0) {
+				where += ' and '
+			}
+			where = where + "lower(title) like '%" + req.body.title + "%'";
+		}
+
+		if (req.body.author.length > 0) {
+			if (where.length > 0) {
+				where += ' and '
+			}
+			where = where + "lower(author) like '%" + req.body.author + "%'";
+		}
+
+		if (req.body.publisher.length > 0) {
+			if (where.length > 0) {
+				where += ' and '
+			}
+			where = where + "lower(publisher) like '%" + req.body.publisher + "%'";
+		}
+
+		if (req.body.isbn.length > 0) {
+			if (where.length > 0) {
+				where += ' and '
+			}
+			where = where + "isbn = " + req.body.isbn;
+		}
+
+		db.all("SELECT * FROM books WHERE " + where.toLowerCase(), function(err, rows) {
+			if (err) {
+                throw err;
+            }
+            console.log(rows);
+            res.end();
+		});
+	}
+
+});
+
+
 
 app.post('/signin', function(req, res)
 {
@@ -149,6 +200,7 @@ app.post('/signin', function(req, res)
             if (rows.length === 1 && req.body.password === rows[0].password) {
                 console.log("do something");
                 req.session.username = username;
+
                 res.redirect('/');
             } else {
                 var err = req.validationErrors();
@@ -160,6 +212,8 @@ app.post('/signin', function(req, res)
 	}
 });
 
+
+
 app.get('/signout', function(req, res) {
   req.session.destroy();
   res.redirect('/');
@@ -170,3 +224,14 @@ var server = app.listen(3000, function()
   var port = server.address().port;
   console.log('Running on 127.0.0.1:%s', port);
 });
+
+
+app.get('/googlelogin', function(req, res) {
+    req.session.username = "Ryan";
+    res.render('index.html');
+});
+
+app.get("/googlelogout", function(req, res) {
+    req.session.destroy();
+    res.redirect('/');
+})

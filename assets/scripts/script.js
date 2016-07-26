@@ -132,6 +132,7 @@ function stickyNav(){
     }
 };
 
+
 // Google Login:
 // Source: https://developers.google.com/identity/sign-in/web/sign-in
 // The following code is used to check
@@ -142,33 +143,50 @@ function stickyNav(){
 // }
 
 // Google SignIn
-function onSignIn(googleUser) {
-    var auth2 = gapi.auth2.getAuthInstance();
-    if (auth2.isSignedIn.get()) {
-        $('#alreadySignedIn').show();
-        $('#unSignedIn').hide();
-        var profile = auth2.currentUser.get().getBasicProfile();
-        $('#greeting').html("Hi, " + profile.getEmail());
-
-        $("#email").html("Email: " + profile.getEmail());
-        $("#phone").html("Phone: " + ""); // Empty for now
-        $("#year_of_study").html("");
-        $("#major").html();
-        $("#is_admin").html();
-        console.log('ID: ' + profile.getId());
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
-    }
-}
+// function onSignIn(googleUser) {
+//     var auth2 = gapi.auth2.getAuthInstance();
+//     if (auth2.isSignedIn.get()) {
+//         $.ajax(
+// 		{
+// 			url: "/googlelogin",
+// 			method: "GET",
+//
+//             success: function(data) {
+//
+//                 $('#alreadySignedIn').show();
+//                 $('#unSignedIn').hide();
+//                 var profile = auth2.currentUser.get().getBasicProfile();
+//                 $('#greeting').html("Hi, " + profile.getEmail());
+//
+//                 $("#email").html("Email: " + profile.getEmail());
+//                 $("#phone").html("Phone: " + ""); // Empty for now
+//                 $("#year_of_study").html("");
+//                 $("#major").html();
+//                 $("#is_admin").html();
+//                 console.log('ID: ' + profile.getId());
+//                 console.log('Full Name: ' + profile.getName());
+//                 console.log('Given Name: ' + profile.getGivenName());
+//                 console.log('Family Name: ' + profile.getFamilyName());
+//                 console.log('Image URL: ' + profile.getImageUrl());
+//                 console.log('Email: ' + profile.getEmail());
+//                 location.reload();
+//             }
+// 		});
+//
+//     }
+// }
 // Google SignOut
-function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-      $('#alreadySignedIn').hide();
-      $('#unSignedIn').show();
-    });
-}
+// function signOut() {
+//     $.ajax(
+//     {
+//         url: "/googlelogout",
+//         method: "GET",
+//         success: function(data) {
+//             var auth2 = gapi.auth2.getAuthInstance();
+//             auth2.signOut().then(function () {
+//                 console.log('User signed out.');
+//             });
+//         }
+//     });
+//
+// }
