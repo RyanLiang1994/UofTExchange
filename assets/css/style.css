@@ -86,6 +86,10 @@ section.menu-item, section#signup{
 	border-width: 1px;
 }
 
+section.menu-item {
+	min-height: 400px;
+}
+
 footer {
 	margin-top: 15px;
 	border-top: solid;

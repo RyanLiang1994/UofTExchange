@@ -2,8 +2,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	email VARCHAR(64) PRIMARY KEY,
 	password VARCHAR(32) CHECK (LENGTH(password) BETWEEN 8 AND 32),
-	birthday DATE NOT NULL,
-	phone INT,
+	phone INT NOT NULL,
 	year_of_study INT CHECK (year_of_study BETWEEN 1 AND 4),
 	major VARCHAR(32),
 	is_admin INT NOT NULL CHECK (is_admin BETWEEN 0 AND 1)
