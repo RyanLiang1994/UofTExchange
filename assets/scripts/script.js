@@ -15,7 +15,7 @@ $(document).ready(function() {
     });
 
     // TODO Maybe it is already signed in.
-    $('#alreadySignedIn').hide();
+    // $('#alreadySignedIn').hide();
 
     // var auth2 = gapi.auth2.getAuthInstance();
     // if (auth2.isSignedIn.get()) {

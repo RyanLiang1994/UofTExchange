@@ -8,6 +8,7 @@ var expressSession = require("express-session");
 var sqlite3 = require('sqlite3').verbose();
 var bcrypt = require('bcryptjs');
 var path = require('path');
+var nunjucks = require('nunjucks');
 var session = require('express-session')
 
 /*
@@ -17,11 +18,19 @@ var session = require('express-session')
 var url_list = ['/', '/index.html'];
 var db = new sqlite3.Database('db.sqlite');
 db.serialize();
+nunjucks.configure('views', { autoescape: true, express: app });
 
 app.use(express.static(__dirname + '/assets'));
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname);
 app.set('view engine', 'html');
+app.use(session({ secret: 'Who is Ryan', resave: false, saveUninitialized: false }));
+// Expose session variables to views
+app.use(function(req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
+
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -53,6 +62,7 @@ app.get(url_list[0] || url_list[1], function(req, res) {
     res.render('index', {  // Note that .html is assumed.
         "errors": ''
     });
+
 
 //	res.sendFile(__dirname + '/index.html');
 });
@@ -138,6 +148,8 @@ app.post('/signin', function(req, res)
 
             if (rows.length === 1 && req.body.password === rows[0].password) {
                 console.log("do something");
+                req.session.username = username;
+                res.redirect('/');
             } else {
                 var err = req.validationErrors();
                 var msgs = { "errors": {} };
