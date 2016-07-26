@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	email VARCHAR(64) PRIMARY KEY,
 	password VARCHAR(32) CHECK (LENGTH(password) BETWEEN 8 AND 32),
+	birthday DATE NOT NULL,
 	phone INT,
 	year_of_study INT CHECK (year_of_study BETWEEN 1 AND 4),
 	major VARCHAR(32),
@@ -78,6 +79,11 @@ CREATE TABLE feedbacks (
 	feedback TEXT
 );
 
-INSERT INTO users VALUES ('water@ryan.com', 'asdasdasd', NULL, NULL, NULL, 1),
-						 ('handsome@ryan.com', 'ryanleung123', NULL, NULL, NULL, 1),
-						 ('mizu@ryan.com', 'mizukami', NULL, NULL, NULL, 0);
+INSERT INTO users VALUES ('water@ryan.com', 'asdasdasd', '1111-01-01', NULL, NULL, NULL, 1),
+						 ('handsome@ryan.com', 'ryanleung123', '1111-01-01', NULL, NULL, NULL, 1),
+						 ('mizu@ryan.com', 'mizukami', '1111-01-01', NULL, NULL, NULL, 0);
+
+INSERT INTO books VALUES ('Introduction to Algorithms', 'Author1', NULL, NULL),
+						 ('Introduction to Algorithms', 'Author2', NULL, NULL),
+						 ('Introduction to Algorithms', 'Author3', NULL, NULL),
+						 ('Introduction to Algorithms', 'Author4', NULL, NULL);
