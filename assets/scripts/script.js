@@ -3,6 +3,8 @@ $(document).ready(function() {
     $('section').hide();
     $('#home').show();
 
+
+
     $(window).resize(function()
     {
        if ($(window).width() >= 768) {
