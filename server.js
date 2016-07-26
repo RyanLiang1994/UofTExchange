@@ -160,6 +160,11 @@ app.post('/signin', function(req, res)
 	}
 });
 
+app.get('/signout', function(req, res) {
+  req.session.destroy();
+  res.redirect('/');
+});
+
 var server = app.listen(3000, function()
 {
   var port = server.address().port;
