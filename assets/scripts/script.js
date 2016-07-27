@@ -136,10 +136,19 @@ $('#btn-profile').click(function() {
 });
 
 $('#btn-profile').click(function() {
+    $('section').hide();
     getProfile();
 });
 
+$('#btn-message').click(function() {
+    $('section').hide();
+    getMessage();
+});
 
+$('#btn-send').click(function() {
+    $('section').hide();
+    sendMessage();
+});
 
 function stickyNav(){
     var navPosition = $('#navbar').position();
@@ -171,20 +180,20 @@ function getProfile() {
                 var $paragraph1 = $("<p>", {id: "profileparagraph"});
                 var $linebreak = $("<br>");
                 $container.append($title1);
-                $paragraph1.append("Email: " + data[0][0].email + "<br>" +
-                                    "Phone: " + data[0][0].phone + "<br>" +
-                                    "Year of Study: " + data[0][0].year_of_study + "<br>" +
-                                    "Major: " + data[0][0].major);
+                $paragraph1.append("Email: " + checkNull(data[0][0].email) + "<br>" +
+                                    "Phone: " + checkNull(data[0][0].phone) + "<br>" +
+                                    "Year of Study: " + checkNull(data[0][0].year_of_study) + "<br>" +
+                                    "Major: " + checkNull(data[0][0].major));
                 $container.append($paragraph1);
 
                 $container.append($title2);
                 if (data.length > 1) {
                     var $paragraph2 = $("<p>", {id: "profileparagraph"});
                     for (var i = 0; i < data[1].length; i++) {
-                        $paragraph2.append("Course: " + data[1][i].title + "<br>" +
-                                            "Section: " + data[1][i].sect + "<br>" +
-                                            "Department: " + data[1][i].dept + "<br>" +
-                                            "Code: " + data[1][i].num);
+                        $paragraph2.append("Course: " + checkNull(data[1][i].title) + "<br>" +
+                                            "Section: " + checkNull(data[1][i].sect) + "<br>" +
+                                            "Department: " + checkNull(data[1][i].dept) + "<br>" +
+                                            "Code: " + checkNull(data[1][i].num));
                         $paragraph2.append("<hr>");
                     }
                     $container.append($paragraph2);
@@ -194,9 +203,9 @@ function getProfile() {
                 if (data.length > 2) {
                     var $paragraph3 = $("<p>", {id: "profileparagraph"});
                     for (var j = 0; j < data[2].length; j++) {
-                        $paragraph3.append("Title: " + data[2][j].title + "<br>" +
-                                            "Author: " + data[2][j].author + "<br>" +
-                                            "Publisher: " + data[2][j].publisher + "<br>"
+                        $paragraph3.append("Title: " + checkNull(data[2][j].title) + "<br>" +
+                                            "Author: " + checkNull(data[2][j].author) + "<br>" +
+                                            "Publisher: " + checkNull(data[2][j].publisher) + "<br>"
                                             );
                         $paragraph3.append("<hr>");
                     }
@@ -213,6 +222,69 @@ function getProfile() {
     });
 }
 
+function getMessage() {
+    $.ajax(
+    {
+        url: "message",
+        method: "POST",
+        dataType: "json",
+        success: function(data) {
+            if (data.length > 0) {
+                console.log(JSON.stringify(data));
+                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $title = $("<h2>", {class: "sectiontitle"});
+                $title.text("My Message");
+                $container.append($title);
+                for (var i = 0; i < data[0].length; i++) {
+                    var $window = $("<dl>", {id: "msgwindows"});
+                    var $sender = $("<dt>", {id: "sender"});
+                    var $msg = $("<dd>", {id: "message"});
+                    $sender.text("From: " + data[0][i].user1);
+                    $msg.text("Text: " + data[0][i].message);
+                    $window.append($sender);
+                    $window.append($msg);
+                    $window.append("<br>");
+                    $container.append($window);
+                    $container.append("<hr>");
+                }
+                $container.insertBefore($("footer"));
+
+            } else {
+                var $paragraph =  $("<p></p>", {id: "404"});
+                $paragraph.text("404 Not Found!")
+                $('body').append($paragraph);
+            }
+        }
+    });
+}
+
+function sendMessage() {
+    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $title = $("<h2>", {class: "sectiontitle"});
+    $title.text("Send Message");
+    var $lable = $("<lable>", {class: "label"});
+    var $receiver = $("<input>", {name: "receiver", id: "receiver", placeholder: "receiver"});
+    var $textbox = $("<textarea>", {name: "mymessage", row: "15", cols: "79", id: "msgbox"});
+    var $button = $("<button>", {type: "submit", id: "submitmsg"});
+    var $form = $("<form>", {action: "/sendmsg", method: "post"});
+    $button.text("Send");
+    $lable.text("Receiver: ");
+    $form.append($lable);
+    $form.append($receiver);
+    $form.append($textbox);
+    $form.append($button);
+    $container.append($title);
+    $container.append($form);
+    $container.insertBefore($("footer"));
+}
+
+function checkNull(value) {
+    if (value === null) {
+        return "";
+    } else {
+        return value;
+    }
+}
 
 // Google Login:
 // Source: https://developers.google.com/identity/sign-in/web/sign-in

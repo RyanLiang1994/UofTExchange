@@ -170,6 +170,11 @@ p.errmsg {
 	padding-bottom: 10px;
 	position: relative;
 }
+
+textarea#msgbox {
+	height: 150px;
+
+}
 @media screen and (max-width: 1024px) {
 	div#profile {
 		margin-left: 20px;
