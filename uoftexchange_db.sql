@@ -70,3 +70,4 @@ INSERT INTO offers_book VALUES ('mizu@ryan.com', 'Introduction to Algorithms', '
 						       ('mizu@ryan.com', 'Introduction to Algorithms', 'Author4', NULL);
 
 INSERT INTO course_textbook VALUES ('csc', 263, 'Introduction to Algorithms', 'Author4');
+INSERT INTO offers_course VALUES('mizu@ryan.com', 'csc', 369, NULL, NULL);
