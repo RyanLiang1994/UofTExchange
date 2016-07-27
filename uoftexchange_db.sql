@@ -32,6 +32,8 @@ CREATE TABLE offers_course (
 	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
 	dept CHAR(3),
 	num INT,
+	title VARCHAR(64),
+	sect VARCHAR(16),
 	PRIMARY KEY (email, dept, num),
 	FOREIGN KEY (dept, num) REFERENCES courses(dept, num) ON DELETE CASCADE
 );

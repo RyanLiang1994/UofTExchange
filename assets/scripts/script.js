@@ -135,6 +135,12 @@ $('#btn-profile').click(function() {
     $('.msg').hide();
 });
 
+$('#btn-profile').click(function() {
+    getProfile();
+});
+
+
+
 function stickyNav(){
     var navPosition = $('#navbar').position();
     var scrollTop = $(window).scrollTop();
@@ -146,7 +152,66 @@ function stickyNav(){
     }
 };
 
+function getProfile() {
+    $.ajax(
+    {
+        url: "profile",
+        method: "GET",
+        dataType: "json",
+        success: function(data) {
+            console.log(data);
+            if (data.length > 0) {
+                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $title1 = $("<h2>", {id: "info"});
+                $title1.text("Imformation: ");
+                var $title2 = $("<h2>", {id: "offerbook"});
+                $title2.text("Offer Books: ");
+                var $title3 = $("<h2>", {id: "offercourse"});
+                $title3.text("Offer Course: ");
+                var $paragraph1 = $("<p>", {id: "profileparagraph"});
+                var $linebreak = $("<br>");
+                $container.append($title1);
+                $paragraph1.append("Email: " + data[0][0].email + "<br>" +
+                                    "Phone: " + data[0][0].phone + "<br>" +
+                                    "Year of Study: " + data[0][0].year_of_study + "<br>" +
+                                    "Major: " + data[0][0].major);
+                $container.append($paragraph1);
 
+                $container.append($title2);
+                if (data.length > 1) {
+                    var $paragraph2 = $("<p>", {id: "profileparagraph"});
+                    for (var i = 0; i < data[1].length; i++) {
+                        $paragraph2.append("Course: " + data[1][i].title + "<br>" +
+                                            "Section: " + data[1][i].sect + "<br>" +
+                                            "Department: " + data[1][i].dept + "<br>" +
+                                            "Code: " + data[1][i].num);
+                        $paragraph2.append("<hr>");
+                    }
+                    $container.append($paragraph2);
+                }
+
+                $container.append($title3);
+                if (data.length > 2) {
+                    var $paragraph3 = $("<p>", {id: "profileparagraph"});
+                    for (var j = 0; j < data[2].length; j++) {
+                        $paragraph3.append("Title: " + data[2][j].title + "<br>" +
+                                            "Author: " + data[2][j].author + "<br>" +
+                                            "Publisher: " + data[2][j].publisher + "<br>"
+                                            );
+                        $paragraph3.append("<hr>");
+                    }
+                    $container.append($paragraph3);
+                }
+                $container.insertBefore($("footer"));
+
+            } else {
+                var $paragraph =  $("<p></p>", {id: "404"});
+                $paragraph.text("404 Not Found!")
+                $('body').append($paragraph);
+            }
+        }
+    });
+}
 
 
 // Google Login:
