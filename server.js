@@ -441,6 +441,23 @@ app.post('/message', function(req, res) {
     }
 });
 
+app.post('/follows', function(req, res) {
+    if (!req.session.username) {
+        res.end(JSON.stringify([]));
+    } else {
+        var result = [];
+        var username = req.session.username;
+        db.all("SELECT user1, user2, message FROM follows WHERE user1 = ?",  [ username ], function(err, rows) {
+            result.push(rows);
+            // res.end(JSON.stringify(result));
+        });
+        db.all("SELECT user1, user2, message FROM follows WHERE user2 = ?",  [ username ], function(err, rows) {
+            result.push(rows);
+            res.end(JSON.stringify(result));
+        });
+    }
+});
+
 app.post('/sendmsg', function(req, res) {
     if (!req.session.username) {
         res.end(JSON.stringify([]));
