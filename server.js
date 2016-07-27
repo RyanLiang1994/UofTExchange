@@ -56,9 +56,9 @@ app.use(expressValidator({
             return String(value).search(reg) >= 0;
         }
 
-		}
-
 	}
+
+
 }));
 
 app.get(url_list[0] || url_list[1], function(req, res) {

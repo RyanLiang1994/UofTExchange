@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	email VARCHAR(64) PRIMARY KEY,
 	password VARCHAR(32) CHECK (LENGTH(password) BETWEEN 8 AND 32),
-	dob DATE NOT NULL,
+	birthday DATE NOT NULL,
 	phone INT,
 	year_of_study INT CHECK (year_of_study BETWEEN 1 AND 4),
 	major VARCHAR(32),
@@ -79,5 +79,3 @@ INSERT INTO offers_book VALUES ('mizu@ryan.com', 'Introduction to Algorithms', '
 						       ('mizu@ryan.com', 'Introduction to Algorithms', 'Author4', NULL);
 
 INSERT INTO course_textbook VALUES ('csc', 263, 'Introduction to Algorithms', 'Author4');
-
-
