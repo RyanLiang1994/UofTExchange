@@ -115,17 +115,19 @@ app.post('/signup', function(req, res)
 
     } else {
 		//submit the data to database
-        console.log("1");
         var username = req.body.email;
         var password = req.body.pword;
         var dob = req.body.birth;
         var result = create_user(username, password, dob, function (err) {
             if (err) {
-                var msgs = { "errors": { error_email: err } }
-                res.render('index.html', msgs);
+                req.session.errmsg = err;
+                res.render('index.html');
+                req.session.errmsg = "";
             } else {
                 req.session.username = username;
+                req.session.errmsg = "Signup successfully!";
                 res.redirect('/');
+                req.session.errmsg = "";
             }
         });
 	}
@@ -137,14 +139,14 @@ function create_user(username, password, dob, callback) {
     db.all('SELECT email FROM users WHERE email = ?', [username], function(err, rows) {
         var result;
         if (err) {
-            console.log(err);
+            callback(err);
             return;
         }
 
         if (rows.length > 0) {
             // user already exist
             console.log("insert err");
-            callback('Already exists')
+            callback('This username has already existed')
             return;
 
         } else {
@@ -283,11 +285,27 @@ app.post('/signin', function(req, res)
 
 
 app.get('/signout', function(req, res) {
-  req.session.destroy();
-  res.redirect('/');
+    req.session.destroy();
+    res.redirect('/');
 });
 
-
+app.post('/feedback', function(req, res) {
+    var feedback = req.body.feedback.substring(0, 200);
+    console.log("ssss" +feedback);
+    if (feedback) {
+        db.run('INSERT INTO feedbacks (feedback) VALUES (?)', [ feedback ], function (err){
+            if (err) {
+                req.session.msg = "feed back submit err";
+                res.render('index.html');
+                req.session.msg = "";
+            } else {
+                req.session.msg = "Feedback submit success! Thank you for your feedback.";
+                res.render('index.html');
+                req.session.msg = "";
+            }
+        });
+    }
+});
 
 var server = app.listen(3000, function()
 {

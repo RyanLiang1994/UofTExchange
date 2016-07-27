@@ -2,6 +2,20 @@
 {% extends "base.html" %}
 
 {% block body %}
+{% if session.msg %}
+<p class="msg"> {{ session.msg }} </p>
+
+
+{% else %}
+{% endif %}
+
+{% if session.errmsg %}
+<p class="errmsg"> {{ session.errmsg }} </p>
+
+
+{% else %}
+{% endif %}
+
 <div id="profile">
     {% if not session.username %}
     <div id="unSignedIn">
@@ -98,10 +112,10 @@
 
         <section id="feedback" class="menu-item">
             <h2>Feedback</h2>
-            <form>
+            <form action="/feedback" method="post">
                 <textarea name="feedback" rows="15" cols="79"></textarea>
                 <br>
-                <button type="button" name="feedback-submit" id="feedback-submit">Submit</button>
+                <button type="submit" name="feedback-submit" id="feedback-submit">Submit</button>
             </form>
         </section>
 

@@ -84,41 +84,55 @@ $('#btn-home').click(function() {
     $('section').hide();
     $('#home').show();
     $('#profile').show();
+    $('.errmsg').hide();
+    $('.msg').hide();
 });
 
 $('#btn-books').click(function() {
     $('section').hide();
     $('#search-books').show();
     $('#profile').show();
+    $('.errmsg').hide();
+    $('.msg').hide();
 });
 
 $('#btn-courses').click(function() {
     $('section').hide();
     $('#search-courses').show();
     $('#profile').show();
+    $('.errmsg').hide();
+    $('.msg').hide();
 });
 
 $('#btn-feedback').click(function() {
     $('section').hide();
     $('#feedback').show();
     $('#profile').show();
+    $('.errmsg').hide();
+    $('.msg').hide();
 });
 
 $('#btn-contact').click(function() {
     $('section').hide();
     $('#contact').show();
     $('#profile').show();
+    $('.errmsg').hide();
+    $('.msg').hide();
 });
 
 $('#btn-signup').click(function() {
     $('section').hide();
     $('#profile').hide();
     $('#signup').show();
+    $('.errmsg').hide();
+    $('.msg').hide();
 });
 
 $('#btn-profile').click(function() {
     $('section').hide();
     $('#userProfile').show();
+    $('.errmsg').hide();
+    $('.msg').hide();
 });
 
 function stickyNav(){
@@ -131,6 +145,8 @@ function stickyNav(){
         $('#navbar').removeClass('sticky');
     }
 };
+
+
 
 
 // Google Login:
