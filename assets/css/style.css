@@ -141,6 +141,35 @@ span.error {
 	padding-left: 20px;
 }
 
+p.msg {
+	color: green;
+	top: 0;
+	left: 0;
+	border: solid;
+	border-width:  1px;
+	background-color: lightgreen;
+	display: block;
+	text-align: center;
+	font-family: sans-serif;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	position: relative;
+}
+
+p.errmsg {
+	color: white;
+	top: 0;
+	left: 0;
+	border: solid;
+	border-width:  1px;
+	background-color: red;
+	display: block;
+	text-align: center;
+	font-family: sans-serif;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	position: relative;
+}
 @media screen and (max-width: 1024px) {
 	div#profile {
 		margin-left: 20px;

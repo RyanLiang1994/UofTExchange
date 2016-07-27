@@ -1,5 +1,6 @@
 var http = require("http");
 var fs = require("fs");
+var cool = require('cool-ascii-faces');
 var express = require("express");
 var app = express();
 var expressValidator = require("express-validator");
@@ -10,6 +11,22 @@ var path = require('path');
 var nunjucks = require('nunjucks');
 var session = require('express-session');
 var sequelize = require('sequelize');
+
+// Code for Heroku, need to change to fit in our app
+// app.set('port', (process.env.PORT || 3000));
+// // app.use(express.static(__dirname + '/public'));
+// // views is directory for all template files
+// app.set('views', __dirname + '/views');
+// app.set('view engine', 'nunjucks');
+// app.get('/', function(request, response) {
+//   response.render('pages/index')
+// });
+// app.get('/cool', function(request, response) {
+//   response.send(cool());
+// });
+// app.listen(app.get('port'), function() {
+//   console.log('Node app is running on port', app.get('port'));
+// });
 
 /*
 	this is a list of url to save url which we
@@ -72,8 +89,7 @@ app.get(url_list[0] || url_list[1], function(req, res) {
 
 
 
-app.post('/signup', function(req, res)
-{
+app.post('/signup', function(req, res) {
 	req.assert('email', 'Username is required').notEmpty();
 	req.assert('pword', 'Password is required').notEmpty();
     req.assert('birth', 'Birthday is required').notEmpty();
@@ -115,17 +131,19 @@ app.post('/signup', function(req, res)
 
     } else {
 		//submit the data to database
-        console.log("1");
         var username = req.body.email;
         var password = req.body.pword;
         var dob = req.body.birth;
         var result = create_user(username, password, dob, function (err) {
             if (err) {
-                var msgs = { "errors": err }
-                res.render('index.html', msgs);
+                req.session.errmsg = err;
+                res.render('index.html');
+                req.session.errmsg = "";
             } else {
                 req.session.username = username;
+                req.session.errmsg = "Signup successfully!";
                 res.redirect('/');
+                req.session.errmsg = "";
             }
         });
 	}
@@ -137,14 +155,14 @@ function create_user(username, password, dob, callback) {
     db.all('SELECT email FROM users WHERE email = ?', [username], function(err, rows) {
         var result;
         if (err) {
-            console.log(err);
+            callback(err);
             return;
         }
 
         if (rows.length > 0) {
             // user already exist
             console.log("insert err");
-            callback('Already exists')
+            callback('This username has already existed')
             return;
 
         } else {
@@ -270,13 +288,12 @@ app.post('/search_books', function(req, res) {
 
 
 
-app.post('/signin', function(req, res)
-{
-	req.assert('email', 'Username is required').notEmpty();
+app.post('/signin', function(req, res) {
+	req.assert('mail', 'Username is required').notEmpty();
 	req.assert('password', 'Password is required').notEmpty();
 
 
-	req.checkBody('email', 'Username is not valid').isEmail();
+	req.checkBody('mail', 'Username is not valid').isEmail();
 	req.checkBody('password', 'Password is not valid').isPassword();
 
 
@@ -288,8 +305,8 @@ app.post('/signin', function(req, res)
         var msgs = { "errors": {} };
 
 
-        if ( mappedErrors.email )
-            msgs.errors.error_email = mappedErrors.email.msg;
+        if ( mappedErrors.mail )
+            msgs.errors.error_mail = mappedErrors.mail.msg;
 
         if ( mappedErrors.password )
             msgs.errors.error_password = mappedErrors.password.msg;
@@ -300,8 +317,8 @@ app.post('/signin', function(req, res)
 
     } else {
 		//submit the data to database
-        var username = req.body.email;
-        db.all("SELECT email, password, birthday, is_admin FROM users WHERE email = '" + username + "'", function(err, rows) {
+        var username = req.body.mail;
+        db.all("SELECT email, password, birthday, is_admin FROM users WHERE email = ?",  [ username ], function(err, rows) {
             if (err) {
                 throw err;
             }
@@ -325,8 +342,26 @@ app.post('/signin', function(req, res)
 
 
 app.get('/signout', function(req, res) {
-  req.session.destroy();
-  res.redirect('/');
+    req.session.destroy();
+    res.redirect('/');
+});
+
+app.post('/feedback', function(req, res) {
+    var feedback = req.body.feedback.substring(0, 200);
+    console.log("ssss" +feedback);
+    if (feedback) {
+        db.run('INSERT INTO feedbacks (feedback) VALUES (?)', [ feedback ], function (err){
+            if (err) {
+                req.session.msg = "feed back submit err";
+                res.render('index.html');
+                req.session.msg = "";
+            } else {
+                req.session.msg = "Feedback submit success! Thank you for your feedback.";
+                res.render('index.html');
+                req.session.msg = "";
+            }
+        });
+    }
 });
 
 var server = app.listen(3000, function()
@@ -335,13 +370,13 @@ var server = app.listen(3000, function()
   console.log('Running on 127.0.0.1:%s', port);
 });
 
-
-app.get('/googlelogin', function(req, res) {
-    req.session.username = "Ryan";
-    res.render('index.html');
-});
-
-app.get("/googlelogout", function(req, res) {
-    req.session.destroy();
-    res.redirect('/');
-})
+//
+// app.get('/googlelogin', function(req, res) {
+//     req.session.username = "Ryan";
+//     res.render('index.html');
+// });
+//
+// app.get("/googlelogout", function(req, res) {
+//     req.session.destroy();
+//     res.redirect('/');
+// })
