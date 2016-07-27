@@ -150,6 +150,11 @@ $('#btn-send').click(function() {
     sendMessage();
 });
 
+$('#btn-follow').click(function() {
+    $('section').hide();
+    followFriend();
+})
+
 function stickyNav(){
     var navPosition = $('#navbar').position();
     var scrollTop = $(window).scrollTop();
@@ -236,15 +241,15 @@ function getMessage() {
                 $title.text("My Message");
                 $container.append($title);
                 for (var i = 0; i < data[0].length; i++) {
-                    var $window = $("<dl>", {id: "msgwindows"});
-                    var $sender = $("<dt>", {id: "sender"});
-                    var $msg = $("<dd>", {id: "message"});
+                    var $msgwindows = $("<dl>", {class: "msgwindows"});
+                    var $sender = $("<dt>", {class: "sender"});
+                    var $msg = $("<dd>", {class: "message"});
                     $sender.text("From: " + data[0][i].user1);
                     $msg.text("Text: " + data[0][i].message);
-                    $window.append($sender);
-                    $window.append($msg);
-                    $window.append("<br>");
-                    $container.append($window);
+                    $msgwindows.append($sender);
+                    $msgwindows.append($msg);
+                    $msgwindows.append("<br>");
+                    $container.append($msgwindows);
                     $container.append("<hr>");
                 }
                 $container.insertBefore($("footer"));
@@ -272,6 +277,24 @@ function sendMessage() {
     $form.append($lable);
     $form.append($receiver);
     $form.append($textbox);
+    $form.append($button);
+    $container.append($title);
+    $container.append($form);
+    $container.insertBefore($("footer"));
+}
+
+function followFriend() {
+    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $title = $("<h2>", {class: "sectiontitle"});
+    $title.text("Follow Friend");
+    var $lable = $("<lable>", {class: "label"});
+    var $receiver = $("<input>", {name: "friend", id: "receiver", placeholder: "Email"});
+    var $button = $("<button>", {type: "submit", id: "submitmsg"});
+    var $form = $("<form>", {action: "/follow", method: "post"});
+    $button.text("Follow!");
+    $lable.text("Target Email: ");
+    $form.append($lable);
+    $form.append($receiver);
     $form.append($button);
     $container.append($title);
     $container.append($form);
