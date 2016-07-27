@@ -136,10 +136,19 @@ $('#btn-profile').click(function() {
 });
 
 $('#btn-profile').click(function() {
+    $('section').hide();
     getProfile();
 });
 
+$('#btn-message').click(function() {
+    $('section').hide();
+    getMessage();
+});
 
+$('#btn-send').click(function() {
+    $('section').hide();
+    sendMessage();
+});
 
 function stickyNav(){
     var navPosition = $('#navbar').position();
@@ -213,6 +222,61 @@ function getProfile() {
     });
 }
 
+function getMessage() {
+    $.ajax(
+    {
+        url: "message",
+        method: "POST",
+        dataType: "json",
+        success: function(data) {
+            if (data.length > 0) {
+                console.log(JSON.stringify(data));
+                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $title = $("<h2>", {class: "sectiontitle"});
+                $title.text("My Message");
+                $container.append($title);
+                for (var i = 0; i < data[0].length; i++) {
+                    var $window = $("<dl>", {id: "msgwindows"});
+                    var $sender = $("<dt>", {id: "sender"});
+                    var $msg = $("<dd>", {id: "message"});
+                    $sender.text("From: " + data[0][i].user1);
+                    $msg.text("Text: " + data[0][i].message);
+                    $window.append($sender);
+                    $window.append($msg);
+                    $window.append("<br>");
+                    $container.append($window);
+                    $container.append("<hr>");
+                }
+                $container.insertBefore($("footer"));
+
+            } else {
+                var $paragraph =  $("<p></p>", {id: "404"});
+                $paragraph.text("404 Not Found!")
+                $('body').append($paragraph);
+            }
+        }
+    });
+}
+
+function sendMessage() {
+    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $title = $("<h2>", {class: "sectiontitle"});
+    $title.text("Send Message");
+    var $lable = $("<lable>", {class: "label"});
+    var $receiver = $("<input>", {name: "receiver", id: "receiver", placeholder: "receiver"});
+    var $textbox = $("<textarea>", {name: "mymessage", row: "15", cols: "79", id: "msgbox"});
+    var $button = $("<button>", {type: "submit", id: "submitmsg"});
+    var $form = $("<form>", {action: "/sendmsg", method: "post"});
+    $button.text("Send");
+    $lable.text("Receiver: ");
+    $form.append($lable);
+    $form.append($receiver);
+    $form.append($textbox);
+    $form.append($button);
+    $container.append($title);
+    $container.append($form);
+    $container.insertBefore($("footer"));
+}
 
 function checkNull(value) {
     if (value === null) {

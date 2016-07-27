@@ -229,7 +229,7 @@ app.post('/search_books', function(req, res) {
 	var msgs = {"errors": {}};
 
 	if (!lenTitle && !lenAuthor && !lenPublisher && !lenDept && !lenNum) {
-		
+
 	} else {
 
 		var offers_book = "";
@@ -390,6 +390,19 @@ app.get('/profile', function(req, res) {
 
         });
 
+    }
+});
+
+app.post('/message', function(req, res) {
+    if (!req.session.username) {
+        res.end(JSON.stringify([]));
+    } else {
+        var result = [];
+        var username = req.session.username;
+        db.all("SELECT user1, user2, message FROM messages WHERE user2 = ?",  [ username ], function(err, rows) {
+            result.push(rows);
+            res.end(JSON.stringify(result));
+        });
     }
 });
 
