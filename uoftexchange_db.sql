@@ -5,7 +5,7 @@ CREATE TABLE users (
 	birthday DATE NOT NULL,
 	phone INT,
 	year_of_study INT CHECK (year_of_study BETWEEN 1 AND 4),
-	major VARCHAR(32),
+	major CHAR(3),
 	is_admin INT NOT NULL CHECK (is_admin BETWEEN 0 AND 1)
 );
 
@@ -62,7 +62,7 @@ CREATE TABLE feedbacks (
 
 INSERT INTO users VALUES ('water@ryan.com', 'asdasdasd', '1111-01-01', NULL, NULL, NULL, 1),
 						 ('handsome@ryan.com', 'ryanleung123', '1111-01-01', NULL, NULL, NULL, 1),
-						 ('mizu@ryan.com', 'mizukami', '1111-01-01', NULL, NULL, NULL, 0);
+						 ('mizu@ryan.com', 'mizukami', '1111-01-01', NULL, 2, 'csc', 0);
 
 INSERT INTO offers_book VALUES ('mizu@ryan.com', 'Introduction to Algorithms', 'Author1', NULL),
 						 	   ('mizu@ryan.com', 'Introduction to Algorithms', 'Author2', NULL),

@@ -208,11 +208,29 @@ app.post('/search_courses', function(req, res) {
 
 		var query_offers_course = "SELECT * FROM offers_course WHERE " + offers_course.toLowerCase();
 
+		var result_list = [];
+
 		db.all(query_offers_course, function(err, rows) {
 			if (err) throw err;
+			result_list.push(rows);
 			console.log(rows);
-			res.end();
 		});
+
+		if (!req.session.username) {
+			result_list.push([]);
+			res.end(JSON.stringify(result_list));
+		} else {
+			var username = req.session.username;
+			db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
+            	
+    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 200) + " and email <> '" + username + "'";
+            	db.all(recommend, function(err, rec) {
+	       			result_list.push(rec);
+	       			console.log(rec);
+	       			res.end(JSON.stringify(result_list));
+       			});
+       		});
+		}
 	}
 
 });
@@ -275,13 +293,30 @@ app.post('/search_books', function(req, res) {
 			result = query_offers_book + " intersect " + query_join_offer_textbook;
 		}
 
+		var result_list = [];
 		db.all(result, function(err, rows) {
 			if (err) {
                 throw err;
             }
+            result_list.push(rows);
             console.log(rows);
-            res.end();
 		});
+
+		if (!req.session.username) {
+			result_list.push([]);
+			res.end(JSON.stringify(result_list));
+		} else {
+			var username = req.session.username;
+			db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
+            	
+    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 200) + " and email <> '" + username + "'";
+            	db.all(recommend, function(err, rec) {
+	       			result_list.push(rec);
+	       			console.log(rec);
+	       			res.end(JSON.stringify(result_list));
+       			});
+       		});
+		}
 	}
 
 });
@@ -335,7 +370,7 @@ app.post('/signin', function(req, res) {
                 msgs.errors.error_password = "Password is not correct!";
                 res.render('index', msgs);
             }
-        })
+        });
 	}
 });
 
