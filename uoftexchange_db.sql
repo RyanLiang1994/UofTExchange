@@ -9,15 +9,6 @@ CREATE TABLE users (
 	is_admin INT NOT NULL CHECK (is_admin BETWEEN 0 AND 1)
 );
 
-DROP TABLE IF EXISTS courses;
-CREATE TABLE courses (
-	dept CHAR(3) CHECK (LENGTH(dept) = 3),
-	num INT CHECK (num BETWEEN 100 AND 499),
-	title VARCHAR(64),
-	sect VARCHAR(16),
-	PRIMARY KEY (dept, num)
-);
-
 DROP TABLE IF EXISTS offers_book;
 CREATE TABLE offers_book (
 	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
@@ -32,8 +23,9 @@ CREATE TABLE offers_course (
 	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
 	dept CHAR(3),
 	num INT,
-	PRIMARY KEY (email, dept, num),
-	FOREIGN KEY (dept, num) REFERENCES courses(dept, num) ON DELETE CASCADE
+	title VARCHAR(32),
+	sect VARCHAR(16),
+	PRIMARY KEY (email, dept, num)
 );
 
 DROP TABLE IF EXISTS course_textbook;
@@ -42,8 +34,7 @@ CREATE TABLE course_textbook (
 	num INT,
 	title VARCHAR(64),
 	author VARCHAR(32),
-	PRIMARY KEY (dept, num, title, author),
-	FOREIGN KEY (dept, num) REFERENCES courses(dept, num) ON DELETE CASCADE
+	PRIMARY KEY (dept, num, title, author)
 );
 
 DROP TABLE IF EXISTS follows;
