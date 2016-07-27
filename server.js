@@ -48,7 +48,12 @@ app.use(expressValidator({
 			var reg = /^[a-zA-Z0-9]{8,32}$/;
 			return String(value).search(reg) >= 0;
 
-		}
+		},
+
+        isBirthday: function(value) {
+            var reg = /^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/;
+            return String(value).search(reg) >= 0;
+        }
 	}
 }));
 
@@ -65,23 +70,31 @@ app.get(url_list[0] || url_list[1], function(req, res) {
 
 app.post('/signup', function(req, res)
 {
-	req.assert('mail', 'Username is required').notEmpty();
+	req.assert('email', 'Username is required').notEmpty();
 	req.assert('pword', 'Password is required').notEmpty();
+    req.assert('birth', 'Birthday is required').notEmpty();
 
-	req.checkBody('mail', 'Username is not valid').isEmail();
+	req.checkBody('email', 'Username is not valid').isEmail();
 	req.checkBody('pword', 'Password is not valid').isPassword();
+    req.checkBody('birth', 'Birthday is not valid').isBirthday();
+
     req.check('confirm', 'password is not matched').equals(req.body.pword);
 
 	var err = req.validationErrors();
     var mappedErrors = req.validationErrors(true);
-
+    console.log("0");
     if (err) // If errors exist, send them back to the form:
     {
+        console.log(err);
+        console.log(req.body.email);
+        console.log(req.body.confirm);
+        console.log(req.body.birth);
         var msgs = { "errors": {} };
 
 
-        if ( mappedErrors.mail )
-            msgs.errors.error_mail = mappedErrors.mail.msg;
+
+        if ( mappedErrors.email )
+            msgs.errors.error_email = mappedErrors.email.msg;
 
         if ( mappedErrors.pword )
             msgs.errors.error_pword = mappedErrors.pword.msg;
@@ -89,15 +102,55 @@ app.post('/signup', function(req, res)
         if ( mappedErrors.confirm)
             msgs.errors.error_confirm = mappedErrors.confirm.msg;
 
+        if ( mappedErrors.birth )
+            msgs.errors.error_birth = mappedErrors.birth.msg;
+
         // res.sendFile(__dirname + '/index.html');
-        res.render('index', msgs);
-        res.redirect(__dirname + '/signup');
+        res.render('index.html', msgs);
+
 
     } else {
 		//submit the data to database
-		console.log("signup");
+        console.log("1");
+        var username = req.body.email;
+        var password = req.body.pword;
+        var dob = req.body.birth;
+        var result = create_user(username, password, dob, function (err) {
+            if (err) {
+                var msgs = { "errors": err }
+                res.render('index.html', msgs);
+            } else {
+                req.session.username = username;
+                res.redirect('/');
+            }
+        });
 	}
 });
+
+
+function create_user(username, password, dob, callback) {
+
+    db.all('SELECT email FROM users WHERE email = ?', [username], function(err, rows) {
+        var result;
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        if (rows.length > 0) {
+            // user already exist
+            console.log("insert err");
+            callback('Already exists')
+            return;
+
+        } else {
+            db.run('INSERT INTO users (email, password, birthday, is_admin) VALUES (?, ?, ?, ?)', [username, password, dob, 0], function (err) {
+                callback(err);
+            });
+        }
+    });
+}
+
 
 app.post('/search_books', function(req, res) {
 	req.assert('title', '').notEmpty();
@@ -187,9 +240,8 @@ app.post('/signin', function(req, res)
 
     } else {
 		//submit the data to database
-        console.log("blahblah");
         var username = req.body.email;
-        db.all("SELECT email, password, is_admin FROM users WHERE email = '" + username + "'", function(err, rows) {
+        db.all("SELECT email, password, birthday, is_admin FROM users WHERE email = '" + username + "'", function(err, rows) {
             if (err) {
                 throw err;
             }
@@ -197,10 +249,8 @@ app.post('/signin', function(req, res)
                 throw "this shouldn't happen";
             }
 
-            if (rows.length === 1 && req.body.password === rows[0].password) {
-                console.log("do something");
+            if (rows.length === 1 && req.body.password === rows[0].password && req.body.dob === rows[0].birthday) {
                 req.session.username = username;
-
                 res.redirect('/');
             } else {
                 var err = req.validationErrors();
