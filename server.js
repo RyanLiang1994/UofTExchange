@@ -47,7 +47,6 @@ app.use(expressValidator({
 		isPassword: function(value) {
 			var reg = /^[a-zA-Z0-9]{8,32}$/;
 			return String(value).search(reg) >= 0;
-
 		}
 	}
 }));
@@ -103,48 +102,62 @@ app.post('/search_books', function(req, res) {
 	req.assert('title', '').notEmpty();
 	req.assert('author', '').notEmpty();
 	req.assert('publisher', '').notEmpty();
-	req.assert('isbn', '').notEmpty();
-	req.assert('course', '').notEmpty();
+	req.assert('dept', '').notEmpty();
+	req.assert('num', '').notEmpty();
 
 	var mappedErrors = req.validationErrors(true);
 
 	var msgs = {"errors": {}};
 
-	if (mappedErrors.title && mappedErrors.author && mappedErrors.publisher
-		&& mappedErrors.isbn && mappedErrors.course) {
+	if (mappedErrors.title && mappedErrors.author && mappedErrors.publisher &&
+		mappedErrors.dept && mappedErrors.num) {
 		msgs.errors.error_empty = "Please enter in at least 1 field";
 		res.render('index', msgs);
 	} else {
-		var where = '';
+		var offers_book = '';
 		if (req.body.title.length > 0) {
-			if (where.length > 0) {
-				where += ' and '
+			if (offers_book.length > 0) {
+				offers_book += ' and ';
 			}
-			where = where + "lower(title) like '%" + req.body.title + "%'";
+			offers_book = offers_book + "lower(title) like '%" + req.body.title + "%'";
 		}
 
 		if (req.body.author.length > 0) {
-			if (where.length > 0) {
-				where += ' and '
+			if (offers_book.length > 0) {
+				offers_book += ' and ';
 			}
-			where = where + "lower(author) like '%" + req.body.author + "%'";
+			offers_book = offers_book + "lower(author) like '%" + req.body.author + "%'";
 		}
 
 		if (req.body.publisher.length > 0) {
-			if (where.length > 0) {
-				where += ' and '
+			if (offers_book.length > 0) {
+				offers_book += ' and ';
 			}
-			where = where + "lower(publisher) like '%" + req.body.publisher + "%'";
+			offers_book = offers_book + "lower(publisher) like '%" + req.body.publisher + "%'";
 		}
 
-		if (req.body.isbn.length > 0) {
-			if (where.length > 0) {
-				where += ' and '
-			}
-			where = where + "isbn = " + req.body.isbn;
+		var course_textbook = '';
+		if (req.body.dept.length > 0 && req.body.num.length == 0) {
+			course_textbook = "lower(dept) like '%" + req.body.dept + "%'";
+		} else if (req.body.dept.length == 0 && req.body.num.length > 0) {
+			course_textbook = "num = " + req.body.num;
+		} else if (req.body.dept.length > 0 && req.body.num.length > 0){
+			course_textbook = "lower(dept) like '%" + req.body.dept + "%' and num = " + req.body.num;
 		}
 
-		db.all("SELECT * FROM books WHERE " + where.toLowerCase(), function(err, rows) {
+		var query_offers_book = "SELECT * FROM offers_book WHERE " + offers_book.toLowerCase();
+		var query_course_textbook = "SELECT title, author FROM course_textbook WHERE " + course_textbook.toLowerCase();
+		var query_join_offer_textbook = "SELECT o.email, o.title, o.author, o.publisher FROM offers_book o, (" + query_course_textbook + ") c WHERE o.title = c.title and o.author = c.author";
+		var result;
+		if (offers_book.length > 0 && course_textbook.length == 0) {
+			result = query_offers_book;
+		} else if (offers_book.length == 0 && course_textbook.length > 0) {
+			result = query_course_textbook;
+		} else if (offers_book.length > 0 && course_textbook.length > 0) {
+			result = query_offers_book + " union " + query_join_offer_textbook;
+		}
+
+		db.all(result, function(err, rows) {
 			if (err) {
                 throw err;
             }
