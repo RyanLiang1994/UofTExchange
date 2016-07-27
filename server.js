@@ -508,12 +508,12 @@ app.post('/follow', function(req, res) {
                 db.run('INSERT INTO follows (user1, user2) VALUES (?, ?)', [ username, receiver], function (err){
                     if (err) {
                         req.session.errmsg = "Follow failed, you're already friends";
-
+                        req.session.msg = "";
                         res.redirect('/');
                         req.session.errmsg = "";
                     } else {
                         req.session.msg = "Follow successfully!";
-
+                        req.session.errmsg = "";
                         res.redirect('/');
                         req.session.msg = "";
                     }
@@ -521,7 +521,7 @@ app.post('/follow', function(req, res) {
             } else {
                 // cannot find this user
                 req.session.errmsg = "Follow friend failed, cannot find this user.";
-
+                req.session.msg = "";
                 res.redirect('/');
                 req.session.errmsg = "";
             }
