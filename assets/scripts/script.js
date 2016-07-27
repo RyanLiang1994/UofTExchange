@@ -84,74 +84,83 @@ $('#btn-home').click(function() {
     $('section').hide();
     $('#home').show();
     $('#profile').show();
-    $('.errmsg').hide();
-    $('.msg').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
 });
 
 $('#btn-books').click(function() {
     $('section').hide();
     $('#search-books').show();
     $('#profile').show();
-    $('.errmsg').hide();
-    $('.msg').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
 });
 
 $('#btn-courses').click(function() {
     $('section').hide();
     $('#search-courses').show();
     $('#profile').show();
-    $('.errmsg').hide();
-    $('.msg').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
 });
 
 $('#btn-feedback').click(function() {
     $('section').hide();
     $('#feedback').show();
     $('#profile').show();
-    $('.errmsg').hide();
-    $('.msg').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
 });
 
 $('#btn-contact').click(function() {
     $('section').hide();
     $('#contact').show();
     $('#profile').show();
-    $('.errmsg').hide();
-    $('.msg').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
 });
 
 $('#btn-signup').click(function() {
     $('section').hide();
     $('#profile').hide();
     $('#signup').show();
-    $('.errmsg').hide();
-    $('.msg').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
 });
 
 $('#btn-profile').click(function() {
     $('section').hide();
     $('#userProfile').show();
-    $('.errmsg').hide();
-    $('.msg').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
 });
 
 $('#btn-profile').click(function() {
     $('section').hide();
     getProfile();
+    $('.errmsg').remove();
+    $('.msg').remove();
 });
 
 $('#btn-message').click(function() {
     $('section').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
     getMessage();
+
 });
 
 $('#btn-send').click(function() {
     $('section').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
     sendMessage();
 });
 
 $('#btn-follow').click(function() {
     $('section').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
     followFriend();
 })
 

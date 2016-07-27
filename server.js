@@ -488,7 +488,6 @@ app.post('/follow', function(req, res) {
         var username = req.session.username;
         db.all("SELECT email FROM users WHERE email = ?",  [ receiver ], function(err, rows) {
             if (rows.length > 0) {
-                var result = [];
                 db.run('INSERT INTO follows (user1, user2) VALUES (?, ?)', [ username, receiver], function (err){
                     if (err) {
                         req.session.errmsg = "Follow failed, you're already friends";
