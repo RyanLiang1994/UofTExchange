@@ -1,1 +1,1 @@
-web: node /assets/scripts/script.js
+web: node server.js
