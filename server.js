@@ -353,14 +353,43 @@ app.post('/feedback', function(req, res) {
         db.run('INSERT INTO feedbacks (feedback) VALUES (?)', [ feedback ], function (err){
             if (err) {
                 req.session.msg = "feed back submit err";
-                res.render('index.html');
+
+                res.redirect('/');
                 req.session.msg = "";
             } else {
                 req.session.msg = "Feedback submit success! Thank you for your feedback.";
-                res.render('index.html');
+
+                res.redirect('/');
                 req.session.msg = "";
             }
         });
+    }
+});
+
+app.get('/profile', function(req, res) {
+    console.log(req.session.username);
+    if (!req.session.username) {
+        // hasn't login yet
+        res.end(JSON.stringify([]));
+    } else {
+        var result = [];
+        var username = req.session.username;
+
+        db.all("SELECT email, phone, year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
+            result.push(rows);
+        });
+
+        db.all("SELECT email, dept, num, title, sect FROM offers_course WHERE email = ?",  [ username ], function(err, rows) {
+            result.push(rows);
+
+        });
+
+        db.all("SELECT email, title, author, publisher FROM offers_book WHERE email = ?",  [ username ], function(err, rows) {
+            result.push(rows);
+            res.end(JSON.stringify(result));
+
+        });
+
     }
 });
 
