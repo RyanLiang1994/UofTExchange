@@ -2,26 +2,17 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	email VARCHAR(64) PRIMARY KEY,
 	password VARCHAR(32) CHECK (LENGTH(password) BETWEEN 8 AND 32),
-	birthday DATE NOT NULL,
+	dob DATE NOT NULL,
 	phone INT,
 	year_of_study INT CHECK (year_of_study BETWEEN 1 AND 4),
 	major VARCHAR(32),
 	is_admin INT NOT NULL CHECK (is_admin BETWEEN 0 AND 1)
 );
 
-DROP TABLE IF EXISTS books;
-CREATE TABLE books (
-	title VARCHAR(64),
-	author VARCHAR(32),
-	publisher VARCHAR(64),
-	isbn INT,
-	PRIMARY KEY (title, author)
-);
-
 DROP TABLE IF EXISTS courses;
 CREATE TABLE courses (
 	dept CHAR(3) CHECK (LENGTH(dept) = 3),
-	num INT,
+	num INT CHECK (num BETWEEN 100 AND 499),
 	title VARCHAR(64),
 	sect VARCHAR(16),
 	PRIMARY KEY (dept, num)
@@ -32,8 +23,8 @@ CREATE TABLE offers_book (
 	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
 	title VARCHAR(64),
 	author VARCHAR(32),
-	PRIMARY KEY (email, title, author),
-	FOREIGN KEY (title, author) REFERENCES books(title, author) ON DELETE CASCADE
+	publisher VARCHAR(64),
+	PRIMARY KEY (email, title, author)
 );
 
 DROP TABLE IF EXISTS offers_course;
@@ -52,8 +43,7 @@ CREATE TABLE course_textbook (
 	title VARCHAR(64),
 	author VARCHAR(32),
 	PRIMARY KEY (dept, num, title, author),
-	FOREIGN KEY (dept, num) REFERENCES courses(dept, num) ON DELETE CASCADE,
-	FOREIGN KEY (title, author) REFERENCES books(title, author) ON DELETE CASCADE
+	FOREIGN KEY (dept, num) REFERENCES courses(dept, num) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS follows;
@@ -83,7 +73,11 @@ INSERT INTO users VALUES ('water@ryan.com', 'asdasdasd', '1111-01-01', NULL, NUL
 						 ('handsome@ryan.com', 'ryanleung123', '1111-01-01', NULL, NULL, NULL, 1),
 						 ('mizu@ryan.com', 'mizukami', '1111-01-01', NULL, NULL, NULL, 0);
 
-INSERT INTO books VALUES ('Introduction to Algorithms', 'Author1', NULL, NULL),
-						 ('Introduction to Algorithms', 'Author2', NULL, NULL),
-						 ('Introduction to Algorithms', 'Author3', NULL, NULL),
-						 ('Introduction to Algorithms', 'Author4', NULL, NULL);
+INSERT INTO offers_book VALUES ('mizu@ryan.com', 'Introduction to Algorithms', 'Author1', NULL),
+						 	   ('mizu@ryan.com', 'Introduction to Algorithms', 'Author2', NULL),
+						       ('mizu@ryan.com', 'Introduction to Algorithms', 'Author3', NULL),
+						       ('mizu@ryan.com', 'Introduction to Algorithms', 'Author4', NULL);
+
+INSERT INTO course_textbook VALUES ('csc', 263, 'Introduction to Algorithms', 'Author4');
+
+
