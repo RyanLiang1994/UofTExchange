@@ -448,10 +448,11 @@ app.post('/sendmsg', function(req, res) {
         var receiver = req.body.receiver;
         var username = req.session.username;
         var message = req.body.mymessage;
-        db.all("SELECT email, is_admin FROM users WHERE email = ?",  [ receiver ], function(err, rows) {
+        db.all("SELECT email FROM users WHERE email = ?",  [ receiver ], function(err, rows) {
             if (rows.length > 0) {
                 var result = [];
-                db.run('INSERT INTO messages (user1, user2, message) VALUES (?, ?, ?)', [ username, receiver, message], function (err){
+                db.run('INSERT INTO messages (user1, user2, message, time) VALUES (?, ?, ?, ?)', [ username, receiver, message, new Date(Date.now()).toString()], function (err){
+                	console.log(new Date(Date.now()).toString());
                     if (err) {
                         req.session.errmsg = "Send message failed";
 
