@@ -222,6 +222,44 @@ function getProfile() {
     });
 }
 
+function getFollows() {
+    $.ajax({
+        url: "follows",
+        method: "POST",
+        dataType: "json",
+        success: function(data) {
+            if (data.length > 0) {
+                console.log(JSON.stringify(data));
+                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $title = $("<h2>", {class: "sectiontitle"});
+                var $following_list = $("</ul>", {id: "following_list"});
+                $title.text("Following");
+                $container.append($title);
+                for (var i = 0; i < data[0].length; i++) {
+                    var $following_user = $("</li>", {class: "following_user"});
+                    $following_user.text(data[0][i].user2);
+                    $following_list.append($following_user);
+                }
+                $container.append($following_list);
+                $container.append("<hr>");
+                var $follower_list = $("</ul>", {id: "follower_list"});
+                for (var i = 0; i < data[1].length; i++) {
+                    var $follower_user = $("</li>", {class: "follower_user"});
+                    $follower_user.text(data[1][i].user1);
+                    $follower_list.append($follower_user);
+                }
+                $container.append($follower_list);
+                $container.insertBefore($("footer"));
+
+            } else {
+                var $paragraph =  $("<p></p>", {id: "404"});
+                $paragraph.text("404 Not Found!")
+                $('body').append($paragraph);
+            }
+        }
+    });
+}
+
 function getMessage() {
     $.ajax(
     {
