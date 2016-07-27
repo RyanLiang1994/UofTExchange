@@ -171,20 +171,20 @@ function getProfile() {
                 var $paragraph1 = $("<p>", {id: "profileparagraph"});
                 var $linebreak = $("<br>");
                 $container.append($title1);
-                $paragraph1.append("Email: " + data[0][0].email + "<br>" +
-                                    "Phone: " + data[0][0].phone + "<br>" +
-                                    "Year of Study: " + data[0][0].year_of_study + "<br>" +
-                                    "Major: " + data[0][0].major);
+                $paragraph1.append("Email: " + checkNull(data[0][0].email) + "<br>" +
+                                    "Phone: " + checkNull(data[0][0].phone) + "<br>" +
+                                    "Year of Study: " + checkNull(data[0][0].year_of_study) + "<br>" +
+                                    "Major: " + checkNull(data[0][0].major));
                 $container.append($paragraph1);
 
                 $container.append($title2);
                 if (data.length > 1) {
                     var $paragraph2 = $("<p>", {id: "profileparagraph"});
                     for (var i = 0; i < data[1].length; i++) {
-                        $paragraph2.append("Course: " + data[1][i].title + "<br>" +
-                                            "Section: " + data[1][i].sect + "<br>" +
-                                            "Department: " + data[1][i].dept + "<br>" +
-                                            "Code: " + data[1][i].num);
+                        $paragraph2.append("Course: " + checkNull(data[1][i].title) + "<br>" +
+                                            "Section: " + checkNull(data[1][i].sect) + "<br>" +
+                                            "Department: " + checkNull(data[1][i].dept) + "<br>" +
+                                            "Code: " + checkNull(data[1][i].num));
                         $paragraph2.append("<hr>");
                     }
                     $container.append($paragraph2);
@@ -194,9 +194,9 @@ function getProfile() {
                 if (data.length > 2) {
                     var $paragraph3 = $("<p>", {id: "profileparagraph"});
                     for (var j = 0; j < data[2].length; j++) {
-                        $paragraph3.append("Title: " + data[2][j].title + "<br>" +
-                                            "Author: " + data[2][j].author + "<br>" +
-                                            "Publisher: " + data[2][j].publisher + "<br>"
+                        $paragraph3.append("Title: " + checkNull(data[2][j].title) + "<br>" +
+                                            "Author: " + checkNull(data[2][j].author) + "<br>" +
+                                            "Publisher: " + checkNull(data[2][j].publisher) + "<br>"
                                             );
                         $paragraph3.append("<hr>");
                     }
@@ -213,6 +213,14 @@ function getProfile() {
     });
 }
 
+
+function checkNull(value) {
+    if (value === null) {
+        return "";
+    } else {
+        return value;
+    }
+}
 
 // Google Login:
 // Source: https://developers.google.com/identity/sign-in/web/sign-in
