@@ -1,5 +1,6 @@
 var http = require("http");
 var fs = require("fs");
+var cool = require('cool-ascii-faces');
 var express = require("express");
 var app = express();
 var expressValidator = require("express-validator");
@@ -10,6 +11,22 @@ var path = require('path');
 var nunjucks = require('nunjucks');
 var session = require('express-session');
 var sequelize = require('sequelize');
+
+// Code for Heroku, need to change to fit in our app
+// app.set('port', (process.env.PORT || 3000));
+// // app.use(express.static(__dirname + '/public'));
+// // views is directory for all template files
+// app.set('views', __dirname + '/views');
+// app.set('view engine', 'nunjucks');
+// app.get('/', function(request, response) {
+//   response.render('pages/index')
+// });
+// app.get('/cool', function(request, response) {
+//   response.send(cool());
+// });
+// app.listen(app.get('port'), function() {
+//   console.log('Node app is running on port', app.get('port'));
+// });
 
 /*
 	this is a list of url to save url which we
@@ -72,8 +89,7 @@ app.get(url_list[0] || url_list[1], function(req, res) {
 
 
 
-app.post('/signup', function(req, res)
-{
+app.post('/signup', function(req, res) {
 	req.assert('email', 'Username is required').notEmpty();
 	req.assert('pword', 'Password is required').notEmpty();
     req.assert('birth', 'Birthday is required').notEmpty();
@@ -228,8 +244,7 @@ app.post('/search_books', function(req, res) {
 
 
 
-app.post('/signin', function(req, res)
-{
+app.post('/signin', function(req, res) {
 	req.assert('mail', 'Username is required').notEmpty();
 	req.assert('password', 'Password is required').notEmpty();
 
