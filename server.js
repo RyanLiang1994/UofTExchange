@@ -352,10 +352,10 @@ app.post('/feedback', function(req, res) {
     if (feedback) {
         db.run('INSERT INTO feedbacks (feedback) VALUES (?)', [ feedback ], function (err){
             if (err) {
-                req.session.msg = "feed back submit err";
+                req.session.errmsg = "Feedback submit err";
 
                 res.redirect('/');
-                req.session.msg = "";
+                req.session.errmsg = "";
             } else {
                 req.session.msg = "Feedback submit success! Thank you for your feedback.";
 
@@ -402,6 +402,40 @@ app.post('/message', function(req, res) {
         db.all("SELECT user1, user2, message FROM messages WHERE user2 = ?",  [ username ], function(err, rows) {
             result.push(rows);
             res.end(JSON.stringify(result));
+        });
+    }
+});
+
+app.post('/sendmsg', function(req, res) {
+    if (!req.session.username) {
+        res.end(JSON.stringify([]));
+    } else {
+        var receiver = req.body.receiver;
+        var username = req.session.username;
+        var message = req.body.mymessage;
+        db.all("SELECT email, is_admin FROM users WHERE email = ?",  [ receiver ], function(err, rows) {
+            if (rows.length > 0) {
+                var result = [];
+                db.run('INSERT INTO messages (user1, user2, message) VALUES (?, ?, ?)', [ username, receiver, message], function (err){
+                    if (err) {
+                        req.session.errmsg = "Send message failed";
+
+                        res.redirect('/');
+                        req.session.errmsg = "";
+                    } else {
+                        req.session.msg = "Send successfully!";
+
+                        res.redirect('/');
+                        req.session.msg = "";
+                    }
+                });
+            } else {
+                // cannot find this user
+                req.session.errmsg = "Send message failed, cannot find this receiver.";
+
+                res.redirect('/');
+                req.session.errmsg = "";
+            }
         });
     }
 });
