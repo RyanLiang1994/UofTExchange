@@ -259,7 +259,7 @@ app.post('/signin', function(req, res)
     } else {
 		//submit the data to database
         var username = req.body.mail;
-        db.all("SELECT email, password, birthday, is_admin FROM users WHERE email = '" + username + "'", function(err, rows) {
+        db.all("SELECT email, password, birthday, is_admin FROM users WHERE email = ?",  [ username ], function(err, rows) {
             if (err) {
                 throw err;
             }
@@ -287,19 +287,21 @@ app.get('/signout', function(req, res) {
   res.redirect('/');
 });
 
+
+
 var server = app.listen(3000, function()
 {
   var port = server.address().port;
   console.log('Running on 127.0.0.1:%s', port);
 });
 
-
-app.get('/googlelogin', function(req, res) {
-    req.session.username = "Ryan";
-    res.render('index.html');
-});
-
-app.get("/googlelogout", function(req, res) {
-    req.session.destroy();
-    res.redirect('/');
-})
+//
+// app.get('/googlelogin', function(req, res) {
+//     req.session.username = "Ryan";
+//     res.render('index.html');
+// });
+//
+// app.get("/googlelogout", function(req, res) {
+//     req.session.destroy();
+//     res.redirect('/');
+// })
