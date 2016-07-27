@@ -447,12 +447,13 @@ app.post('/follows', function(req, res) {
     } else {
         var result = [];
         var username = req.session.username;
-        db.all("SELECT user1, user2, message FROM follows WHERE user1 = ?",  [ username ], function(err, rows) {
+        db.all("SELECT user1, user2 FROM follows WHERE user1 = ?",  [ username ], function(err, rows) {
             result.push(rows);
             // res.end(JSON.stringify(result));
         });
-        db.all("SELECT user1, user2, message FROM follows WHERE user2 = ?",  [ username ], function(err, rows) {
+        db.all("SELECT user1, user2 FROM follows WHERE user2 = ?",  [ username ], function(err, rows) {
             result.push(rows);
+            console.log(JSON.stringify(result));
             res.end(JSON.stringify(result));
         });
     }
