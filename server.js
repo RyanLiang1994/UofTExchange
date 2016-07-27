@@ -222,7 +222,7 @@ app.post('/search_courses', function(req, res) {
 		} else {
 			var username = req.session.username;
 			db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
-            	
+
     			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 200) + " and email <> '" + username + "'";
             	db.all(recommend, function(err, rec) {
 	       			result_list.push(rec);
@@ -308,7 +308,7 @@ app.post('/search_books', function(req, res) {
 		} else {
 			var username = req.session.username;
 			db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
-            	
+
     			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 200) + " and email <> '" + username + "'";
             	db.all(recommend, function(err, rec) {
 	       			result_list.push(rec);
@@ -493,6 +493,42 @@ app.post('/sendmsg', function(req, res) {
     }
 });
 
+
+app.post('/follow', function(req, res) {
+    if (!req.session.username) {
+        req.session.errmsg = "You haven't login yet";
+
+        res.redirect('/');
+        req.session.errmsg = "";
+    } else {
+        var receiver = req.body.friend;
+        var username = req.session.username;
+        db.all("SELECT email FROM users WHERE email = ?",  [ receiver ], function(err, rows) {
+            if (rows.length > 0) {
+                var result = [];
+                db.run('INSERT INTO follows (user1, user2) VALUES (?, ?)', [ username, receiver], function (err){
+                    if (err) {
+                        req.session.errmsg = "Follow failed, you're already friends";
+
+                        res.redirect('/');
+                        req.session.errmsg = "";
+                    } else {
+                        req.session.msg = "Follow successfully!";
+
+                        res.redirect('/');
+                        req.session.msg = "";
+                    }
+                });
+            } else {
+                // cannot find this user
+                req.session.errmsg = "Follow friend failed, cannot find this user.";
+
+                res.redirect('/');
+                req.session.errmsg = "";
+            }
+        });
+    }
+});
 var server = app.listen(3000, function()
 {
   var port = server.address().port;
