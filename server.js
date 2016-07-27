@@ -416,6 +416,8 @@ app.get('/profile', function(req, res) {
             result.push(rows);
         });
 
+
+
         db.all("SELECT email, dept, num, title, sect FROM offers_course WHERE email = ?",  [ username ], function(err, rows) {
             result.push(rows);
 
@@ -426,6 +428,7 @@ app.get('/profile', function(req, res) {
             res.end(JSON.stringify(result));
 
         });
+
 
     }
 });
@@ -531,6 +534,82 @@ app.post('/follow', function(req, res) {
         });
     }
 });
+
+app.post('/add_book', function(req, res) {
+    if (!req.session.username) {
+        req.session.errmsg = "You haven't login yet";
+        res.redirect('/');
+        req.session.errmsg = "";
+    } else {
+        var title = req.body.title;
+        var author = req.body.author;
+        var publisher = req.body.publisher;
+        var username = req.session.username;
+
+        db.all("SELECT email, title FROM offers_book WHERE email = ? AND title = ?",  [ username, title ], function(err, rows) {
+            if (!(rows.length > 0)) {
+                db.run('INSERT INTO offers_book (email, title, author, publisher) VALUES (?, ?, ?, ?)', [ username, title, author, publisher], function (err){
+                    if (err) {
+                        req.session.errmsg = "Add failed. " + err;
+                        req.session.msg = "";
+                        res.redirect('/');
+                        req.session.errmsg = "";
+                    } else {
+                        req.session.msg = "Add offered book successfully!";
+                        req.session.errmsg = "";
+                        res.redirect('/');
+                        req.session.msg = "";
+                    }
+                });
+            } else {
+                // cannot find this user
+                req.session.errmsg = "Add book failed. You've already offered this book";
+                req.session.msg = "";
+                res.redirect('/');
+                req.session.errmsg = "";
+            }
+        });
+    }
+});
+
+app.post('/add_course', function(req, res) {
+    if (!req.session.username) {
+        req.session.errmsg = "You haven't login yet";
+        req.session.msg = "";
+        res.redirect('/');
+        req.session.errmsg = "";
+    } else {
+        var dept = req.body.department;
+        var code = req.body.code;
+        var section = req.body.section;
+        var username = req.session.username;
+
+        db.all("SELECT email, dept, num FROM offers_course WHERE email = ? AND dept = ? AND num = ?",  [ username, dept, code ], function(err, rows) {
+            if (!(rows.length > 0)) {
+                db.run('INSERT INTO offers_course (email, dept, num, sect) VALUES (?, ?, ?, ?)', [ username, dept, code, section ], function (err){
+                    if (err) {
+                        req.session.errmsg = "Add failed. " + err;
+                        req.session.msg = "";
+                        res.redirect('/');
+                        req.session.errmsg = "";
+                    } else {
+                        req.session.msg = "Add offered course successfully!";
+                        req.session.errmsg = "";
+                        res.redirect('/');
+                        req.session.msg = "";
+                    }
+                });
+            } else {
+                // cannot find this user
+                req.session.errmsg = "Add course failed. You've already offered this course";
+                req.session.msg = "";
+                res.redirect('/');
+                req.session.errmsg = "";
+            }
+        });
+    }
+});
+
 var server = app.listen(3000, function()
 {
   var port = server.address().port;

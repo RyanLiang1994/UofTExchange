@@ -128,9 +128,9 @@ $('#btn-signup').click(function() {
     $('.msg').remove();
 });
 
-$('#btn-profile').click(function() {
+$('#btn-add').click(function() {
     $('section').hide();
-    $('#userProfile').show();
+    getAddingForms();
     $('.errmsg').remove();
     $('.msg').remove();
 });
@@ -194,10 +194,10 @@ function getProfile() {
                 var $container = $("<section>", {id: "container", class: "menu-item"});
                 var $title1 = $("<h2>", {id: "info"});
                 $title1.text("Imformation: ");
-                var $title2 = $("<h2>", {id: "offerbook"});
-                $title2.text("Offer Books: ");
-                var $title3 = $("<h2>", {id: "offercourse"});
-                $title3.text("Offer Course: ");
+                var $title2 = $("<h2>", {id: "offercourse"});
+                $title2.text("Offer Course: ");
+                var $title3 = $("<h2>", {id: "offerBook"});
+                $title3.text("Offer Book: ");
                 var $paragraph1 = $("<p>", {id: "profileparagraph"});
                 var $linebreak = $("<br>");
                 $container.append($title1);
@@ -241,6 +241,31 @@ function getProfile() {
             }
         }
     });
+}
+
+
+function getAddingForms() {
+    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $title1 = $("<h2>", {class: "sectiontitle"});
+    var $title2 = $("<h2>", {class: "sectiontitle"});
+    $title1.text("Add Offer Books");
+    $title2.text("Add Offer Courses");
+    var $bookform = $("#searchBookForm").clone().prop("id", "addBookForm");
+    var $courseform = $("#searchCourseForm").clone().prop("id", "addCourseForm");
+    $bookform.attr("action","add_book");
+    $courseform.attr("action", "add_course");
+    $bookform.find("#search-book").text("Add Book!");
+    $courseform.find("#search-course").text("Add Course!");
+    $bookform.find("#lable_dept").remove();
+    $bookform.find("#lable_num").remove();
+    $container.append($title1);
+    $container.append($bookform);
+    $container.append("<hr>");
+    $container.append($title2);
+    $container.append($courseform);
+    $container.insertBefore($("footer"));
+
+
 }
 
 function getFollows() {
