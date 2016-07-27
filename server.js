@@ -173,63 +173,105 @@ function create_user(username, password, dob, callback) {
     });
 }
 
-
-app.post('/search_books', function(req, res) {
-	req.assert('title', '').notEmpty();
-	req.assert('author', '').notEmpty();
-	req.assert('publisher', '').notEmpty();
-	req.assert('dept', '').notEmpty();
-	req.assert('num', '').notEmpty();
-
-	var mappedErrors = req.validationErrors(true);
+app.post('/search_courses', function(req, res) {
+	var lenDept = req.body.department.trim().length,
+		lenNum = req.body.code.trim().length,
+		lenSect = req.body.section.trim().length;
 
 	var msgs = {"errors": {}};
 
-	if (mappedErrors.title && mappedErrors.author && mappedErrors.publisher &&
-		mappedErrors.dept && mappedErrors.num) {
-		msgs.errors.error_empty = "Please enter in at least 1 field";
+	if (!lenDept && !lenNum && !lenSect) {
+		msgs.errors.course_empty = "Please enter in at least 1 field";
 		res.render('index', msgs);
 	} else {
-		var offers_book = '';
-		if (req.body.title.length > 0) {
-			if (offers_book.length > 0) {
-				offers_book += ' and ';
+		var offers_course = "";
+		if (lenDept) {
+			if (offers_course.length) {
+				offers_course += ' and ';
 			}
-			offers_book = offers_book + "lower(title) like '%" + req.body.title + "%'";
+			offers_course = offers_course + "lower(dept) like '%" + req.sanitize('department').escape().trim() + "%'";
 		}
 
-		if (req.body.author.length > 0) {
-			if (offers_book.length > 0) {
-				offers_book += ' and ';
+		if (lenNum) {
+			if (offers_course.length) {
+				offers_course += ' and ';
 			}
-			offers_book = offers_book + "lower(author) like '%" + req.body.author + "%'";
+			offers_course = offers_course + "num = " + req.sanitize('code').escape().trim();
 		}
 
-		if (req.body.publisher.length > 0) {
-			if (offers_book.length > 0) {
-				offers_book += ' and ';
+		if (lenSect) {
+			if (offers_course.length) {
+				offers_course += ' and ';
 			}
-			offers_book = offers_book + "lower(publisher) like '%" + req.body.publisher + "%'";
+			offers_course = offers_course + "lower(sect) like '%" + req.sanitize('section').escape().trim() + "%'";
 		}
 
-		var course_textbook = '';
-		if (req.body.dept.length > 0 && req.body.num.length == 0) {
-			course_textbook = "lower(dept) like '%" + req.body.dept + "%'";
-		} else if (req.body.dept.length == 0 && req.body.num.length > 0) {
-			course_textbook = "num = " + req.body.num;
-		} else if (req.body.dept.length > 0 && req.body.num.length > 0){
-			course_textbook = "lower(dept) like '%" + req.body.dept + "%' and num = " + req.body.num;
+		var query_offers_course = "SELECT * FROM offers_course WHERE " + offers_course.toLowerCase();
+
+		db.all(query_offers_course, function(err, rows) {
+			if (err) throw err;
+			console.log(rows);
+			res.end();
+		});
+	}
+
+});
+
+
+app.post('/search_books', function(req, res) {
+
+	var lenTitle = req.body.title.trim().length,
+		lenAuthor = req.body.author.trim().length,
+		lenPublisher = req.body.publisher.trim().length,
+		lenDept = req.body.dept.trim().length,
+		lenNum = req.body.num.trim().length;
+
+	var msgs = {"errors": {}};
+
+	if (!lenTitle && !lenAuthor && !lenPublisher && !lenDept && !lenNum) {
+		
+	} else {
+
+		var offers_book = "";
+		if (lenTitle) {
+			if (offers_book.length) {
+				offers_book += ' and ';
+			}
+			offers_book = offers_book + "lower(title) like '%" + req.sanitize('title').escape().trim() + "%'";
+		}
+
+		if (lenAuthor) {
+			if (offers_book.length) {
+				offers_book += ' and ';
+			}
+			offers_book = offers_book + "lower(author) like '%" + req.sanitize('author').escape().trim() + "%'";
+		}
+
+		if (lenPublisher) {
+			if (offers_book.length) {
+				offers_book += ' and ';
+			}
+			offers_book = offers_book + "lower(publisher) like '%" + req.sanitize('publisher').escape().trim() + "%'";
+		}
+
+		var course_textbook = "";
+		if (lenDept && !lenNum) {
+			course_textbook = "lower(dept) like '%" + req.sanitize('dept').escape().trim() + "%'";
+		} else if (!lenDept&& lenNum) {
+			course_textbook = "num = " + req.sanitize('num').escape().trim();
+		} else if (lenDept && lenNum) {
+			course_textbook = "lower(dept) like '%" + req.sanitize('dept').escape().trim() + "%' and num = " + req.sanitize('num').escape().trim();
 		}
 
 		var query_offers_book = "SELECT * FROM offers_book WHERE " + offers_book.toLowerCase();
 		var query_course_textbook = "SELECT title, author FROM course_textbook WHERE " + course_textbook.toLowerCase();
-		var query_join_offer_textbook = "SELECT o.email, o.title, o.author, o.publisher FROM offers_book o, (" + query_course_textbook + ") c WHERE o.title = c.title and o.author = c.author";
+		var query_join_offer_textbook = "SELECT o.email as email, o.title as title, o.author as author, o.publisher as publisher FROM offers_book o, (" + query_course_textbook + ") c WHERE o.title = c.title and o.author = c.author";
 		var result;
-		if (offers_book.length > 0 && course_textbook.length == 0) {
+		if (offers_book.length && !course_textbook.length) {
 			result = query_offers_book;
-		} else if (offers_book.length == 0 && course_textbook.length > 0) {
+		} else if (!offers_book.length && course_textbook.length) {
 			result = query_course_textbook;
-		} else if (offers_book.length > 0 && course_textbook.length > 0) {
+		} else if (offers_book.length && course_textbook.length) {
 			result = query_offers_book + " intersect " + query_join_offer_textbook;
 		}
 

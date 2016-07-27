@@ -93,7 +93,8 @@
 
          <section id="search-courses" class="menu-item">
             <h2>Search Courses</h2>
-            <form action="/search_courses" method="get">
+            <span class="error">{{ errors.course_empty}}</span>
+            <form action="/search_courses" method="post">
                 <label class="label">Department:
                     <input type="text" name="department" required="true" placeholder="Department" id="department">
                 </label>
