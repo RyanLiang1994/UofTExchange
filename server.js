@@ -121,7 +121,7 @@ app.post('/signup', function(req, res)
         var dob = req.body.birth;
         var result = create_user(username, password, dob, function (err) {
             if (err) {
-                var msgs = { "errors": err }
+                var msgs = { "errors": { error_email: err } }
                 res.render('index.html', msgs);
             } else {
                 req.session.username = username;
@@ -230,11 +230,11 @@ app.post('/search_books', function(req, res) {
 
 app.post('/signin', function(req, res)
 {
-	req.assert('email', 'Username is required').notEmpty();
+	req.assert('mail', 'Username is required').notEmpty();
 	req.assert('password', 'Password is required').notEmpty();
 
 
-	req.checkBody('email', 'Username is not valid').isEmail();
+	req.checkBody('mail', 'Username is not valid').isEmail();
 	req.checkBody('password', 'Password is not valid').isPassword();
 
 
@@ -246,8 +246,8 @@ app.post('/signin', function(req, res)
         var msgs = { "errors": {} };
 
 
-        if ( mappedErrors.email )
-            msgs.errors.error_email = mappedErrors.email.msg;
+        if ( mappedErrors.mail )
+            msgs.errors.error_mail = mappedErrors.mail.msg;
 
         if ( mappedErrors.password )
             msgs.errors.error_password = mappedErrors.password.msg;
@@ -258,7 +258,7 @@ app.post('/signin', function(req, res)
 
     } else {
 		//submit the data to database
-        var username = req.body.email;
+        var username = req.body.mail;
         db.all("SELECT email, password, birthday, is_admin FROM users WHERE email = '" + username + "'", function(err, rows) {
             if (err) {
                 throw err;
