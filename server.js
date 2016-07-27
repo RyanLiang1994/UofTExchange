@@ -154,7 +154,7 @@ app.post('/search_books', function(req, res) {
 		} else if (offers_book.length == 0 && course_textbook.length > 0) {
 			result = query_course_textbook;
 		} else if (offers_book.length > 0 && course_textbook.length > 0) {
-			result = query_offers_book + " union " + query_join_offer_textbook;
+			result = query_offers_book + " intersect " + query_join_offer_textbook;
 		}
 
 		db.all(result, function(err, rows) {
