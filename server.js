@@ -137,13 +137,15 @@ app.post('/signup', function(req, res) {
         var result = create_user(username, password, dob, function (err) {
             if (err) {
                 req.session.errmsg = err;
+                req.session.msg = "";
                 res.render('index.html');
                 req.session.errmsg = "";
             } else {
                 req.session.username = username;
-                req.session.errmsg = "Signup successfully!";
-                res.redirect('/');
+                req.session.msg = "Signup successfully!";
                 req.session.errmsg = "";
+                res.redirect('/');
+                req.session.msg = "";
             }
         });
 	}
@@ -388,12 +390,12 @@ app.post('/feedback', function(req, res) {
         db.run('INSERT INTO feedbacks (feedback) VALUES (?)', [ feedback ], function (err){
             if (err) {
                 req.session.errmsg = "Feedback submit err";
-
+                req.session.msg = "";
                 res.redirect('/');
                 req.session.errmsg = "";
             } else {
                 req.session.msg = "Feedback submit success! Thank you for your feedback.";
-
+                req.session.errmsg = "";
                 res.redirect('/');
                 req.session.msg = "";
             }
@@ -473,12 +475,12 @@ app.post('/sendmsg', function(req, res) {
                 	console.log(new Date(Date.now()).toString());
                     if (err) {
                         req.session.errmsg = "Send message failed";
-
+                        req.session.msg = "";
                         res.redirect('/');
                         req.session.errmsg = "";
                     } else {
                         req.session.msg = "Send successfully!";
-
+                        req.session.errmsg = "";
                         res.redirect('/');
                         req.session.msg = "";
                     }
