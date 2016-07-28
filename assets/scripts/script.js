@@ -71,6 +71,13 @@ $('#btn-add').click(function() {
     $('.msg').remove();
 });
 
+$('#btn-changeUser').click(function() {
+    $('section').hide();
+    changeUser();
+    $('.errmsg').remove();
+    $('.msg').remove();
+});
+
 $('#btn-profile').click(function() {
     $('section').hide();
     getProfile();
@@ -430,6 +437,46 @@ function getCourse() {
     console.log('aasd');
 
 }
+
+function changeUser() {
+    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $title1 = $("<h2>", {class: "sectiontitle"});
+    $title1.text("Change User Information");
+    var $form = $("<form>", {id: "infoform"});
+    var $email = $("<label>");
+    $email.text("Email: ");
+    $email.append("")
+
+
+
+
+
+
+    ///////////////////doing//////////////////////////
+    var $phone = $("<label>");
+    $phone.text("Phone: ");
+    var $dob = $("<label>");
+    $phone.text("Birthday: ");
+    var $year_of_study = $("<label>");
+    $year_of_study.text("Year of Study: ");
+    var $major = $("<label>");
+    $major.text("Major: ");
+
+    $bookform.attr("action","add_book");
+    $courseform.attr("action", "add_course");
+    $bookform.find("#search-book").text("Add Book!");
+    $courseform.find("#search-course").text("Add Course!");
+    $bookform.find("#lable_dept").remove();
+    $bookform.find("#lable_num").remove();
+    $container.append($title1);
+    $container.append($bookform);
+    $container.append("<hr>");
+    $container.append($title2);
+    $container.append($courseform);
+    $container.insertBefore($("footer"));
+
+}
+
 
 function checkNull(value) {
     if (value === null) {
