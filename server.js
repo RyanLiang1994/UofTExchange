@@ -37,6 +37,8 @@ var db = new sqlite3.Database('db.sqlite');
 db.serialize();
 nunjucks.configure('views', { autoescape: true, express: app });
 
+var page = "/";
+
 app.use(express.static(__dirname + '/assets'));
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname);
@@ -79,7 +81,7 @@ app.use(expressValidator({
 }));
 
 app.get(url_list[0] || url_list[1], function(req, res) {
-    res.render('index', {  // Note that .html is assumed.
+    res.render('index.html', {  // Note that .html is assumed.
         "errors": ''
     });
 
@@ -364,8 +366,18 @@ app.post('/signin', function(req, res) {
             }
 
             if (rows.length === 1 && req.body.password === rows[0].password && req.body.dob === rows[0].birthday) {
-                req.session.username = username;
-                res.redirect('/');
+                if (rows[0].is_admin === 0) {
+                    req.session.username = username;
+                    req.session.is_admin = 0;
+                    res.redirect(page);
+                } else if (rows[0].is_admin === 1) {
+                    req.session.username = username;
+                    req.session.is_admin = 1;
+                    page = "/admin"
+                    res.redirect(page);
+                } else {
+                    res.sendStatus(404);
+                }
             } else {
                 var err = req.validationErrors();
                 var msgs = { "errors": {} };
@@ -407,7 +419,7 @@ app.get('/profile', function(req, res) {
     console.log(req.session.username);
     if (!req.session.username) {
         // hasn't login yet
-        res.end(JSON.stringify([]));
+        res.sendStatus(404);
     } else {
         var result = [];
         var username = req.session.username;
@@ -435,7 +447,7 @@ app.get('/profile', function(req, res) {
 
 app.post('/message', function(req, res) {
     if (!req.session.username) {
-        res.end(JSON.stringify([]));
+        res.sendStatus(404);
     } else {
         var result = [];
         var username = req.session.username;
@@ -448,7 +460,7 @@ app.post('/message', function(req, res) {
 
 app.post('/follows', function(req, res) {
     if (!req.session.username) {
-        res.end(JSON.stringify([]));
+        res.sendStatus(404);
     } else {
         var result = [];
         var username = req.session.username;
@@ -466,7 +478,7 @@ app.post('/follows', function(req, res) {
 
 app.post('/sendmsg', function(req, res) {
     if (!req.session.username) {
-        res.end(JSON.stringify([]));
+        res.sendStatus(404);
     } else {
         var receiver = req.body.receiver;
         var username = req.session.username;
@@ -502,10 +514,7 @@ app.post('/sendmsg', function(req, res) {
 
 app.post('/follow', function(req, res) {
     if (!req.session.username) {
-        req.session.errmsg = "You haven't login yet";
-
-        res.redirect('/');
-        req.session.errmsg = "";
+        res.sendStatus(404);
     } else {
         var receiver = req.body.friend;
         var username = req.session.username;
@@ -537,9 +546,7 @@ app.post('/follow', function(req, res) {
 
 app.post('/add_book', function(req, res) {
     if (!req.session.username) {
-        req.session.errmsg = "You haven't login yet";
-        res.redirect('/');
-        req.session.errmsg = "";
+        res.sendStatus(404);
     } else {
         var title = req.body.title;
         var author = req.body.author;
@@ -574,10 +581,7 @@ app.post('/add_book', function(req, res) {
 
 app.post('/add_course', function(req, res) {
     if (!req.session.username) {
-        req.session.errmsg = "You haven't login yet";
-        req.session.msg = "";
-        res.redirect('/');
-        req.session.errmsg = "";
+        res.sendStatus(404);
     } else {
         var dept = req.body.department;
         var code = req.body.code;
@@ -607,6 +611,17 @@ app.post('/add_course', function(req, res) {
                 req.session.errmsg = "";
             }
         });
+    }
+});
+
+app.get("/admin", function(req, res) {
+    if (req.session.is_admin === 1) {
+        res.render('admin.html', {
+            "errors": ''
+        });
+    } else {
+        res.status(404).send("You are not admin, cannot access this page.");
+
     }
 });
 

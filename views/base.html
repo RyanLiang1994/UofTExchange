@@ -37,8 +37,149 @@
             </ul>
         </nav>
 
+        {% if session.msg %}
+        <p class="msg"> {{ session.msg }} </p>
 
+
+        {% else %}
+        {% endif %}
+
+        {% if session.errmsg %}
+        <p class="errmsg"> {{ session.errmsg }} </p>
+
+
+        {% else %}
+        {% endif %}
+        
         {% block body %}{% endblock %}
+
+    </div>
+
+
+            <section id="home" class="menu-item">
+
+                <p>A platform to search your textbook</p>
+                <p>Convenient, fast, cheap and refundable.</p>
+                <p>You can almost always find the textbook you want here.</p>
+                <p>You can exchange textbooks you don't want with people around you.</p>
+                <p>You can always find the people who want to buy your textbook.</p>
+                <p>You can search by the textbook name, author, publisher, ISBN, etc.</p>
+                <p>If you cannot find one, we can find one for you.</p>
+
+                <article id="introduction">
+                    Find the textbook by the filter and just click "Search!", you can find all the corresponding results.
+                </article>
+            </section>
+
+            <section id="search-books" class="menu-item">
+                <h2>Search Books</h2>
+                <span class="error">{{ errors.error_empty }}</span>
+                <form action="/search_books" method="post" id="searchBookForm">
+                   <label class="label">Title:
+                    <input type="text" name="title" placeholder="Title" id="title"><br>
+                    </label>
+                    <label class="label">Author:
+                    <input type="text" name="author" placeholder="Author" id="author"><br>
+                     </label>
+                    <label class="label">Publisher:
+                    <input type="text" name="publisher" placeholder="Publisher" id="publisher"><br>
+                     </label>
+                    <label class="label" id="lable_dept">Department:
+                    <input type="text" name="dept" placeholder="Department" id="dept"><br>
+                    </label>
+                    <label class="label" id="lable_num">Course Code:
+                    <input type="number" name="num" placeholder="Course Code" id="num"><br>
+                    </label>
+                    <button id="search-book">Search!</button>
+
+                </form>
+            </section>
+
+             <section id="search-courses" class="menu-item">
+                <h2>Search Courses</h2>
+                <span class="error">{{ errors.course_empty}}</span>
+                <form action="/search_courses" method="post" id="searchCourseForm">
+                    <label class="label">Department:
+                        <input type="text" name="department" placeholder="Department" id="department">
+                    </label>
+                    <br>
+                    <label class="label">Course Code:
+                        <input type="text" name="code" placeholder="Course Code" id="code">
+                    </label>
+                    <br>
+                    <label class="label">Section:
+                        <input type="text" name="section" placeholder="Section" id="section">
+                    </label>
+                     <br>
+                    <button id="search-course">Search Course</button>
+                </form>
+            </section>
+
+            <section id="feedback" class="menu-item">
+                <h2>Feedback</h2>
+                <form action="/feedback" method="post">
+                    <textarea name="feedback" rows="15" cols="79"></textarea>
+                    <br>
+                    <button type="submit" name="feedback-submit" id="feedback-submit">Submit</button>
+                </form>
+            </section>
+
+            <section id="contact" class="menu-item">
+                <h2>Contact Us</h2>
+                <dl>
+                    <dt>Chengjie Liang</dt>
+                    <dd>chengjie.liang[at]mail.utoronto.ca</dd>
+                    <dt>Ruoshui Yan</dt>
+                    <dd>ryan.yan[at]mail.utoronto.ca</dd>
+                    <dt>Wen Hao Zhang</dt>
+                    <dd>wh.zhang[at]mail.utoronto.ca</dd>
+                    <dd></dd>
+                    <dt>Rio Yue Li</dt>
+                    <dd></dd>
+                </dl>
+            </section>
+
+            <section id="signup">
+                <h2>Sign Up</h2>
+                <form action="/signup" method="post" class="signupform">
+                    <label class="label">Email:
+                        <input type="email" name="email" required="true" placeholder="Email" id="signupemail"><br>
+                        <span class="error">{{ errors.error_email }}</span>
+                    </label><br>
+                    <label class="label">Password:
+                        <input type="password" name="pword" required="true" placeholder="Password" id="signupword" pattern="^[a-zA-Z0-9]{8,32}$"><br>
+                        <span class="error">{{ errors.error_pword }}</span>
+                    </label><br>
+                    <label class="label">Confirm Password:
+                        <input type="password" name="confirm" required="true" placeholder="Confirm Password" id="signupconfirm"> <br>
+                        <span class="error">{{ errors.error_confirm }}</span>
+
+                    </label><br>
+                    <label class="label">Date of birth:
+                        <input type="date" name="birth" required="true" placeholder="birthday" id="signupbirthday"> <br>
+                        <span class="error">{{ errors.error_birth }}</span>
+
+                    </label><br>
+                    <button id="submit-sign-up">Sign Up</button>
+                </form>
+            </section>
+            <section id="userProfile">
+                <p id="email"></p>
+                <p id="phone"></p>
+                <p id="year_of_study"></p>
+                <p id="major"></p>
+                <p id="is_admin"></p>
+            </section>
+            <section id="message">
+            </section>
+            <section id="following">
+            </section>
+            <section id="follower">
+            </section>
+
+            <footer>
+                <small>Copyright &copy; 2016. All Rights Reserved.</small>
+            </footer>
     </body>
 
 </html>
