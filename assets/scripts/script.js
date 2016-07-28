@@ -3,8 +3,6 @@ $(document).ready(function() {
     $('section').hide();
     $('#home').show();
 
-
-
     $(window).resize(function()
     {
        if ($(window).width() >= 768) {
@@ -16,69 +14,7 @@ $(document).ready(function() {
         }
     });
 
-    // TODO Maybe it is already signed in.
-    // $('#alreadySignedIn').hide();
-
-    // var auth2 = gapi.auth2.getAuthInstance();
-    // if (auth2.isSignedIn.get()) {
-    //     console.log("haha");
-    //     $('#unSignedIn').hide();
-    // }
-
-    // hamburgerMenu();
-    // displayMenu();
-
-
-    // $(window).resize(function() {
-    //     displayMenu();
-    //     hamburgerMenu();
-    //     showMenu();
-    // });
-
 });
-
-// function hamburgerMenu() {
-//     if ($(window).width() <= 480){
-
-//         if ($("nav.navbar button#hamburger-menu").length === 0){
-//             var $button = $("<button>", {
-//                 id: 'hamburger-menu',
-//                 text: 'Menu',
-//                 display: 'block'
-//             }).click(function(){
-//                 $("nav.navbar ul").toggleClass("open");
-//             }).appendTo('nav.navbar');
-//         }
-
-//         $("nav.navbar").attr('id', "hamburgerMenu");
-//     } else {
-//         $("nav.navbar").attr('id', "hamburgerMenu");
-
-//         if ($("nav.navbar button#hamburger-menu").length > 0) {
-//             $("nav.navbar button#hamburger-menu").remove();
-//         }
-//     }
-// }
-
-// function displayHamburger() {
-//     if ($(window).width() <= 480){
-//         $("nav.navbar ul").hide();
-//     }
-// }
-
-// function displayMenu() {
-//     if ($(window).width() <= 480){
-//         $('nav.navbar button#hamburger-menu').click(function() {
-//             $("nav.navbar ul").show();
-//         })
-//     }
-// }
-
-// function showMenu() {
-//     if ($(window).width() > 480){
-//         $("nav.navbar ul").show();
-//     }
-// }
 
 $('#btn-home').click(function() {
     $('section').hide();
@@ -162,14 +98,28 @@ $('#btn-follow').click(function() {
     $('.errmsg').remove();
     $('.msg').remove();
     followFriend();
-})
+});
 
 $('#btn-follows').click(function() {
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
     getFollows();
-})
+});
+
+$('#btn-follows').click(function() {
+    $('section').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
+    getFollows();
+});
+
+$('#search-course').click(function() {
+    $('section').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
+    getCourse();
+});
 
 function stickyNav(){
     var navPosition = $('#navbar').position();
@@ -382,6 +332,98 @@ function followFriend() {
     $container.insertBefore($("footer"));
 }
 
+function getCourse() {
+    console.log("some");
+    $.ajax({
+        url: "search_courses",
+        method: "POST",
+        dataType: "json",
+        success: function(data) {
+            console.log("success");
+            var $container = $("<section>", {id: "container", class: "menu-item"});
+            var $title = $("<h2>", {class: "sectiontitle", text: "Offering Courses"});
+            $container.append($title);
+            if (data[0]) {
+                for (var i = 0; i < data[0].length; i++) {
+                    $course_code = $("<h3>", {
+                        class: "course-code",
+                        text: data[0][i].dept.toUpperCase() + data[0][i].num
+                    });
+
+                    $course_title = $("<h4>", {
+                        class: "course-title",
+                        text: "Course Title: " + checkNull(data[0][i].sect)
+                    });
+                    $lecture_section = $("<h4>", {
+                        class: "lecture-section",
+                        text: "Lecture Section: " + checkNull(data[0][i].title)
+                    });
+
+                    $contact_info = $("<p>", {
+                        class: "contact-info",
+                        text: "Contact Information: " + data[0][i].email
+                    });
+
+                    $container.append($course_code);
+                    $container.append($course_title);
+                    $container.append($lectur_section);
+                    $container.append($contact_info);
+                    $container.append("<hr>");
+
+                }
+            } else {
+                    $no_result = $("<p>", {
+                        text: "Sorry! Nothing was found. Please try a different query"
+                    });
+                    container.append($no_result);
+                    $container.append("<hr>");
+            }
+            var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
+            $container.append($title);
+            if (data[1]) {
+                for (var i = 0; i < data[1].length; i++) {
+                    $course_code = $("<h3>", {
+                        class: "course-code",
+                        text: data[1][i].dept.toUpperCase() + data[1][i].num
+                    });
+
+                    $course_title = $("<h4>", {
+                        class: "course-title",
+                        text: "Course Title: " + checkNull(data[1][i].sect)
+                    });
+                    $lecture_section = $("<h4>", {
+                        class: "lecture-section",
+                        text: "Lecture Section: " + checkNull(data[1][i].title)
+                    });
+
+                    $contact_info = $("<p>", {
+                        class: "contact-info",
+                        text: "Contact Information: " + data[1][i].email
+                    });
+
+                    $container.append($course_code);
+                    $container.append($course_title);
+                    $container.append($lectur_section);
+                    $container.append($contact_info);
+                    $container.append("<hr>");
+                }
+            } else {
+                $no_result = $("<p>", {
+                        text: "Please provide more information to optimize your experience."
+                });
+                container.append($no_result);
+                $container.append("<hr>");
+            }
+            $container.insertBefore($("footer"));
+        },
+        error: function() {
+            console.log('asd');
+        }
+    });
+    console.log('aasd');
+
+}
+
 function checkNull(value) {
     if (value === null) {
         return "";
@@ -389,61 +431,3 @@ function checkNull(value) {
         return value;
     }
 }
-
-// Google Login:
-// Source: https://developers.google.com/identity/sign-in/web/sign-in
-// The following code is used to check
-// if the user has signed in for Google
-// var auth2 = gapi.auth2.getAuthInstance();
-// if (auth2.isSignedIn.get()) {
-//     // Statements
-// }
-
-// Google SignIn
-// function onSignIn(googleUser) {
-//     var auth2 = gapi.auth2.getAuthInstance();
-//     if (auth2.isSignedIn.get()) {
-//         $.ajax(
-// 		{
-// 			url: "/googlelogin",
-// 			method: "GET",
-//
-//             success: function(data) {
-//
-//                 $('#alreadySignedIn').show();
-//                 $('#unSignedIn').hide();
-//                 var profile = auth2.currentUser.get().getBasicProfile();
-//                 $('#greeting').html("Hi, " + profile.getEmail());
-//
-//                 $("#email").html("Email: " + profile.getEmail());
-//                 $("#phone").html("Phone: " + ""); // Empty for now
-//                 $("#year_of_study").html("");
-//                 $("#major").html();
-//                 $("#is_admin").html();
-//                 console.log('ID: ' + profile.getId());
-//                 console.log('Full Name: ' + profile.getName());
-//                 console.log('Given Name: ' + profile.getGivenName());
-//                 console.log('Family Name: ' + profile.getFamilyName());
-//                 console.log('Image URL: ' + profile.getImageUrl());
-//                 console.log('Email: ' + profile.getEmail());
-//                 location.reload();
-//             }
-// 		});
-//
-//     }
-// }
-// Google SignOut
-// function signOut() {
-//     $.ajax(
-//     {
-//         url: "/googlelogout",
-//         method: "GET",
-//         success: function(data) {
-//             var auth2 = gapi.auth2.getAuthInstance();
-//             auth2.signOut().then(function () {
-//                 console.log('User signed out.');
-//             });
-//         }
-//     });
-//
-// }
