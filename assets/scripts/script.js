@@ -73,7 +73,7 @@ $('#btn-add').click(function() {
 
 $('#btn-changeUser').click(function() {
     $('section').hide();
-    changeUser();
+    displayUsers();
     $('.errmsg').remove();
     $('.msg').remove();
 });
@@ -132,6 +132,10 @@ $('#search-course').click(function(event) {
     $('.msg').remove();
     getCourse();
 });
+
+
+
+
 
 function stickyNav(){
     var navPosition = $('#navbar').position();
@@ -438,43 +442,95 @@ function getCourse() {
 
 }
 
-function changeUser() {
-    var $container = $("<section>", {id: "container", class: "menu-item"});
-    var $title1 = $("<h2>", {class: "sectiontitle"});
-    $title1.text("Change User Information");
-    var $form = $("<form>", {id: "infoform"});
-    var $email = $("<label>");
-    $email.text("Email: ");
-    $email.append("")
 
+function displayUsers(){
+    $.ajax({
+        url: "userList",
+        method: "POST",
+        dataType: "json",
+        success: function(data) {
+            var $container = $("<section>", {id: "container", class: "menu-item"});
+            var $title = $("<h2>");
+            $title.text("User List");
+            $container.append($title);
+            console.log(data.length);
+            console.log(data);
+            for (var i=0; i < data.length; i++) {
 
+                var $paragraph = $("<p>", {id: "user_" + (i+1), class: "user"});
+                var $button = $("<button>", {id: "" + data[i].email, class: "selectUser"});
 
+                $button.text("More Info");
+                $paragraph.text("User " + (i+1) + ": "+ data[i].email);
+                $paragraph.append($button);
+                $paragraph.css({"border": "solid","border-width" : "1px"});
+                $container.append($paragraph);
+            }
+            $container.insertBefore($("footer"));
 
+            // make the button works
+            $(".selectUser").click(function() {
+                $('section').hide();
+                $('.errmsg').remove();
+                $('.msg').remove();
+                changeUser(this.id);
+            });
+        }
+    });
+}
 
+function removeSection() {
+    $('.menu-item').remove();
+}
 
-    ///////////////////doing//////////////////////////
-    var $phone = $("<label>");
-    $phone.text("Phone: ");
-    var $dob = $("<label>");
-    $phone.text("Birthday: ");
-    var $year_of_study = $("<label>");
-    $year_of_study.text("Year of Study: ");
-    var $major = $("<label>");
-    $major.text("Major: ");
+function changeUser(username) {
+    $.ajax({
+        url: "userInfo",
+        method: "POST",
+        dataType: "json",
+        data: {
+            target: username
+        },
+        success: function(data) {
+            console.log(JSON.stringify(data));
 
-    $bookform.attr("action","add_book");
-    $courseform.attr("action", "add_course");
-    $bookform.find("#search-book").text("Add Book!");
-    $courseform.find("#search-course").text("Add Course!");
-    $bookform.find("#lable_dept").remove();
-    $bookform.find("#lable_num").remove();
-    $container.append($title1);
-    $container.append($bookform);
-    $container.append("<hr>");
-    $container.append($title2);
-    $container.append($courseform);
-    $container.insertBefore($("footer"));
-
+            // var $container = $("<section>", {id: "container", class: "menu-item"});
+            // var $title1 = $("<h2>", {class: "sectiontitle"});
+            // $title1.text("Change User Information");
+            // var $form = $("<form>", {id: "infoform"});
+            // var $email = $("<label>");
+            // $email.text("Email: ");
+            // $email.append("")
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            // var $phone = $("<label>");
+            // $phone.text("Phone: ");
+            // var $dob = $("<label>");
+            // $phone.text("Birthday: ");
+            // var $year_of_study = $("<label>");
+            // $year_of_study.text("Year of Study: ");
+            // var $major = $("<label>");
+            // $major.text("Major: ");
+            //
+            // $bookform.attr("action","add_book");
+            // $courseform.attr("action", "add_course");
+            // $bookform.find("#search-book").text("Add Book!");
+            // $courseform.find("#search-course").text("Add Course!");
+            // $bookform.find("#lable_dept").remove();
+            // $bookform.find("#lable_num").remove();
+            // $container.append($title1);
+            // $container.append($bookform);
+            // $container.append("<hr>");
+            // $container.append($title2);
+            // $container.append($courseform);
+            // $container.insertBefore($("footer"));
+        }
+    });
 }
 
 

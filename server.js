@@ -241,7 +241,7 @@ app.post('/search_courses', function(req, res) {
 			}
 		});
 
-		
+
 	}
 
 });
@@ -329,7 +329,7 @@ app.post('/search_books', function(req, res) {
 			}
 		});
 
-		
+
 	}
 
 });
@@ -629,8 +629,33 @@ app.get("/admin", function(req, res) {
             "errors": ''
         });
     } else {
-        res.status(404).send("You are not admin, cannot access this page.");
+        res.status(403).send("You are not admin, cannot access this page.");
 
+    }
+});
+
+
+app.post("/userList", function(req, res) {
+    if (req.session.is_admin === 1) {
+        db.all("SELECT email FROM users", function(err, rows) {
+            res.end(JSON.stringify(rows));
+        });
+    } else {
+        res.status(403).send("You are not admin, cannot access this page.");
+    }
+});
+
+app.post("/userInfo", function(req, res) {
+
+    if (req.session.is_admin === 1) {
+        var target = req.body.target;
+        console.log(target);
+        db.all("SELECT email, password, birthday, phone, year_of_study, major FROM users WHERE email=?", [ target ],function(err, rows) {
+            console.log(rows)
+            res.end(JSON.stringify(rows));
+        });
+    } else {
+        res.status(403).send("You are not admin, cannot access this page.");
     }
 });
 
