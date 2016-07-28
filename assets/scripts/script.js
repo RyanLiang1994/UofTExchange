@@ -65,6 +65,7 @@ $('#btn-signup').click(function() {
 });
 
 $('#btn-add').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     getAddingForms();
     $('.errmsg').remove();
@@ -72,6 +73,7 @@ $('#btn-add').click(function() {
 });
 
 $('#btn-changeUser').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     displayUsers();
     $('.errmsg').remove();
@@ -79,6 +81,7 @@ $('#btn-changeUser').click(function() {
 });
 
 $('#btn-profile').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     getProfile();
     $('.errmsg').remove();
@@ -86,6 +89,7 @@ $('#btn-profile').click(function() {
 });
 
 $('#btn-message').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
@@ -94,6 +98,7 @@ $('#btn-message').click(function() {
 });
 
 $('#btn-send').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
@@ -101,6 +106,7 @@ $('#btn-send').click(function() {
 });
 
 $('#btn-follow').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
@@ -108,18 +114,14 @@ $('#btn-follow').click(function() {
 });
 
 $('#btn-follows').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
     getFollows();
 });
 
-$('#btn-follows').click(function() {
-    $('section').hide();
-    $('.errmsg').remove();
-    $('.msg').remove();
-    getFollows();
-});
+
 
 $('nav#navbar').click(function() {
     $('#container').remove();
@@ -127,6 +129,7 @@ $('nav#navbar').click(function() {
 
 $('#search-course').click(function(event) {
     event.preventDefault();
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
@@ -157,7 +160,7 @@ function getProfile() {
         success: function(data) {
             console.log(data);
             if (data.length > 0) {
-                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title1 = $("<h2>", {id: "info"});
                 $title1.text("Imformation: ");
                 var $title2 = $("<h2>", {id: "offercourse"});
@@ -211,7 +214,7 @@ function getProfile() {
 
 
 function getAddingForms() {
-    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
     var $title1 = $("<h2>", {class: "sectiontitle"});
     var $title2 = $("<h2>", {class: "sectiontitle"});
     $title1.text("Add Offer Books");
@@ -242,7 +245,7 @@ function getFollows() {
         success: function(data) {
             if (data.length > 0) {
                 console.log(JSON.stringify(data));
-                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title = $("<h2>", {class: "sectiontitle"});
                 var $following_list = $("<ul>", {id: "following_list"});
                 $title.text("Following");
@@ -283,7 +286,7 @@ function getMessage() {
         success: function(data) {
             if (data.length > 0) {
                 console.log(JSON.stringify(data));
-                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title = $("<h2>", {class: "sectiontitle"});
                 $title.text("My Message");
                 $container.append($title);
@@ -311,7 +314,7 @@ function getMessage() {
 }
 
 function sendMessage() {
-    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
     var $title = $("<h2>", {class: "sectiontitle"});
     $title.text("Send Message");
     var $lable = $("<lable>", {class: "label"});
@@ -331,7 +334,7 @@ function sendMessage() {
 }
 
 function followFriend() {
-    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
     var $title = $("<h2>", {class: "sectiontitle"});
     $title.text("Follow Friend");
     var $lable = $("<lable>", {class: "label"});
@@ -361,7 +364,7 @@ function getCourse() {
         },
         success: function(data) {
             console.log("success");
-            var $container = $("<section>", {id: "container", class: "menu-item"});
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
             var $title = $("<h2>", {class: "sectiontitle", text: "Offering Courses"});
             $container.append($title);
             if (data[0]) {
@@ -449,7 +452,7 @@ function displayUsers(){
         method: "POST",
         dataType: "json",
         success: function(data) {
-            var $container = $("<section>", {id: "container", class: "menu-item"});
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
             var $title = $("<h2>");
             $title.text("User List");
             $container.append($title);
@@ -479,8 +482,8 @@ function displayUsers(){
     });
 }
 
-function removeSection() {
-    $('.menu-item').remove();
+function removeLoggedInSection() {
+    $(".logged-in-menu-item").remove();
 }
 
 function changeUser(username) {
@@ -493,7 +496,7 @@ function changeUser(username) {
         },
         success: function(data) {
 
-            var $container = $("<section>", {id: "container", class: "menu-item"});
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
             var $title = $("<h2>", {class: "sectiontitle"});
             $title.text("Change User Information");
             var $form = $("<form>", {id: "infoform", action: "/changeInfo", method: "post"});
