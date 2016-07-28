@@ -178,15 +178,18 @@ function create_user(username, password, dob, callback) {
 }
 
 app.post('/search_courses', function(req, res) {
-	var lenDept = req.body.department,
-		lenNum = req.body.code,
-		lenSect = req.body.section;
+	var lenDept = req.body.department.trim().length,
+		lenNum = req.body.code.trim().length,
+		lenSect = req.body.section.trim().length;
 
 		console.log(req.body.department);
+		console.log(req.body.code);
+		console.log(req.body.section);
 
 	var msgs = {"errors": {}};
 
 	if (!lenDept && !lenNum && !lenSect) {
+		console.log('asdasd');
 		msgs.errors.course_empty = "Please enter in at least 1 field";
 		res.render('index', msgs);
 	} else {
@@ -219,8 +222,10 @@ app.post('/search_courses', function(req, res) {
 		db.all(query_offers_course, function(err, rows) {
 			if (err) throw err;
 			result_list.push(rows);
+			console.log(rows);
 			if (!req.session.username) {
 				result_list.push([]);
+				console.log(result_list);
 				res.end(JSON.stringify(result_list));
 			} else {
 				var username = req.session.username;

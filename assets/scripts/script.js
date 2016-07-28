@@ -114,7 +114,8 @@ $('#btn-follows').click(function() {
     getFollows();
 });
 
-$('#search-course').click(function() {
+$('#search-course').click(function(event) {
+    event.preventDefault();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
@@ -333,11 +334,16 @@ function followFriend() {
 }
 
 function getCourse() {
-    console.log("some");
+
     $.ajax({
         url: "search_courses",
         method: "POST",
         dataType: "json",
+        data: {
+            department: $("#department").val(),
+            code: $("#code").val(),
+            section: $("#section").val()
+        },
         success: function(data) {
             console.log("success");
             var $container = $("<section>", {id: "container", class: "menu-item"});
@@ -366,7 +372,7 @@ function getCourse() {
 
                     $container.append($course_code);
                     $container.append($course_title);
-                    $container.append($lectur_section);
+                    $container.append($lecture_section);
                     $container.append($contact_info);
                     $container.append("<hr>");
 
@@ -378,6 +384,7 @@ function getCourse() {
                     container.append($no_result);
                     $container.append("<hr>");
             }
+
             var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
             $container.append($title);
             if (data[1]) {
@@ -403,7 +410,7 @@ function getCourse() {
 
                     $container.append($course_code);
                     $container.append($course_title);
-                    $container.append($lectur_section);
+                    $container.append($lecture_section);
                     $container.append($contact_info);
                     $container.append("<hr>");
                 }
