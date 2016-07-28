@@ -114,6 +114,10 @@ $('#btn-follows').click(function() {
     getFollows();
 });
 
+$('nav#navbar').click(function() {
+    $('#container').remove();
+});
+
 $('#search-course').click(function(event) {
     event.preventDefault();
     $('section').hide();
@@ -352,21 +356,21 @@ function getCourse() {
             if (data[0]) {
                 for (var i = 0; i < data[0].length; i++) {
                     $course_code = $("<h3>", {
-                        class: "course-code",
+                        class: "query_courses",
                         text: data[0][i].dept.toUpperCase() + data[0][i].num
                     });
 
                     $course_title = $("<h4>", {
-                        class: "course-title",
+                        class: "query_courses",
                         text: "Course Title: " + checkNull(data[0][i].sect)
                     });
                     $lecture_section = $("<h4>", {
-                        class: "lecture-section",
+                        class: "query_courses",
                         text: "Lecture Section: " + checkNull(data[0][i].title)
                     });
 
                     $contact_info = $("<p>", {
-                        class: "contact-info",
+                        class: "query_courses",
                         text: "Contact Information: " + data[0][i].email
                     });
 
@@ -381,30 +385,30 @@ function getCourse() {
                     $no_result = $("<p>", {
                         text: "Sorry! Nothing was found. Please try a different query"
                     });
-                    container.append($no_result);
+                    $container.append($no_result);
                     $container.append("<hr>");
             }
 
             var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
             $container.append($title);
-            if (data[1]) {
+            if (data[1] != []) {
                 for (var i = 0; i < data[1].length; i++) {
                     $course_code = $("<h3>", {
-                        class: "course-code",
+                        class: "query_courses",
                         text: data[1][i].dept.toUpperCase() + data[1][i].num
                     });
 
                     $course_title = $("<h4>", {
-                        class: "course-title",
+                        class: "query_courses",
                         text: "Course Title: " + checkNull(data[1][i].sect)
                     });
                     $lecture_section = $("<h4>", {
-                        class: "lecture-section",
+                        class: "query_courses",
                         text: "Lecture Section: " + checkNull(data[1][i].title)
                     });
 
                     $contact_info = $("<p>", {
-                        class: "contact-info",
+                        class: "query_courses",
                         text: "Contact Information: " + data[1][i].email
                     });
 
@@ -418,16 +422,12 @@ function getCourse() {
                 $no_result = $("<p>", {
                         text: "Please provide more information to optimize your experience."
                 });
-                container.append($no_result);
+                $container.append($no_result);
                 $container.append("<hr>");
             }
             $container.insertBefore($("footer"));
         },
-        error: function() {
-            console.log('asd');
-        }
     });
-    console.log('aasd');
 
 }
 

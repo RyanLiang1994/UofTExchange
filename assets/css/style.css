@@ -175,6 +175,10 @@ textarea#msgbox {
 	height: 150px;
 
 }
+
+.query_courses {
+	padding-left: 20px;
+}
 @media screen and (max-width: 1024px) {
 	div#profile {
 		margin-left: 20px;
