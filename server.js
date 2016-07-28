@@ -659,6 +659,42 @@ app.post("/userInfo", function(req, res) {
     }
 });
 
+app.post("/changeInfo", function(req, res) {
+    if (req.session.is_admin === 1) {
+        var username = req.body.user_email;
+        var password =  emptyStringToNull(req.body.user_password);
+        var birthday =  emptyStringToNull(req.body.user_birthday);
+        var phone =  emptyStringToNull(req.body.user_phone);
+        var year =  emptyStringToNull(req.body.user_year_of_study);
+        var major =  emptyStringToNull(req.body.major);
+        console.log([ password, birthday, phone, year, major, username ]);
+
+        db.all("UPDATE users SET password=?, birthday=?, phone=?, year_of_study=?, major=? WHERE email=?", [ password, birthday, phone, year, major, username ],function(err, rows) {
+            if (err) {
+                req.session.errmsg = "Update failed. " + err + " Please contact the admin";
+                req.session.msg = "";
+                res.redirect('/');
+                req.session.errmsg = "";
+            } else {
+                req.session.msg = "Update successfully!";
+                req.session.errmsg = "";
+                res.redirect(page);
+                req.session.msg = "";
+            }
+        });
+    } else {
+        //should not be happened, unless hacker trying to access
+        res.status(403).send("You are not admin, cannot access this page.");
+    }
+})
+
+function emptyStringToNull(value) {
+    if (value === "") {
+        return null;
+    } else {
+        return value;
+    }
+}
 var server = app.listen(3000, function()
 {
   var port = server.address().port;

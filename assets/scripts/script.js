@@ -492,43 +492,58 @@ function changeUser(username) {
             target: username
         },
         success: function(data) {
-            console.log(JSON.stringify(data));
 
-            // var $container = $("<section>", {id: "container", class: "menu-item"});
-            // var $title1 = $("<h2>", {class: "sectiontitle"});
-            // $title1.text("Change User Information");
-            // var $form = $("<form>", {id: "infoform"});
-            // var $email = $("<label>");
-            // $email.text("Email: ");
-            // $email.append("")
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            // var $phone = $("<label>");
-            // $phone.text("Phone: ");
-            // var $dob = $("<label>");
-            // $phone.text("Birthday: ");
-            // var $year_of_study = $("<label>");
-            // $year_of_study.text("Year of Study: ");
-            // var $major = $("<label>");
-            // $major.text("Major: ");
-            //
-            // $bookform.attr("action","add_book");
-            // $courseform.attr("action", "add_course");
-            // $bookform.find("#search-book").text("Add Book!");
-            // $courseform.find("#search-course").text("Add Course!");
-            // $bookform.find("#lable_dept").remove();
-            // $bookform.find("#lable_num").remove();
-            // $container.append($title1);
-            // $container.append($bookform);
-            // $container.append("<hr>");
-            // $container.append($title2);
-            // $container.append($courseform);
-            // $container.insertBefore($("footer"));
+            var $container = $("<section>", {id: "container", class: "menu-item"});
+            var $title = $("<h2>", {class: "sectiontitle"});
+            $title.text("Change User Information");
+            var $form = $("<form>", {id: "infoform", action: "/changeInfo", method: "post"});
+            $form.append($title);
+            var $email = $("<label>");
+            $email.text("Email: ");
+            var $email_input = $("<input>", {name: "user_email", value: checkNull(data[0].email), readonly: "readonly"});
+            $email.append($email_input);
+            $form.append($email);
+            $form.append("<br>");
+
+            var $password = $("<label>");
+            $password.text("Password: ");
+            var $password_input = $("<input>", {name: "user_password", value: checkNull(data[0].password)});
+            $password.append($password_input);
+            $form.append($password);
+            $form.append("<br>")
+
+            var $birthday = $("<label>");
+            $birthday.text("Birthday: ");
+            var $birthday_input = $("<input>", {name: "user_birthday", value: checkNull(data[0].birthday)});
+            $birthday.append($birthday_input);
+            $form.append($birthday);
+            $form.append("<br>")
+
+            var $phone = $("<label>");
+            $phone.text("Phone: ");
+            var $phone_input = $("<input>", {name: "user_phone", value: checkNull(data[0].phone)});
+            $phone.append($phone_input);
+            $form.append($phone);
+            $form.append("<br>")
+
+            var $year_of_study = $("<label>");
+            $year_of_study.text("Year of Study: ");
+            var $year_of_study_input = $("<input>", {name: "user_year_of_study", value: checkNull(data[0].year_of_study)});
+            $year_of_study.append($year_of_study_input);
+            $form.append($year_of_study);
+            $form.append("<br>")
+
+            var $major = $("<label>");
+            $major.text("Major: ");
+            var $major_input = $("<input>", {name: "user_major", value: checkNull(data[0].major)});
+            $major.append($major_input);
+            $form.append($major);
+            $form.append("<br>")
+
+            var $button = $("<button>", {type: "submit"}).text("Save Information");
+            $form.append($button);
+            $container.append($form);
+            $container.insertBefore($("footer"));
         }
     });
 }
