@@ -277,8 +277,6 @@ function getAddingForms() {
     $courseform.attr("action", "add_course");
     $bookform.find("#search-book").text("Add Book!");
     $courseform.find("#search-course").text("Add Course!");
-    $bookform.find("#lable_dept").remove();
-    $bookform.find("#lable_num").remove();
     $container.append($title1);
     $container.append($bookform);
     $container.append("<hr>");

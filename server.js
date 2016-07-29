@@ -554,9 +554,12 @@ app.post('/add_book', function(req, res) {
         var author = req.body.author;
         var publisher = req.body.publisher;
         var username = req.session.username;
+        var dept = req.body.dept;
+        var num = req.body.num;
 
         db.all("SELECT email, title FROM offers_book WHERE email = ? AND title = ?",  [ username, title ], function(err, rows) {
             if (!(rows.length > 0)) {
+
                 db.run('INSERT INTO offers_book (email, title, author, publisher) VALUES (?, ?, ?, ?)', [ username, title, author, publisher], function (err){
                     if (err) {
                         req.session.errmsg = "Add failed. " + err;
@@ -564,6 +567,19 @@ app.post('/add_book', function(req, res) {
                         res.redirect('/');
                         req.session.errmsg = "";
                     } else {
+                        if (dept && num) {
+                            db.run('INSERT INTO course_textbook (dept, num, title, author) VALUES (?, ?, ?, ?)', [ dept, num, title, author ], function (err) {
+                                if(err) {
+                                    // doing nothing, our database has already have this book
+                                }
+                                req.session.msg = "Add offered book successfully!";
+                                req.session.errmsg = "";
+                                res.redirect('/');
+                                req.session.msg = "";
+
+                            });
+
+                        }
                         req.session.msg = "Add offered book successfully!";
                         req.session.errmsg = "";
                         res.redirect('/');
@@ -572,7 +588,7 @@ app.post('/add_book', function(req, res) {
                 });
             } else {
                 // cannot find this user
-                req.session.errmsg = "Add book failed. You've already offered this book";
+                req.session.errmsg = "Add book failed.";
                 req.session.msg = "";
                 res.redirect('/');
                 req.session.errmsg = "";
