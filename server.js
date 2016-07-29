@@ -240,8 +240,6 @@ app.post('/search_courses', function(req, res) {
 	       		});
 			}
 		});
-
-		
 	}
 
 });
