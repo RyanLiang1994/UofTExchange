@@ -1,3 +1,4 @@
+// http://mochajs.org/#getting-started
 var assert = require('chai').assert;
 describe('Array', function() {
   describe('#indexOf()', function() {
