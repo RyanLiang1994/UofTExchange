@@ -136,9 +136,14 @@ $('#search-course').click(function(event) {
     getCourse();
 });
 
-
-
-
+$('#search-book').click(function(event) {
+    event.preventDefault();
+    removeLoggedInSection();
+    $('section').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
+    getBooks();
+});
 
 function stickyNav(){
     var navPosition = $('#navbar').position();
@@ -442,33 +447,32 @@ function getCourse() {
 
                 }
             } else {
-                    $no_result = $("<p>", {
-                        text: "Sorry! Nothing was found. Please try a different query"
-                    });
-                    $container.append($no_result);
-                    $container.append("<hr>");
+                $no_result = $("<p>", {
+                    text: "Sorry! Nothing was found. Please try a different query"
+                });
+                $container.append($no_result);
             }
 
             var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
             $container.append($title);
-            if (data[1].lengt > 0) {
+            if (data[1].length > 0) {
                 for (var i = 0; i < data[1].length; i++) {
                     $course_code = $("<h3>", {
-                        class: "query_courses",
+                        class: "queries",
                         text: data[1][i].dept.toUpperCase() + data[1][i].num
                     });
 
                     $course_title = $("<h4>", {
-                        class: "query_courses",
+                        class: "queries",
                         text: "Course Title: " + checkNull(data[1][i].sect)
                     });
                     $lecture_section = $("<h4>", {
-                        class: "query_courses",
+                        class: "queries",
                         text: "Lecture Section: " + checkNull(data[1][i].title)
                     });
 
                     $contact_info = $("<p>", {
-                        class: "query_courses",
+                        class: "queries",
                         text: "Contact Information: " + data[1][i].email
                     });
 
@@ -483,7 +487,6 @@ function getCourse() {
                         text: "Please provide more information to optimize your experience."
                 });
                 $container.append($no_result);
-                $container.append("<hr>");
             }
             $container.insertBefore($("footer"));
         },
@@ -497,12 +500,86 @@ function getBooks() {
         method: "POST",
         dataType: "json",
         data: {
-            department: $("#department").val(),
-            code: $("#code").val(),
-            section: $("#section").val()
+            title: $("#title").val(),
+            author: $("#author").val(),
+            publisher: $("#publisher").val(),
+            dept: $("#dept").val(),
+            num: $("#num").val()
         },
         success: function(data) {
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
+            var $title = $("<h2>", {class: "sectiontitle", text: "Offering Books"});
+            $container.append($title);
+            if (data[0].length > 0) {
+                for (var i = 0; i < data[0].length; i++) {
+                    $book_title = $("<h3>", {
+                        class: "queries",
+                        text: data[0][i].title});
 
+                    $booka_author = $("<h4>", {
+                        class: "queries",
+                        text: "By: " + data[0][i].author
+                    });
+
+                    $book_publisher = $("<h5>", {
+                        class: "queries",
+                        text: "Publisher: " + checkNull(data[0][i].publisher)
+                    });
+
+                    $contact_info = $("<p>", {
+                        class: "queries",
+                        text: "Contact Information: " + data[0][i].email
+                    });
+
+                    $container.append($book_title);
+                    $container.append($booka_author);
+                    $container.append($book_publisher);
+                    $container.append($contact_info);
+                    $container.append("<hr>");
+                }
+            } else {
+                $no_result = $("<p>", {
+                    text: "Sorry! Nothing was found. Please try a different query"
+                });
+                $container.append($no_result);
+            }
+
+            var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
+            $container.append($title);
+            if (data[1].length > 0) {
+                for (var i = 0; i < data[1].length; i++) {
+                    $course_code = $("<h3>", {
+                        class: "queries",
+                        text: data[1][i].dept.toUpperCase() + data[1][i].num
+                    });
+
+                    $course_title = $("<h4>", {
+                        class: "queries",
+                        text: "Course Title: " + checkNull(data[1][i].sect)
+                    });
+                    $lecture_section = $("<h4>", {
+                        class: "queries",
+                        text: "Lecture Section: " + checkNull(data[1][i].title)
+                    });
+
+                    $contact_info = $("<p>", {
+                        class: "queries",
+                        text: "Contact Information: " + data[1][i].email
+                    });
+
+                    $container.append($course_code);
+                    $container.append($course_title);
+                    $container.append($lecture_section);
+                    $container.append($contact_info);
+                    $container.append("<hr>");
+                }
+            } else {
+                $no_result = $("<p>", {
+                        text: "Please provide more information to optimize your experience."
+                });
+                $container.append($no_result);
+            }
+            $container.insertBefore($("footer"));
         }
     });
 }
@@ -572,7 +649,7 @@ function changeUser(username) {
 
             var $password = $("<label>");
             $password.text("Password: ");
-            var $password_input = $("<input>", {name: "user_password", value: checkNull(data[0].password)});
+            var $password_input = $("<input>", {name: "user_password", type: "password", value: checkNull(data[0].password)});
             $password.append($password_input);
             $form.append($password);
             $form.append("<br>")
