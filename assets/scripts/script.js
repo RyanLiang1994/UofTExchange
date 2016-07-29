@@ -377,6 +377,17 @@ function getAddingForms() {
     $courseform.attr("method","post");
     $bookform.find("#search-book").text("Add Book!");
     $courseform.find("#search-course").text("Add Course!");
+    $courseTitle = $("<input>", {
+        id: "course-title",
+        type: "text",
+        name: "course_title",
+        placeholder: "Course Title"});
+    $courseTitleLabel = $("<label>", {
+        text: "Course Title: "
+    });
+    $courseTitle.appendTo($courseTitleLabel);
+    $courseTitleLabel.append("<br>");
+    $courseTitleLabel.insertBefore($($courseform.find("#section")).parent());
     $container.append($title1);
     $container.append($bookform);
     $container.append("<hr>");
@@ -526,11 +537,11 @@ function getCourse() {
 
                     $course_title = $("<h4>", {
                         class: "queries",
-                        text: "Course Title: " + checkNull(data[0][i].sect)
+                        text: "Course Title: " + checkNull(data[0][i].title)
                     });
                     $lecture_section = $("<h4>", {
                         class: "queries",
-                        text: "Lecture Section: " + checkNull(data[0][i].title)
+                        text: "Lecture Section: " + checkNull(data[0][i].sect)
                     });
 
                     $contact_info = $("<p>", {
