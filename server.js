@@ -245,7 +245,6 @@ app.post('/search_courses', function(req, res) {
 				var username = req.session.username;
 				db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
 
-<<<<<<< HEAD
 	    			if (lenDept) {
 	    				recommend_textbook += " or lower(c.dept) like '%" + rows[0].major.trim().toLowerCase() + 
 	    							 "%' and c.num between " + (rows[0].year_of_study * 100) + " and " + 
@@ -261,10 +260,6 @@ app.post('/search_courses', function(req, res) {
 	    			console.log(recommend_textbook);
 	            	db.all(recommend_textbook, function(err, rec) {
 	            		if (err) console.log(err);
-=======
-	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 200) + " and email <> '" + username + "'";
-	            	db.all(recommend, function(err, rec) {
->>>>>>> 8de403297f2d7d5ec2c652eb384863e14e4bc121
 		       			result_list.push(rec);
 		       			console.log(rec);
 		       			res.end(JSON.stringify(result_list));
@@ -349,11 +344,7 @@ app.post('/search_books', function(req, res) {
 				var username = req.session.username;
 				db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
 
-<<<<<<< HEAD
 	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major.toLowerCase().trim() + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 99) + " and email <> '" + username + "'";
-=======
-	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 200) + " and email <> '" + username + "'";
->>>>>>> 8de403297f2d7d5ec2c652eb384863e14e4bc121
 	            	db.all(recommend, function(err, rec) {
 		       			result_list.push(rec);
 		       			// console.log(rec);

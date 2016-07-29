@@ -68,7 +68,8 @@ function slider() {
     $gallery.append($slider);
 
     // Make first image bigger than others
-    $("div ul li:first-child").css("width", "500px");
+
+    $("div#gallery ul li:first-child").css("width", "500px");
     // Calculate step size
     var step_size = 100 / (images.length - 1);
     // Create slide controller
@@ -89,7 +90,7 @@ function slider() {
             // slider_index is an index, e.g. 0, 1, 2, 3, 4 ...
             var slider_index = ui.value / step_size;
             // Get showcase (image at slider_index)
-            var $showcase = $("div ul li").eq(slider_index);
+            var $showcase = $("div#gallery ul li").eq(slider_index);
             // Get images before and after showcase.
             var before = $showcase.prevAll();
             var after = $showcase.nextAll();
@@ -371,7 +372,9 @@ function getAddingForms() {
     var $bookform = $("#searchBookForm").clone().prop("id", "addBookForm");
     var $courseform = $("#searchCourseForm").clone().prop("id", "addCourseForm");
     $bookform.attr("action","add_book");
+    $bookform.attr("method","post");
     $courseform.attr("action", "add_course");
+    $courseform.attr("method","post");
     $bookform.find("#search-book").text("Add Book!");
     $courseform.find("#search-course").text("Add Course!");
     $container.append($title1);
