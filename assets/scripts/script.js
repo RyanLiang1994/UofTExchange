@@ -421,21 +421,21 @@ function getCourse() {
                 console.log(data);
                 for (var i = 0; i < data[0].length; i++) {
                     $course_code = $("<h3>", {
-                        class: "query_courses",
+                        class: "queries",
                         text: data[0][i].dept.toUpperCase() + data[0][i].num
                     });
 
                     $course_title = $("<h4>", {
-                        class: "query_courses",
+                        class: "queries",
                         text: "Course Title: " + checkNull(data[0][i].sect)
                     });
                     $lecture_section = $("<h4>", {
-                        class: "query_courses",
+                        class: "queries",
                         text: "Lecture Section: " + checkNull(data[0][i].title)
                     });
 
                     $contact_info = $("<p>", {
-                        class: "query_courses",
+                        class: "queries",
                         text: "Contact Information: " + data[0][i].email
                     });
 
@@ -457,18 +457,18 @@ function getCourse() {
             $container.append($title);
             if (data[1].length > 0) {
                 for (var i = 0; i < data[1].length; i++) {
-                    $course_code = $("<h3>", {
+                    $book_title = $("<h3>", {
                         class: "queries",
-                        text: data[1][i].dept.toUpperCase() + data[1][i].num
+                        text: data[1][i].title});
+
+                    $booka_author = $("<h4>", {
+                        class: "queries",
+                        text: "By: " + data[1][i].author
                     });
 
-                    $course_title = $("<h4>", {
+                    $book_publisher = $("<h5>", {
                         class: "queries",
-                        text: "Course Title: " + checkNull(data[1][i].sect)
-                    });
-                    $lecture_section = $("<h4>", {
-                        class: "queries",
-                        text: "Lecture Section: " + checkNull(data[1][i].title)
+                        text: "Publisher: " + checkNull(data[1][i].publisher)
                     });
 
                     $contact_info = $("<p>", {
@@ -476,9 +476,9 @@ function getCourse() {
                         text: "Contact Information: " + data[1][i].email
                     });
 
-                    $container.append($course_code);
-                    $container.append($course_title);
-                    $container.append($lecture_section);
+                    $container.append($book_title);
+                    $container.append($booka_author);
+                    $container.append($book_publisher);
                     $container.append($contact_info);
                     $container.append("<hr>");
                 }

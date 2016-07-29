@@ -190,7 +190,7 @@ app.post('/search_courses', function(req, res) {
 	if (!lenDept && !lenNum && !lenSect) {
 		console.log('asdasd');
 		msgs.errors.course_empty = "Please enter in at least 1 field";
-		res.render('index.html', msgs);
+		res.render('base.html', msgs);
 	} else {
 		var offers_course = "";
 		if (lenDept) {
@@ -222,16 +222,44 @@ app.post('/search_courses', function(req, res) {
 			if (err) throw err;
 			result_list.push(rows);
 			console.log(rows);
+
+			var recommend_textbook;
+			if (lenDept) {
+				recommend_textbook = "select o.email as email, o.title as title, o.author as author, o.publisher as publisher from offers_book o, course_textbook c where o.title like c.title and o.author like c.author and lower(c.dept) like '%" + req.sanitize('department').escape().toLowerCase().trim() + "%'"
+			};
+
 			if (!req.session.username) {
-				result_list.push([]);
-				console.log(result_list);
-				res.end(JSON.stringify(result_list));
+				if (lenDept) {
+					db.all(recommend_textbook, function(err, rows) {
+						if (err) throw err;
+						result_list.push(rows);
+						console.log(result_list);
+						res.end(JSON.stringify(result_list));
+					});
+				} else {
+					result_list.push([]);
+					res.end(JSON.stringify(result_list));
+				}
+				
 			} else {
 				var username = req.session.username;
 				db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
 
-	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 100) + " and email <> '" + username + "'";
-	            	db.all(recommend, function(err, rec) {
+	    			if (lenDept) {
+	    				recommend_textbook += " or lower(c.dept) like '%" + rows[0].major.trim().toLowerCase() + 
+	    							 "%' and c.num between " + (rows[0].year_of_study * 100) + " and " + 
+	    							 (rows[0].year_of_study * 100 + 99) + " and email <> '" + username + "'";
+	    			} else {
+	    				recommend_textbook = "select o.email as email, o.title as title, o.author as author, o.publisher as publisher from offers_book o, course_textbook c where o.title like c.title and o.author like c.author and lower(c.dept) like '%" + 
+	    									  rows[0].major.trim().toLowerCase() + 
+	    									  "%' and c.num between " + 
+	    									  (rows[0].year_of_study * 100) + " and " + 
+	    							 		  (rows[0].year_of_study * 100 + 99) + 
+	    							 		  " and email <> '" + username + "'"
+	    			}
+	    			console.log(recommend_textbook);
+	            	db.all(recommend_textbook, function(err, rec) {
+	            		if (err) console.log(err);
 		       			result_list.push(rec);
 		       			console.log(rec);
 		       			res.end(JSON.stringify(result_list));
@@ -309,12 +337,6 @@ app.post('/search_books', function(req, res) {
             }
             result_list.push(rows);
 
-            if (lenDept) {
-            	var query_course_rec = "select * from offers_course where lower(dept) = " + req.sanitize('dept').escape().trim().lower();
-            	db.all(query_course_rec, 
-            }
-            
-
             if (!req.session.username) {
 				result_list.push([]);
 				// console.log(result_list);
@@ -323,7 +345,7 @@ app.post('/search_books', function(req, res) {
 				var username = req.session.username;
 				db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
 
-	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 100) + " and email <> '" + username + "'";
+	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major.toLowerCase().trim() + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 99) + " and email <> '" + username + "'";
 	            	db.all(recommend, function(err, rec) {
 		       			result_list.push(rec);
 		       			// console.log(rec);

@@ -5,7 +5,7 @@ CREATE TABLE users (
 	birthday DATE NOT NULL,
 	phone INT,
 	year_of_study INT CHECK (year_of_study BETWEEN 1 AND 4),
-	major CHAR(3),
+	major CHAR(3) CHECK(LENGTH(major) = 3),
 	is_admin INT NOT NULL CHECK (is_admin BETWEEN 0 AND 1)
 );
 
