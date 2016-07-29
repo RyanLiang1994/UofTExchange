@@ -15,11 +15,11 @@
 
         <!-- Advanced -->
         <!-- JQuery UI -->
-        <!-- <link href="../jquery-ui/css/jquery-ui.css" type="text/css" rel="stylesheet">
-        <script src="../jquery-ui/scripts/jquery-ui.min.js" type="text/javascript" defer></script> -->
+        <link href="/jquery-ui/css/jquery-ui.css" type="text/css" rel="stylesheet">
+        <script src="/jquery-ui/scripts/jquery-ui.min.js" type="text/javascript" defer></script>
         <!-- Google Login -->
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <meta name="google-signin-client_id" content="876028759281-5ig4uobuead2frdqhentneo6qpn2rrn7.apps.googleusercontent.com">
+        <!-- <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="google-signin-client_id" content="876028759281-5ig4uobuead2frdqhentneo6qpn2rrn7.apps.googleusercontent.com"> -->
 
         <!-- Title -->
         <title>UofT Exchange</title>
@@ -57,7 +57,7 @@
 
 
             <section id="home" class="menu-item">
-
+                <div id="gallery"></div>
                 <p>A platform to search your textbook</p>
                 <p>Convenient, fast, cheap and refundable.</p>
                 <p>You can almost always find the textbook you want here.</p>
@@ -74,7 +74,7 @@
             <section id="search-books" class="menu-item">
                 <h2>Search Books</h2>
                 <span class="error">{{ errors.error_empty }}</span>
-                <form id="searchBookForm">
+                <form action="/search_books" method="post" id="searchBookForm">
                    <label class="label">Title:
                     <input type="text" name="title" placeholder="Title" id="title"><br>
                     </label>
