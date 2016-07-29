@@ -1,6 +1,5 @@
 var http = require("http");
 var fs = require("fs");
-var cool = require('cool-ascii-faces');
 var express = require("express");
 var app = express();
 var expressValidator = require("express-validator");
@@ -40,9 +39,9 @@ nunjucks.configure('views', { autoescape: true, express: app });
 var page = "/";
 
 app.use(express.static(__dirname + '/assets'));
-app.engine('.html', require('ejs').__express);
-app.set('views', __dirname);
-app.set('view engine', 'html');
+// app.engine('.html', require('ejs').__express);
+// app.set('views', __dirname);
+// app.set('view engine', 'html');
 app.use(session({ secret: 'Who is Ryan', resave: false, saveUninitialized: false }));
 // Expose session variables to views
 app.use(function(req, res, next) {
@@ -191,7 +190,7 @@ app.post('/search_courses', function(req, res) {
 	if (!lenDept && !lenNum && !lenSect) {
 		console.log('asdasd');
 		msgs.errors.course_empty = "Please enter in at least 1 field";
-		res.render('index', msgs);
+		res.render('index.html', msgs);
 	} else {
 		var offers_course = "";
 		if (lenDept) {
@@ -356,7 +355,7 @@ app.post('/signin', function(req, res) {
 
 
         // res.sendFile(__dirname + '/index.html');
-        res.render('index', msgs);
+        res.render('index.html', msgs);
 
     } else {
 		//submit the data to database
@@ -386,7 +385,7 @@ app.post('/signin', function(req, res) {
                 var err = req.validationErrors();
                 var msgs = { "errors": {} };
                 msgs.errors.error_password = "Password is not correct!";
-                res.render('index', msgs);
+                res.render('index.html', msgs);
             }
         });
 	}
@@ -428,7 +427,7 @@ app.get('/profile', function(req, res) {
         var result = [];
         var username = req.session.username;
 
-        db.all("SELECT email, phone, year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
+        db.all("SELECT email, password, birthday, phone, year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
             result.push(rows);
         });
 
@@ -653,34 +652,40 @@ app.post("/userInfo", function(req, res) {
 });
 
 app.post("/changeInfo", function(req, res) {
+    var username = req.body.user_email;
+    var password =  emptyStringToNull(req.body.user_password);
+    var birthday =  emptyStringToNull(req.body.user_birthday);
+    var phone =  emptyStringToNull(req.body.user_phone);
+    var year =  emptyStringToNull(req.body.user_year_of_study);
+    var major =  emptyStringToNull(req.body.user_major);
     if (req.session.is_admin === 1) {
-        var username = req.body.user_email;
-        var password =  emptyStringToNull(req.body.user_password);
-        var birthday =  emptyStringToNull(req.body.user_birthday);
-        var phone =  emptyStringToNull(req.body.user_phone);
-        var year =  emptyStringToNull(req.body.user_year_of_study);
-        var major =  emptyStringToNull(req.body.major);
-        console.log([ password, birthday, phone, year, major, username ]);
-
-        db.all("UPDATE users SET password=?, birthday=?, phone=?, year_of_study=?, major=? WHERE email=?", [ password, birthday, phone, year, major, username ],function(err, rows) {
-            if (err) {
-                req.session.errmsg = "Update failed. " + err + " Please contact the admin";
-                req.session.msg = "";
-                res.redirect('/');
-                req.session.errmsg = "";
-            } else {
-                req.session.msg = "Update successfully!";
-                req.session.errmsg = "";
-                res.redirect(page);
-                req.session.msg = "";
-            }
-        });
+        updateInfo(password, birthday, phone, year, major, username, req, res);
     } else {
-        //should not be happened, unless hacker trying to access
-        res.status(403).send("You are not admin, cannot access this page.");
+        if (req.session.username === username) {
+            updateInfo(password, birthday, phone, year, major, username, req, res);
+        } else {
+            //should not be happened, unless hacker trying to access
+
+            res.status(403).send("You are not admin, cannot access this page.");
+        }
     }
 })
 
+function updateInfo(password, birthday, phone, year, major, username, req, res) {
+    db.all("UPDATE users SET password=?, birthday=?, phone=?, year_of_study=?, major=? WHERE email=?", [ password, birthday, phone, year, major, username ],function(err, rows) {
+        if (err) {
+            req.session.errmsg = "Update failed. " + err + " Please contact the admin";
+            req.session.msg = "";
+            res.redirect('/');
+            req.session.errmsg = "";
+        } else {
+            req.session.msg = "Update successfully!";
+            req.session.errmsg = "";
+            res.redirect(page);
+            req.session.msg = "";
+        }
+    });
+}
 function emptyStringToNull(value) {
     if (value === "") {
         return null;

@@ -162,7 +162,7 @@ function getProfile() {
             if (data.length > 0) {
                 var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title1 = $("<h2>", {id: "info"});
-                $title1.text("Imformation: ");
+                $title1.text("User Imformation: ");
                 var $title2 = $("<h2>", {id: "offercourse"});
                 $title2.text("Offer Course: ");
                 var $title3 = $("<h2>", {id: "offerBook"});
@@ -170,11 +170,57 @@ function getProfile() {
                 var $paragraph1 = $("<p>", {id: "profileparagraph"});
                 var $linebreak = $("<br>");
                 $container.append($title1);
-                $paragraph1.append("Email: " + checkNull(data[0][0].email) + "<br>" +
-                                    "Phone: " + checkNull(data[0][0].phone) + "<br>" +
-                                    "Year of Study: " + checkNull(data[0][0].year_of_study) + "<br>" +
-                                    "Major: " + checkNull(data[0][0].major));
+
+                var $form = $("<form>", {id: "infoform", action: "/changeInfo", method: "post"});
+                var $email = $("<label>");
+                $email.text("Email: ");
+                var $email_input = $("<input>", {name: "user_email", value: checkNull(data[0][0].email), readonly: "readonly"});
+                $email.append($email_input);
+                $form.append($email);
+                $form.append("<br>");
+                var $password = $("<label>");
+                $password.text("Password: ");
+                var $password_input = $("<input>", {name: "user_password", type: "password", value: checkNull(data[0][0].password)});
+                $password.append($password_input);
+                $form.append($password);
+                $form.append("<br>")
+
+                var $birthday = $("<label>");
+                $birthday.text("Birthday: ");
+                var $birthday_input = $("<input>", {name: "user_birthday", value: checkNull(data[0][0].birthday)});
+                $birthday.append($birthday_input);
+                $form.append($birthday);
+                $form.append("<br>")
+
+                var $phone = $("<label>");
+                $phone.text("Phone: ");
+                var $phone_input = $("<input>", {name: "user_phone", value: checkNull(data[0][0].phone)});
+                $phone.append($phone_input);
+                $form.append($phone);
+                $form.append("<br>")
+
+                var $year_of_study = $("<label>");
+                $year_of_study.text("Year of Study: ");
+                var $year_of_study_input = $("<input>", {name: "user_year_of_study", value: checkNull(data[0][0].year_of_study)});
+                $year_of_study.append($year_of_study_input);
+                $form.append($year_of_study);
+                $form.append("<br>")
+
+                var $major = $("<label>");
+                $major.text("Major: ");
+                var $major_input = $("<input>", {name: "user_major", value: checkNull(data[0][0].major)});
+                $major.append($major_input);
+                $form.append($major);
+                $form.append("<br>")
+
+                var $button = $("<button>", {type: "submit"}).text("Save Information");
+                $form.append($button);
+
+
+                $paragraph1.append($form);
+
                 $container.append($paragraph1);
+                $container.append("<hr>");
 
                 $container.append($title2);
                 if (data.length > 1) {
@@ -188,7 +234,7 @@ function getProfile() {
                     }
                     $container.append($paragraph2);
                 }
-
+                $container.append("<hr>");
                 $container.append($title3);
                 if (data.length > 2) {
                     var $paragraph3 = $("<p>", {id: "profileparagraph"});
@@ -201,6 +247,7 @@ function getProfile() {
                     }
                     $container.append($paragraph3);
                 }
+                $container.append("<hr>");
                 $container.insertBefore($("footer"));
 
             } else {
@@ -457,8 +504,8 @@ function getBooks() {
         },
         success: function(data) {
 
-                 }
-        });
+        }
+    });
 }
 
 function displayUsers(){
