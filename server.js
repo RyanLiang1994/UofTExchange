@@ -326,8 +326,6 @@ app.post('/search_books', function(req, res) {
 	       		});
 			}
 		});
-
-
 	}
 
 });
@@ -349,7 +347,6 @@ app.post('/signin', function(req, res) {
     if (err) // If errors exist, send them back to the form:
     {
         var msgs = { "errors": {} };
-
 
         if ( mappedErrors.mail )
             msgs.errors.error_mail = mappedErrors.mail.msg;
@@ -434,8 +431,6 @@ app.get('/profile', function(req, res) {
         db.all("SELECT email, phone, year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
             result.push(rows);
         });
-
-
 
         db.all("SELECT email, dept, num, title, sect FROM offers_course WHERE email = ?",  [ username ], function(err, rows) {
             result.push(rows);
@@ -635,7 +630,7 @@ app.get("/admin", function(req, res) {
 
 app.post("/userList", function(req, res) {
     if (req.session.is_admin === 1) {
-        db.all("SELECT email FROM users", function(err, rows) {
+        db.all("SELECT email FROM users WHERE is_admin <> 1", function(err, rows) {
             res.end(JSON.stringify(rows));
         });
     } else {
