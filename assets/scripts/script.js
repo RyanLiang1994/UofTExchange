@@ -408,11 +408,11 @@ function getCourse() {
             section: $("#section").val()
         },
         success: function(data) {
-            console.log("success");
             var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
             var $title = $("<h2>", {class: "sectiontitle", text: "Offering Courses"});
             $container.append($title);
-            if (data[0]) {
+            if (data[0].length > 0) {
+                console.log(data);
                 for (var i = 0; i < data[0].length; i++) {
                     $course_code = $("<h3>", {
                         class: "query_courses",
@@ -450,7 +450,7 @@ function getCourse() {
 
             var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
             $container.append($title);
-            if (data[1] != []) {
+            if (data[1].lengt > 0) {
                 for (var i = 0; i < data[1].length; i++) {
                     $course_code = $("<h3>", {
                         class: "query_courses",
@@ -501,6 +501,7 @@ function getBooks() {
             section: $("#section").val()
         },
         success: function(data) {
+
         }
     });
 }
