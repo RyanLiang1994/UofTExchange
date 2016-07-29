@@ -473,6 +473,7 @@ function displayUsers(){
 
             // make the button works
             $(".selectUser").click(function() {
+                removeLoggedInSection();
                 $('section').hide();
                 $('.errmsg').remove();
                 $('.msg').remove();
