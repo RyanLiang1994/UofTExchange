@@ -492,6 +492,18 @@ function getCourse() {
 
 }
 
+function getBooks() {
+    $.ajax({
+        url: "search_books",
+        method: "POST",
+        dataType: "json",
+        data: {
+            department: $("#department").val(),
+            code: $("#code").val(),
+            section: $("#section").val()
+        },
+        success: function(data) {
+}
 
 function displayUsers(){
     $.ajax({
@@ -598,7 +610,6 @@ function changeUser(username) {
         }
     });
 }
-
 
 function checkNull(value) {
     if (value === null) {
