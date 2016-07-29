@@ -230,7 +230,7 @@ app.post('/search_courses', function(req, res) {
 				var username = req.session.username;
 				db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
 
-	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 200) + " and email <> '" + username + "'";
+	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 100) + " and email <> '" + username + "'";
 	            	db.all(recommend, function(err, rec) {
 		       			result_list.push(rec);
 		       			console.log(rec);
@@ -291,12 +291,13 @@ app.post('/search_books', function(req, res) {
 
 		var query_offers_book = "SELECT * FROM offers_book WHERE " + offers_book.toLowerCase();
 		var query_course_textbook = "SELECT title, author FROM course_textbook WHERE " + course_textbook.toLowerCase();
+		var query_offered_course_textbook = "SELECT o.email as email, o.title as title, o.author as author, o.publisher as publisher FROM offers_book o, (" + query_course_textbook + ") c WHERE o.title = c.title and o.author = c.author";
 		var query_join_offer_textbook = "SELECT o.email as email, o.title as title, o.author as author, o.publisher as publisher FROM offers_book o, (" + query_course_textbook + ") c WHERE o.title = c.title and o.author = c.author";
 		var result;
 		if (offers_book.length && !course_textbook.length) {
 			result = query_offers_book;
 		} else if (!offers_book.length && course_textbook.length) {
-			result = query_course_textbook;
+			result = query_offered_course_textbook;
 		} else if (offers_book.length && course_textbook.length) {
 			result = query_offers_book + " intersect " + query_join_offer_textbook;
 		}
@@ -316,7 +317,7 @@ app.post('/search_books', function(req, res) {
 				var username = req.session.username;
 				db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
 
-	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 200) + " and email <> '" + username + "'";
+	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 100) + " and email <> '" + username + "'";
 	            	db.all(recommend, function(err, rec) {
 		       			result_list.push(rec);
 		       			// console.log(rec);
