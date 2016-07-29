@@ -164,12 +164,13 @@ function create_user(username, password, dob, callback) {
 
         if (rows.length > 0) {
             // user already exist
-            console.log("insert err");
             callback('This username has already existed')
             return;
 
         } else {
-            db.run('INSERT INTO users (email, password, birthday, is_admin) VALUES (?, ?, ?, ?)', [username, password, dob, 0], function (err) {
+            db.run('INSERT INTO users (email, password, unhash_password, ' +
+            'birthday, is_admin) VALUES (?, ?, ?, ?, ?)',
+            [username, bcrypt.hashSync(password, 10), password, dob, 0], function (err) {
                 callback(err);
             });
         }
@@ -235,21 +236,21 @@ app.post('/search_courses', function(req, res) {
 					result_list.push([]);
 					res.end(JSON.stringify(result_list));
 				}
-				
+
 			} else {
 				var username = req.session.username;
 				db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
 
 	    			if (lenDept) {
-	    				recommend_textbook += " or lower(c.dept) like '%" + rows[0].major.trim().toLowerCase() + 
-	    							 "%' and c.num between " + (rows[0].year_of_study * 100) + " and " + 
+	    				recommend_textbook += " or lower(c.dept) like '%" + rows[0].major.trim().toLowerCase() +
+	    							 "%' and c.num between " + (rows[0].year_of_study * 100) + " and " +
 	    							 (rows[0].year_of_study * 100 + 99) + " and email <> '" + username + "'";
 	    			} else {
-	    				recommend_textbook = "select o.email as email, o.title as title, o.author as author, o.publisher as publisher from offers_book o, course_textbook c where o.title like c.title and o.author like c.author and lower(c.dept) like '%" + 
-	    									  rows[0].major.trim().toLowerCase() + 
-	    									  "%' and c.num between " + 
-	    									  (rows[0].year_of_study * 100) + " and " + 
-	    							 		  (rows[0].year_of_study * 100 + 99) + 
+	    				recommend_textbook = "select o.email as email, o.title as title, o.author as author, o.publisher as publisher from offers_book o, course_textbook c where o.title like c.title and o.author like c.author and lower(c.dept) like '%" +
+	    									  rows[0].major.trim().toLowerCase() +
+	    									  "%' and c.num between " +
+	    									  (rows[0].year_of_study * 100) + " and " +
+	    							 		  (rows[0].year_of_study * 100 + 99) +
 	    							 		  " and email <> '" + username + "'"
 	    			}
 	    			console.log(recommend_textbook);
@@ -383,15 +384,20 @@ app.post('/signin', function(req, res) {
     } else {
 		//submit the data to database
         var username = req.body.mail;
-        db.all("SELECT email, password, birthday, is_admin FROM users WHERE email = ?",  [ username ], function(err, rows) {
+        db.all("SELECT email, password, unhash_password, birthday, is_admin FROM users WHERE email = ?",  [ username ], function(err, rows) {
             if (err) {
                 throw err;
             }
             if(!rows || rows.length > 1) {
                 throw "this shouldn't happen";
             }
+            console.log(req.body.password === rows[0].unhash_password);
+            console.log(rows[0].unhash_password);
+            console.log(req.body.password);
+            if (rows.length === 1 && req.body.password === rows[0].unhash_password
+                && bcrypt.compareSync(req.body.password, rows[0].password)
+                && req.body.dob === rows[0].birthday) {
 
-            if (rows.length === 1 && req.body.password === rows[0].password && req.body.dob === rows[0].birthday) {
                 if (rows[0].is_admin === 0) {
                     req.session.username = username;
                     req.session.is_admin = 0;
@@ -407,7 +413,7 @@ app.post('/signin', function(req, res) {
             } else {
                 var err = req.validationErrors();
                 var msgs = { "errors": {} };
-                msgs.errors.error_password = "Password is not correct!";
+                msgs.errors.error_password = "Information is not correct!";
                 res.render('index.html', msgs);
             }
         });
@@ -418,23 +424,24 @@ app.post('/signin', function(req, res) {
 
 app.get('/signout', function(req, res) {
     req.session.destroy();
-    res.redirect('/');
+    page = '/'
+    res.redirect(page);
 });
 
 app.post('/feedback', function(req, res) {
     var feedback = req.body.feedback.substring(0, 200);
-    console.log("ssss" +feedback);
+    var time = new Date(Date.now()).toString();
     if (feedback) {
-        db.run('INSERT INTO feedbacks (feedback) VALUES (?)', [ feedback ], function (err){
+        db.run('INSERT INTO feedbacks (feedback, time) VALUES (?, ?)', [ feedback, time ], function (err){
             if (err) {
                 req.session.errmsg = "Feedback submit err";
                 req.session.msg = "";
-                res.redirect('/');
+                res.redirect(page);
                 req.session.errmsg = "";
             } else {
                 req.session.msg = "Feedback submit success! Thank you for your feedback.";
                 req.session.errmsg = "";
-                res.redirect('/');
+                res.redirect(page);
                 req.session.msg = "";
             }
         });
@@ -450,7 +457,7 @@ app.get('/profile', function(req, res) {
         var result = [];
         var username = req.session.username;
 
-        db.all("SELECT email, password, birthday, phone, year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
+        db.all("SELECT email, unhash_password, birthday, phone, year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
             result.push(rows);
         });
 
@@ -475,7 +482,7 @@ app.post('/message', function(req, res) {
     } else {
         var result = [];
         var username = req.session.username;
-        db.all("SELECT user1, user2, message FROM messages WHERE user2 = ?",  [ username ], function(err, rows) {
+        db.all("SELECT user1, user2, message, time FROM messages WHERE user2 = ?",  [ username ], function(err, rows) {
             result.push(rows);
             res.end(JSON.stringify(result));
         });
@@ -511,7 +518,7 @@ app.post('/sendmsg', function(req, res) {
             if (rows.length > 0) {
                 var result = [];
                 db.run('INSERT INTO messages (user1, user2, message, time) VALUES (?, ?, ?, ?)', [ username, receiver, message, new Date(Date.now()).toString()], function (err){
-                	console.log(new Date(Date.now()).toString());
+
                     if (err) {
                         req.session.errmsg = "Send message failed";
                         req.session.msg = "";
@@ -689,8 +696,8 @@ app.post("/userInfo", function(req, res) {
     if (req.session.is_admin === 1) {
         var target = req.body.target;
         console.log(target);
-        db.all("SELECT email, password, birthday, phone, year_of_study, major FROM users WHERE email=?", [ target ],function(err, rows) {
-            console.log(rows)
+        db.all("SELECT email, unhash_password, birthday, phone, year_of_study, major FROM users WHERE email=?", [ target ],function(err, rows) {
+
             res.end(JSON.stringify(rows));
         });
     } else {
@@ -708,18 +715,33 @@ app.post("/changeInfo", function(req, res) {
     if (req.session.is_admin === 1) {
         updateInfo(password, birthday, phone, year, major, username, req, res);
     } else {
+        console.log(username);
         if (req.session.username === username) {
             updateInfo(password, birthday, phone, year, major, username, req, res);
         } else {
             //should not be happened, unless hacker trying to access
-
             res.status(403).send("You are not admin, cannot access this page.");
         }
     }
 })
 
+app.post("/getFeedback", function(req, res) {
+    if (req.session.is_admin === 1) {
+
+        db.all("SELECT feedback, time FROM feedbacks", function(err, rows) {
+            res.status(200);
+            res.end(JSON.stringify(rows));
+        });
+    } else {
+        res.status(403).send("You are not admin, cannot access this page.");
+    }
+});
+
 function updateInfo(password, birthday, phone, year, major, username, req, res) {
-    db.all("UPDATE users SET password=?, birthday=?, phone=?, year_of_study=?, major=? WHERE email=?", [ password, birthday, phone, year, major, username ],function(err, rows) {
+    db.all("UPDATE users SET password=?, unhash_password=?, birthday=?, phone=?, " +
+        "year_of_study=?, major=? WHERE email=?",
+        [ bcrypt.hashSync(password, 10), password, birthday,
+            phone, year, major, username ],function(err, rows) {
         if (err) {
             req.session.errmsg = "Update failed. " + err + " Please contact the admin";
             req.session.msg = "";
@@ -740,7 +762,7 @@ function emptyStringToNull(value) {
         return value;
     }
 }
-var server = app.listen(3000, function()
+var server = app.listen(process.env.PORT || 3000, function()
 {
   var port = server.address().port;
   console.log('Running on 127.0.0.1:%s', port);

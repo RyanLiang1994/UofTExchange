@@ -1,3 +1,5 @@
+
+
 $(document).ready(function() {
 
     $('section').hide();
@@ -19,26 +21,27 @@ $(document).ready(function() {
 
 function slider() {
     // Images
+    
     var images = [
         {
-            "title": "Andromeda Galaxy",
-            "url": "https://s31.postimg.org/p4pd6we07/space_1.jpg"
+            "title": "Introduction to Algorithms",
+            "url": "../img/Clrs3.jpeg"
         },
         {
-            "title": "Collection of galaxies",
-            "url": "https://s31.postimg.org/k7bslsc13/space_2.jpg"
+            "title": "The C Programming Language",
+            "url": "../img/cprogramming.png"
         },
         {
-            "title": "Lights on Earth at night from space",
-            "url": "https://s31.postimg.org/97vn7arxj/space_3.jpg"
+            "title": "The Linux Programming Interface",
+            "url": "../img/linux.png"
         },
         {
-            "title": "Earth from space",
-            "url": "https://s31.postimg.org/sr08gnqp3/space_4.jpg"
+            "title": "Web Programming Step by Step",
+            "url": "../img/webprogramming.jpg"
         },
         {
-            "title": "Pluto (New Horizons)",
-            "url": "https://s31.postimg.org/m1tp0n5d3/space_5.jpg"
+            "title": "Learning Web App Development",
+            "url": "../img/webappdevelopment.jpg"
         }
     ];
 
@@ -57,7 +60,9 @@ function slider() {
         });
         var $img = $('<img/>', {
             src: images[index].url,
-            alt: images[index].title
+            alt: images[index].title,
+            height: "100%",
+            width:"62%"
         });
         // Append
         $li.append($img);
@@ -225,6 +230,13 @@ $('#btn-follows').click(function() {
 });
 
 
+$('#btn-veiwFeedback').click(function() {
+    removeLoggedInSection();
+    $('section').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
+    getFeedbacklist();
+});
 
 $('nav#navbar').click(function() {
     $('#container').remove();
@@ -283,7 +295,7 @@ function getProfile() {
                 $form.append("<br>");
                 var $password = $("<label>");
                 $password.text("Password: ");
-                var $password_input = $("<input>", {name: "user_password", type: "password", value: checkNull(data[0][0].password)});
+                var $password_input = $("<input>", {name: "user_password", type: "password", value: checkNull(data[0][0].unhash_password)});
                 $password.append($password_input);
                 $form.append($password);
                 $form.append("<br>")
@@ -446,18 +458,33 @@ function getMessage() {
         dataType: "json",
         success: function(data) {
             if (data.length > 0) {
-                console.log(JSON.stringify(data));
+                data[0].sort(function (obj1, obj2) {
+                    var date1 = new Date(obj1.time);
+                    var date2 = new Date(obj2.time);
+                    if (date1.getTime() > date2.getTime()) {
+                        return -1;
+                    }
+                    if (date1.getTime() < date2.getTime()) {
+                        return 1;
+                    }
+                    return 0;
+                });
                 var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title = $("<h2>", {class: "sectiontitle"});
                 $title.text("My Message");
                 $container.append($title);
+                console.log(JSON.stringify(data));
                 for (var i = 0; i < data[0].length; i++) {
-                    var $msgwindows = $("<dl>", {class: "msgwindows"});
-                    var $sender = $("<dt>", {class: "sender"});
-                    var $msg = $("<dd>", {class: "message"});
+                    var date = new Date(data[0][i].time);
+                    var $msgwindows = $("<p>", {class: "msgwindows"});
+                    var $sender = $("<h3>", {class: "sender"});
+                    var $time = $("<h4>", {class: "sendtime"});
+                    var $msg = $("<h4>", {class: "message"});
                     $sender.text("From: " + data[0][i].user1);
+                    $time.text("Time: " + date.toLocaleString());
                     $msg.text("Text: " + data[0][i].message);
                     $msgwindows.append($sender);
+                    $msgwindows.append($time);
                     $msgwindows.append($msg);
                     $msgwindows.append("<br>");
                     $container.append($msgwindows);
@@ -566,7 +593,7 @@ function getCourse() {
 
             var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
             $container.append($title);
-            if (data[1].lengt > 0) {
+            if (data[1].length > 0) {
                 for (var i = 0; i < data[1].length; i++) {
                     $book_title = $("<h3>", {
                         class: "queries",
@@ -687,7 +714,7 @@ function changeUser(username) {
 
             var $password = $("<label>");
             $password.text("Password: ");
-            var $password_input = $("<input>", {name: "user_password", value: checkNull(data[0].password)});
+            var $password_input = $("<input>", {name: "user_password", value: checkNull(data[0].unhash_password)});
             $password.append($password_input);
             $form.append($password);
             $form.append("<br>")
@@ -723,6 +750,51 @@ function changeUser(username) {
             var $button = $("<button>", {type: "submit"}).text("Save Information");
             $form.append($button);
             $container.append($form);
+            $container.insertBefore($("footer"));
+        }
+    });
+}
+
+
+function getFeedbacklist() {
+    $.ajax({
+        url: "/getFeedback",
+        method: "POST",
+        dataType: "json",
+        success: function(data) {
+            data.sort(function (obj1, obj2) {
+                var date1 = new Date(obj1.time);
+                var date2 = new Date(obj2.time);
+                if (date1.getTime() > date2.getTime()) {
+                    return -1;
+                }
+                if (date1.getTime() < date2.getTime()) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
+            var $title = $("<h2>", {class: "sectiontitle", text: "User's Feedbacks"});
+            $container.append($title);
+            for (var i = 0; i < data.length; i++) {
+                var date = new Date(data[i].time);
+                $time = $("<h3>", {
+                    class: "queries",
+                    text: "Submit Time: " + date.toLocaleString()
+                });
+
+                $feedback = $("<h4>", {
+                    class: "queries",
+                    text: "Feedback: " + checkNull(data[i].feedback)
+                });
+
+                $container.append($time);
+                $container.append($feedback);
+                $container.append("<hr>");
+
+            }
+
             $container.insertBefore($("footer"));
         }
     });
