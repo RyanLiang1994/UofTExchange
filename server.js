@@ -240,21 +240,21 @@ app.post('/search_courses', function(req, res) {
 					result_list.push([]);
 					res.end(JSON.stringify(result_list));
 				}
-				
+
 			} else {
 				var username = req.session.username;
 				db.all("SELECT year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
 
 	    			if (lenDept) {
-	    				recommend_textbook += " or lower(c.dept) like '%" + rows[0].major.trim().toLowerCase() + 
-	    							 "%' and c.num between " + (rows[0].year_of_study * 100) + " and " + 
+	    				recommend_textbook += " or lower(c.dept) like '%" + rows[0].major.trim().toLowerCase() +
+	    							 "%' and c.num between " + (rows[0].year_of_study * 100) + " and " +
 	    							 (rows[0].year_of_study * 100 + 99) + " and email <> '" + username + "'";
 	    			} else {
-	    				recommend_textbook = "select o.email as email, o.title as title, o.author as author, o.publisher as publisher from offers_book o, course_textbook c where o.title like c.title and o.author like c.author and lower(c.dept) like '%" + 
-	    									  rows[0].major.trim().toLowerCase() + 
-	    									  "%' and c.num between " + 
-	    									  (rows[0].year_of_study * 100) + " and " + 
-	    							 		  (rows[0].year_of_study * 100 + 99) + 
+	    				recommend_textbook = "select o.email as email, o.title as title, o.author as author, o.publisher as publisher from offers_book o, course_textbook c where o.title like c.title and o.author like c.author and lower(c.dept) like '%" +
+	    									  rows[0].major.trim().toLowerCase() +
+	    									  "%' and c.num between " +
+	    									  (rows[0].year_of_study * 100) + " and " +
+	    							 		  (rows[0].year_of_study * 100 + 99) +
 	    							 		  " and email <> '" + username + "'"
 	    			}
 	    			console.log(recommend_textbook);
@@ -712,11 +712,11 @@ app.post("/changeInfo", function(req, res) {
     if (req.session.is_admin === 1) {
         updateInfo(password, birthday, phone, year, major, username, req, res);
     } else {
+        console.log(username);
         if (req.session.username === username) {
             updateInfo(password, birthday, phone, year, major, username, req, res);
         } else {
             //should not be happened, unless hacker trying to access
-
             res.status(403).send("You are not admin, cannot access this page.");
         }
     }
