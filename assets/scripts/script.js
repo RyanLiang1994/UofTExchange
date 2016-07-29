@@ -65,13 +65,23 @@ $('#btn-signup').click(function() {
 });
 
 $('#btn-add').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     getAddingForms();
     $('.errmsg').remove();
     $('.msg').remove();
 });
 
+$('#btn-changeUser').click(function() {
+    removeLoggedInSection();
+    $('section').hide();
+    displayUsers();
+    $('.errmsg').remove();
+    $('.msg').remove();
+});
+
 $('#btn-profile').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     getProfile();
     $('.errmsg').remove();
@@ -79,6 +89,7 @@ $('#btn-profile').click(function() {
 });
 
 $('#btn-message').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
@@ -87,6 +98,7 @@ $('#btn-message').click(function() {
 });
 
 $('#btn-send').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
@@ -94,6 +106,7 @@ $('#btn-send').click(function() {
 });
 
 $('#btn-follow').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
@@ -101,18 +114,14 @@ $('#btn-follow').click(function() {
 });
 
 $('#btn-follows').click(function() {
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
     getFollows();
 });
 
-$('#btn-follows').click(function() {
-    $('section').hide();
-    $('.errmsg').remove();
-    $('.msg').remove();
-    getFollows();
-});
+
 
 $('nav#navbar').click(function() {
     $('#container').remove();
@@ -120,11 +129,16 @@ $('nav#navbar').click(function() {
 
 $('#search-course').click(function(event) {
     event.preventDefault();
+    removeLoggedInSection();
     $('section').hide();
     $('.errmsg').remove();
     $('.msg').remove();
     getCourse();
 });
+
+
+
+
 
 function stickyNav(){
     var navPosition = $('#navbar').position();
@@ -146,7 +160,7 @@ function getProfile() {
         success: function(data) {
             console.log(data);
             if (data.length > 0) {
-                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title1 = $("<h2>", {id: "info"});
                 $title1.text("Imformation: ");
                 var $title2 = $("<h2>", {id: "offercourse"});
@@ -200,7 +214,7 @@ function getProfile() {
 
 
 function getAddingForms() {
-    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
     var $title1 = $("<h2>", {class: "sectiontitle"});
     var $title2 = $("<h2>", {class: "sectiontitle"});
     $title1.text("Add Offer Books");
@@ -231,7 +245,7 @@ function getFollows() {
         success: function(data) {
             if (data.length > 0) {
                 console.log(JSON.stringify(data));
-                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title = $("<h2>", {class: "sectiontitle"});
                 var $following_list = $("<ul>", {id: "following_list"});
                 $title.text("Following");
@@ -272,7 +286,7 @@ function getMessage() {
         success: function(data) {
             if (data.length > 0) {
                 console.log(JSON.stringify(data));
-                var $container = $("<section>", {id: "container", class: "menu-item"});
+                var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title = $("<h2>", {class: "sectiontitle"});
                 $title.text("My Message");
                 $container.append($title);
@@ -300,7 +314,7 @@ function getMessage() {
 }
 
 function sendMessage() {
-    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
     var $title = $("<h2>", {class: "sectiontitle"});
     $title.text("Send Message");
     var $lable = $("<lable>", {class: "label"});
@@ -320,7 +334,7 @@ function sendMessage() {
 }
 
 function followFriend() {
-    var $container = $("<section>", {id: "container", class: "menu-item"});
+    var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
     var $title = $("<h2>", {class: "sectiontitle"});
     $title.text("Follow Friend");
     var $lable = $("<lable>", {class: "label"});
@@ -350,7 +364,7 @@ function getCourse() {
         },
         success: function(data) {
             console.log("success");
-            var $container = $("<section>", {id: "container", class: "menu-item"});
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
             var $title = $("<h2>", {class: "sectiontitle", text: "Offering Courses"});
             $container.append($title);
             if (data[0]) {
@@ -442,6 +456,112 @@ function getBooks() {
             section: $("#section").val()
         },
         success: function(data) {
+}
+
+function displayUsers(){
+    $.ajax({
+        url: "userList",
+        method: "POST",
+        dataType: "json",
+        success: function(data) {
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
+            var $title = $("<h2>");
+            $title.text("User List");
+            $container.append($title);
+            console.log(data.length);
+            console.log(data);
+            for (var i=0; i < data.length; i++) {
+
+                var $paragraph = $("<p>", {id: "user_" + (i+1), class: "user"});
+                var $button = $("<button>", {id: "" + data[i].email, class: "selectUser"});
+
+                $button.text("More Info");
+                $paragraph.text("User " + (i+1) + ": "+ data[i].email);
+                $paragraph.append($button);
+                $paragraph.css({"border": "solid","border-width" : "1px"});
+                $container.append($paragraph);
+            }
+            $container.insertBefore($("footer"));
+
+            // make the button works
+            $(".selectUser").click(function() {
+                removeLoggedInSection();
+                $('section').hide();
+                $('.errmsg').remove();
+                $('.msg').remove();
+                changeUser(this.id);
+            });
+        }
+    });
+}
+
+function removeLoggedInSection() {
+    $(".logged-in-menu-item").remove();
+}
+
+function changeUser(username) {
+    $.ajax({
+        url: "userInfo",
+        method: "POST",
+        dataType: "json",
+        data: {
+            target: username
+        },
+        success: function(data) {
+
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
+            var $title = $("<h2>", {class: "sectiontitle"});
+            $title.text("Change User Information");
+            var $form = $("<form>", {id: "infoform", action: "/changeInfo", method: "post"});
+            $form.append($title);
+            var $email = $("<label>");
+            $email.text("Email: ");
+            var $email_input = $("<input>", {name: "user_email", value: checkNull(data[0].email), readonly: "readonly"});
+            $email.append($email_input);
+            $form.append($email);
+            $form.append("<br>");
+
+            var $password = $("<label>");
+            $password.text("Password: ");
+            var $password_input = $("<input>", {name: "user_password", value: checkNull(data[0].password)});
+            $password.append($password_input);
+            $form.append($password);
+            $form.append("<br>")
+
+            var $birthday = $("<label>");
+            $birthday.text("Birthday: ");
+            var $birthday_input = $("<input>", {name: "user_birthday", value: checkNull(data[0].birthday)});
+            $birthday.append($birthday_input);
+            $form.append($birthday);
+            $form.append("<br>")
+
+            var $phone = $("<label>");
+            $phone.text("Phone: ");
+            var $phone_input = $("<input>", {name: "user_phone", value: checkNull(data[0].phone)});
+            $phone.append($phone_input);
+            $form.append($phone);
+            $form.append("<br>")
+
+            var $year_of_study = $("<label>");
+            $year_of_study.text("Year of Study: ");
+            var $year_of_study_input = $("<input>", {name: "user_year_of_study", value: checkNull(data[0].year_of_study)});
+            $year_of_study.append($year_of_study_input);
+            $form.append($year_of_study);
+            $form.append("<br>")
+
+            var $major = $("<label>");
+            $major.text("Major: ");
+            var $major_input = $("<input>", {name: "user_major", value: checkNull(data[0].major)});
+            $major.append($major_input);
+            $form.append($major);
+            $form.append("<br>")
+
+            var $button = $("<button>", {type: "submit"}).text("Save Information");
+            $form.append($button);
+            $container.append($form);
+            $container.insertBefore($("footer"));
+        }
+    });
 }
 
 function checkNull(value) {

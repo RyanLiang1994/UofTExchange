@@ -77,7 +77,7 @@ div#profile form#signin button {
 	padding: 10px;
 }
 
-section.menu-item, section#signup{
+section.menu-item, section.logged-in-menu-item, section#signup{
 	font-family: 'Orbitron', sans-serif;
 	margin-left: 20%;
 	padding-left: 20px;
@@ -86,7 +86,7 @@ section.menu-item, section#signup{
 	border-width: 1px;
 }
 
-section.menu-item {
+section.menu-item, section.logged-in-menu-item {
 	min-height: 400px;
 }
 
@@ -96,21 +96,21 @@ footer {
 	border-width: 1px;
 }
 
-section.menu-item h2, section#signup h2{
+section.menu-item  h2, section#signup h2, , section.logged-in-menu-item h2{
 	padding: 10px;
 }
 
-section.menu-item form, section#signup form{
+section.menu-item form, section#signup form, section.logged-in-menu-item form{
 	padding-left: 10px;
 }
 
-section.menu-item form input, section#signup form input{
+section.menu-item form input, section#signup form input, section.logged-in-menu-item form input{
 	margin: 10px;
 	padding: 10px;
 	width: 50%;
 }
 
-section.menu-item form button, section#signup form button{
+section.menu-item form button, section#signup form button, section.logged-in-menu-item  form button{
 	margin-top: 25px;
 	margin-left: 20%;
 	padding-top: 10px;
@@ -186,7 +186,7 @@ textarea#msgbox {
 }
 
 @media screen and (max-width: 768px) {
-	section.menu-item, section#signup {
+	section.menu-item, section.logged-in-menu-item, section#signup {
 		margin-left: 30%;
 	}
 
@@ -213,7 +213,7 @@ textarea#msgbox {
 		float: none;
 	}
 
-	section.menu-item, section#signup {
+	section.menu-item, section.logged-in-menu-item, section#signup {
 		margin-left: 0;
 		border-left: none;
 		border-top: solid;
