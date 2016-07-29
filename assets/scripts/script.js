@@ -503,6 +503,8 @@ function getBooks() {
             section: $("#section").val()
         },
         success: function(data) {
+        }
+    });
 }
 
 function displayUsers(){
