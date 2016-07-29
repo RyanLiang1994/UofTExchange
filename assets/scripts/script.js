@@ -1,23 +1,23 @@
 var images = [
     {
-        "title": "Andromeda Galaxy",
-        "url": "https://s31.postimg.org/p4pd6we07/space_1.jpg"
+        "title": "Introduction to Algorithms",
+        "url": "../img/Clrs3.jpeg"
     },
     {
-        "title": "Collection of galaxies",
-        "url": "https://s31.postimg.org/k7bslsc13/space_2.jpg"
+        "title": "The C Programming Language",
+        "url": "../img/cprogramming.png"
     },
     {
-        "title": "Lights on Earth at night from space",
-        "url": "https://s31.postimg.org/97vn7arxj/space_3.jpg"
+        "title": "The Linux Programming Interface",
+        "url": "../img/linux.png"
     },
     {
-        "title": "Earth from space",
-        "url": "https://s31.postimg.org/sr08gnqp3/space_4.jpg"
+        "title": "Web Programming Step by Step",
+        "url": "../img/webprogramming.jpg"
     },
     {
-        "title": "Pluto (New Horizons)",
-        "url": "https://s31.postimg.org/m1tp0n5d3/space_5.jpg"
+        "title": "Learning Web App Development",
+        "url": "../img/webappdevelopment.jpg"
     }
 ];
 
@@ -59,7 +59,9 @@ function slider() {
         });
         var $img = $('<img/>', {
             src: images[index].url,
-            alt: images[index].title
+            alt: images[index].title,
+            height: "100%",
+            width:"62%"
         });
         // Append
         $li.append($img);
