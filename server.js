@@ -181,14 +181,9 @@ app.post('/search_courses', function(req, res) {
 		lenNum = req.body.code.trim().length,
 		lenSect = req.body.section.trim().length;
 
-		console.log(req.body.department);
-		console.log(req.body.code);
-		console.log(req.body.section);
-
 	var msgs = {"errors": {}};
 
 	if (!lenDept && !lenNum && !lenSect) {
-		console.log('asdasd');
 		msgs.errors.course_empty = "Please enter in at least 1 field";
 		res.render('base.html', msgs);
 	} else {
@@ -584,7 +579,7 @@ app.post('/add_book', function(req, res) {
         var dept = req.body.dept;
         var num = req.body.num;
 
-        db.all("SELECT email, title FROM offers_book WHERE email = ? AND title = ?",  [ username, title ], function(err, rows) {
+        db.all("SELECT email, title, author FROM offers_book WHERE email = ? AND title = ? AND author",  [ username, title, author], function(err, rows) {
             if (!(rows.length > 0)) {
 
                 db.run('INSERT INTO offers_book (email, title, author, publisher) VALUES (?, ?, ?, ?)', [ username, title, author, publisher], function (err){
@@ -594,7 +589,7 @@ app.post('/add_book', function(req, res) {
                         res.redirect('/');
                         req.session.errmsg = "";
                     } else {
-                        if (!(dept || num)) {
+                        if (!dept || !num) {
                             req.session.msg = "Add offered book successfully!";
                             req.session.errmsg = "";
                             res.redirect('/');
@@ -639,10 +634,11 @@ app.post('/add_course', function(req, res) {
         var code = req.body.code;
         var section = req.body.section;
         var username = req.session.username;
+        var course_title = req.body.course_title;
 
         db.all("SELECT email, dept, num FROM offers_course WHERE email = ? AND dept = ? AND num = ?",  [ username, dept, code ], function(err, rows) {
             if (!(rows.length > 0)) {
-                db.run('INSERT INTO offers_course (email, dept, num, sect) VALUES (?, ?, ?, ?)', [ username, dept, code, section ], function (err){
+                db.run('INSERT INTO offers_course (email, dept, num, title, sect) VALUES (?, ?, ?, ?, ?)', [ username, dept, code, course_title, section ], function (err){
                     if (err) {
                         req.session.errmsg = "Add failed. " + err;
                         req.session.msg = "";
