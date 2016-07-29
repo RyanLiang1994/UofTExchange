@@ -1,26 +1,3 @@
-var images = [
-    {
-        "title": "Andromeda Galaxy",
-        "url": "https://s31.postimg.org/p4pd6we07/space_1.jpg"
-    },
-    {
-        "title": "Collection of galaxies",
-        "url": "https://s31.postimg.org/k7bslsc13/space_2.jpg"
-    },
-    {
-        "title": "Lights on Earth at night from space",
-        "url": "https://s31.postimg.org/97vn7arxj/space_3.jpg"
-    },
-    {
-        "title": "Earth from space",
-        "url": "https://s31.postimg.org/sr08gnqp3/space_4.jpg"
-    },
-    {
-        "title": "Pluto (New Horizons)",
-        "url": "https://s31.postimg.org/m1tp0n5d3/space_5.jpg"
-    }
-];
-
 $(document).ready(function() {
 
     $('section').hide();
@@ -40,9 +17,30 @@ $(document).ready(function() {
 
 });
 
-// var slider_index;
-
 function slider() {
+    // Images
+    var images = [
+        {
+            "title": "Andromeda Galaxy",
+            "url": "https://s31.postimg.org/p4pd6we07/space_1.jpg"
+        },
+        {
+            "title": "Collection of galaxies",
+            "url": "https://s31.postimg.org/k7bslsc13/space_2.jpg"
+        },
+        {
+            "title": "Lights on Earth at night from space",
+            "url": "https://s31.postimg.org/97vn7arxj/space_3.jpg"
+        },
+        {
+            "title": "Earth from space",
+            "url": "https://s31.postimg.org/sr08gnqp3/space_4.jpg"
+        },
+        {
+            "title": "Pluto (New Horizons)",
+            "url": "https://s31.postimg.org/m1tp0n5d3/space_5.jpg"
+        }
+    ];
 
     // Init
     var $gallery = $("#gallery");
@@ -73,52 +71,52 @@ function slider() {
 
     $("div#gallery ul li:first-child").css("width", "500px");
     // Calculate step size
-    // var step_size = 100 / (images.length - 1);
+    var step_size = 100 / (images.length - 1);
     // Create slide controller
     var $controller = $('<div/>', {
         id: "controller"
     });
     $slider.append($controller);
 
-    window.slider_index = 0;
-    window.slide_direction = "right";
-    slide();
+    // Config .slider()
+    $controller.slider({
+        // Init
+        value: 0,
+        min: 0,
+        max: 100,
+        step: step_size,
+        // Interaction
+        slide: function(event, ui) {
+            // slider_index is an index, e.g. 0, 1, 2, 3, 4 ...
+            var slider_index = ui.value / step_size;
+            // Get showcase (image at slider_index)
+            var $showcase = $("div#gallery ul li").eq(slider_index);
+            // Get images before and after showcase.
+            var before = $showcase.prevAll();
+            var after = $showcase.nextAll();
+            // Animate showcase
+            $showcase.animate({
+                left: "0px",
+                width: "500px"
+            });
+            // Config all images before showcase
+            $showcase.prevAll().each(function(index) {
+                // prevAll() returns elements starting with the closest sibling
+                $(this).animate({
+                    left: - 250 - index * 250 ,
+                    width: 250
+                }, { duration: 200, queue: true });
+            });
+            /// Config all images after showcase
+            $showcase.nextAll().each(function(index) {
+                $(this).animate({
+                    left: + 500 + index * 250,
+                    width: 250
+                }, { duration: 200, queue: true });
+            });
+        }
+    });
     $("div#gallery").append($controller);
-}
-
-function slide() {
-
-    if (slider_index == images.length - 1) slide_direction = "left";
-    else if (slider_index == 0) slide_direction = "right";
-    if (slide_direction == "right") slider_index ++;
-    else if (slide_direction == "left") slider_index --;
-
-    // Get showcase (image at slider_index)
-    var $showcase = $("div#gallery ul li").eq(slider_index);
-    // Get images before and after showcase.
-    var before = $showcase.prevAll();
-    var after = $showcase.nextAll();
-    // Animate showcase
-    $showcase.animate({
-        left: "0px",
-        width: "500px"
-    });
-    // Config all images before showcase
-    $showcase.prevAll().each(function(index) {
-        // prevAll() returns elements starting with the closest sibling
-        $(this).animate({
-            left: - 250 - index * 250 ,
-            width: 250
-        }, { duration: 200, queue: true });
-    });
-    /// Config all images after showcase
-    $showcase.nextAll().each(function(index) {
-        $(this).animate({
-            left: + 500 + index * 250,
-            width: 250
-        }, { duration: 200, queue: true });
-    });
-    setTimeout(slide, 2000);
 }
 
 $('#btn-home').click(function() {
