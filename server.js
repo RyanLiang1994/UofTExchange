@@ -752,7 +752,7 @@ function emptyStringToNull(value) {
         return value;
     }
 }
-var server = app.listen(3000, function()
+var server = app.listen(process.env.PORT || 3000, function()
 {
   var port = server.address().port;
   console.log('Running on 127.0.0.1:%s', port);
