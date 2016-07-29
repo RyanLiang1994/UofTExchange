@@ -176,7 +176,7 @@ textarea#msgbox {
 
 }
 
-.queries {
+.query_courses {
 	padding-left: 20px;
 }
 @media screen and (max-width: 1024px) {
@@ -250,4 +250,69 @@ textarea#msgbox {
 	div#profile form#signin button {
 		margin-left: 30%;
 	}
+}
+
+div#gallery {
+	margin-top: 20px;
+}
+
+/* Using Week7 Lab6 */
+/* Start of slider */
+div#gallery ul {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 325px;
+}
+
+div#gallery ul li {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 250px;
+    height: 325px;
+}
+
+div#gallery ul li.hidden {
+    display: none;
+}
+div#gallery ul li.showcase {
+    width: 500px;
+}
+
+div#gallery ul li img {
+    margin: 5px;
+    width: 100%;
+}
+
+/* Start of slider controller */
+.ui-widget-content {
+    background: #000;
+    border: none;
+    margin: 3rem auto 0;
+    width: 33.333%;
+}
+.ui-slider-horizontal {
+    height: 5px;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    border: none;
+    border-radius: 100%;
+    background: #36d7b7;
+}
+.ui-slider .ui-slider-handle {
+    cursor: pointer;
+    outline: none;
+    width: 30px;
+    height: 30px;
+}
+.ui-slider-horizontal .ui-slider-handle {
+    top: -15px;
 }

@@ -13,8 +13,110 @@ $(document).ready(function() {
             });
         }
     });
+    slider();
 
 });
+
+function slider() {
+    // Images
+    var images = [
+        {
+            "title": "Andromeda Galaxy",
+            "url": "https://s31.postimg.org/p4pd6we07/space_1.jpg"
+        },
+        {
+            "title": "Collection of galaxies",
+            "url": "https://s31.postimg.org/k7bslsc13/space_2.jpg"
+        },
+        {
+            "title": "Lights on Earth at night from space",
+            "url": "https://s31.postimg.org/97vn7arxj/space_3.jpg"
+        },
+        {
+            "title": "Earth from space",
+            "url": "https://s31.postimg.org/sr08gnqp3/space_4.jpg"
+        },
+        {
+            "title": "Pluto (New Horizons)",
+            "url": "https://s31.postimg.org/m1tp0n5d3/space_5.jpg"
+        }
+    ];
+
+    // Init
+    var $gallery = $("#gallery");
+    var $slider = $('<ul/>');
+    var leftOffset = 0;
+
+    // Append each item
+    $.each( images, function(index, item) {
+        // Add offset for next item
+        if ( index == 1 ) leftOffset += 250;
+        // Create new tags
+        var $li = $('<li/>', {
+            css: {left: leftOffset}
+        });
+        var $img = $('<img/>', {
+            src: images[index].url,
+            alt: images[index].title
+        });
+        // Append
+        $li.append($img);
+        $li.appendTo($slider);
+        // Add offset
+        leftOffset += 250;
+    });
+    $gallery.append($slider);
+
+    // Make first image bigger than others
+    $("div ul li:first-child").css("width", "500px");
+    // Calculate step size
+    var step_size = 100 / (images.length - 1);
+    // Create slide controller
+    var $controller = $('<div/>', {
+        id: "controller"
+    });
+    $slider.append($controller);
+
+    // Config .slider()
+    $controller.slider({
+        // Init
+        value: 0,
+        min: 0,
+        max: 100,
+        step: step_size,
+        // Interaction
+        slide: function(event, ui) {
+            // slider_index is an index, e.g. 0, 1, 2, 3, 4 ...
+            var slider_index = ui.value / step_size;
+            // Get showcase (image at slider_index)
+            var $showcase = $("div ul li").eq(slider_index);
+            // Get images before and after showcase.
+            var before = $showcase.prevAll();
+            var after = $showcase.nextAll();
+            // Animate showcase
+            $showcase.animate({
+                left: "0px",
+                width: "500px"
+            });
+            // Config all images before showcase
+            $showcase.prevAll().each(function(index) {
+                // prevAll() returns elements starting with the closest sibling
+                $(this).animate({
+                    left: - 250 - index * 250 ,
+                    width: 250
+                }, { duration: 200, queue: true });
+            });
+            /// Config all images after showcase
+            $showcase.nextAll().each(function(index) {
+                $(this).animate({
+                    left: + 500 + index * 250,
+                    width: 250
+                }, { duration: 200, queue: true });
+            });
+        }
+    });
+    $("div#gallery").append($controller);
+}
 
 $('#btn-home').click(function() {
     $('section').hide();
@@ -136,14 +238,9 @@ $('#search-course').click(function(event) {
     getCourse();
 });
 
-$('#search-book').click(function(event) {
-    event.preventDefault();
-    removeLoggedInSection();
-    $('section').hide();
-    $('.errmsg').remove();
-    $('.msg').remove();
-    getBooks();
-});
+
+
+
 
 function stickyNav(){
     var navPosition = $('#navbar').position();
@@ -275,7 +372,6 @@ function getAddingForms() {
     var $courseform = $("#searchCourseForm").clone().prop("id", "addCourseForm");
     $bookform.attr("action","add_book");
     $courseform.attr("action", "add_course");
-    $courseform.attr("method", "post");
     $bookform.find("#search-book").text("Add Book!");
     $courseform.find("#search-course").text("Add Course!");
     $container.append($title1);
@@ -447,32 +543,33 @@ function getCourse() {
 
                 }
             } else {
-                $no_result = $("<p>", {
-                    text: "Sorry! Nothing was found. Please try a different query"
-                });
-                $container.append($no_result);
+                    $no_result = $("<p>", {
+                        text: "Sorry! Nothing was found. Please try a different query"
+                    });
+                    $container.append($no_result);
+                    $container.append("<hr>");
             }
 
             var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
             $container.append($title);
-            if (data[1].length > 0) {
+            if (data[1].lengt > 0) {
                 for (var i = 0; i < data[1].length; i++) {
                     $course_code = $("<h3>", {
-                        class: "queries",
+                        class: "query_courses",
                         text: data[1][i].dept.toUpperCase() + data[1][i].num
                     });
 
                     $course_title = $("<h4>", {
-                        class: "queries",
+                        class: "query_courses",
                         text: "Course Title: " + checkNull(data[1][i].sect)
                     });
                     $lecture_section = $("<h4>", {
-                        class: "queries",
+                        class: "query_courses",
                         text: "Lecture Section: " + checkNull(data[1][i].title)
                     });
 
                     $contact_info = $("<p>", {
-                        class: "queries",
+                        class: "query_courses",
                         text: "Contact Information: " + data[1][i].email
                     });
 
@@ -487,6 +584,7 @@ function getCourse() {
                         text: "Please provide more information to optimize your experience."
                 });
                 $container.append($no_result);
+                $container.append("<hr>");
             }
             $container.insertBefore($("footer"));
         },
@@ -500,86 +598,12 @@ function getBooks() {
         method: "POST",
         dataType: "json",
         data: {
-            title: $("#title").val(),
-            author: $("#author").val(),
-            publisher: $("#publisher").val(),
-            dept: $("#dept").val(),
-            num: $("#num").val()
+            department: $("#department").val(),
+            code: $("#code").val(),
+            section: $("#section").val()
         },
         success: function(data) {
-            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
-            var $title = $("<h2>", {class: "sectiontitle", text: "Offering Books"});
-            $container.append($title);
-            if (data[0].length > 0) {
-                for (var i = 0; i < data[0].length; i++) {
-                    $book_title = $("<h3>", {
-                        class: "queries",
-                        text: data[0][i].title});
 
-                    $booka_author = $("<h4>", {
-                        class: "queries",
-                        text: "By: " + data[0][i].author
-                    });
-
-                    $book_publisher = $("<h5>", {
-                        class: "queries",
-                        text: "Publisher: " + checkNull(data[0][i].publisher)
-                    });
-
-                    $contact_info = $("<p>", {
-                        class: "queries",
-                        text: "Contact Information: " + data[0][i].email
-                    });
-
-                    $container.append($book_title);
-                    $container.append($booka_author);
-                    $container.append($book_publisher);
-                    $container.append($contact_info);
-                    $container.append("<hr>");
-                }
-            } else {
-                $no_result = $("<p>", {
-                    text: "Sorry! Nothing was found. Please try a different query"
-                });
-                $container.append($no_result);
-            }
-
-            var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
-            $container.append($title);
-            if (data[1].length > 0) {
-                for (var i = 0; i < data[1].length; i++) {
-                    $course_code = $("<h3>", {
-                        class: "queries",
-                        text: data[1][i].dept.toUpperCase() + data[1][i].num
-                    });
-
-                    $course_title = $("<h4>", {
-                        class: "queries",
-                        text: "Course Title: " + checkNull(data[1][i].sect)
-                    });
-                    $lecture_section = $("<h4>", {
-                        class: "queries",
-                        text: "Lecture Section: " + checkNull(data[1][i].title)
-                    });
-
-                    $contact_info = $("<p>", {
-                        class: "queries",
-                        text: "Contact Information: " + data[1][i].email
-                    });
-
-                    $container.append($course_code);
-                    $container.append($course_title);
-                    $container.append($lecture_section);
-                    $container.append($contact_info);
-                    $container.append("<hr>");
-                }
-            } else {
-                $no_result = $("<p>", {
-                        text: "Please provide more information to optimize your experience."
-                });
-                $container.append($no_result);
-            }
-            $container.insertBefore($("footer"));
         }
     });
 }
@@ -649,7 +673,7 @@ function changeUser(username) {
 
             var $password = $("<label>");
             $password.text("Password: ");
-            var $password_input = $("<input>", {name: "user_password", type: "password", value: checkNull(data[0].password)});
+            var $password_input = $("<input>", {name: "user_password", value: checkNull(data[0].password)});
             $password.append($password_input);
             $form.append($password);
             $form.append("<br>")

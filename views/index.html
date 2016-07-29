@@ -7,9 +7,10 @@
 <div id="profile">
     {% if not session.username %}
     <div id="unSignedIn">
-        <ul>
-            <li id="btn-signup"> Sign Up</li>
-        </ul>
+        <!-- <ul>
+            <li id="btn-signup">Sign Up</li>
+        </ul> -->
+        <button id="btn-signup" type="button" name="button">Sign Up</button>
 
         <form action="/signin" id="signin" method="post">
             <label>
