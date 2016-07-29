@@ -566,12 +566,7 @@ app.post('/add_book', function(req, res) {
                         res.redirect('/');
                         req.session.errmsg = "";
                     } else {
-                        if (!(dept || num)) {
-                            req.session.msg = "Add offered book successfully!";
-                            req.session.errmsg = "";
-                            res.redirect('/');
-                            req.session.msg = "";
-                        } else if (dept && num) {
+                        if (dept && num) {
                             db.run('INSERT INTO course_textbook (dept, num, title, author) VALUES (?, ?, ?, ?)', [ dept, num, title, author ], function (err) {
                                 if(err) {
                                     // doing nothing, our database has already have this book
@@ -583,13 +578,11 @@ app.post('/add_book', function(req, res) {
 
                             });
 
-                        } else {
-                            req.session.errmsg = "Add failed. ";
-                            req.session.msg = "";
-                            res.redirect('/');
-                            req.session.errmsg = "";
                         }
-
+                        req.session.msg = "Add offered book successfully!";
+                        req.session.errmsg = "";
+                        res.redirect('/');
+                        req.session.msg = "";
                     }
                 });
             } else {
