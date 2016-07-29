@@ -309,6 +309,12 @@ app.post('/search_books', function(req, res) {
             }
             result_list.push(rows);
 
+            if (lenDept) {
+            	var query_course_rec = "select * from offers_course where lower(dept) = " + req.sanitize('dept').escape().trim().lower();
+            	db.all(query_course_rec, 
+            }
+            
+
             if (!req.session.username) {
 				result_list.push([]);
 				// console.log(result_list);
