@@ -475,7 +475,7 @@ app.post('/message', function(req, res) {
     } else {
         var result = [];
         var username = req.session.username;
-        db.all("SELECT user1, user2, message FROM messages WHERE user2 = ?",  [ username ], function(err, rows) {
+        db.all("SELECT user1, user2, message, time FROM messages WHERE user2 = ?",  [ username ], function(err, rows) {
             result.push(rows);
             res.end(JSON.stringify(result));
         });

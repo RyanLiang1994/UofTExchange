@@ -455,18 +455,33 @@ function getMessage() {
         dataType: "json",
         success: function(data) {
             if (data.length > 0) {
-                console.log(JSON.stringify(data));
+                data[0].sort(function (obj1, obj2) {
+                    var date1 = new Date(obj1.time);
+                    var date2 = new Date(obj2.time);
+                    if (date1.getTime() > date2.getTime()) {
+                        return -1;
+                    }
+                    if (date1.getTime() < date2.getTime()) {
+                        return 1;
+                    }
+                    return 0;
+                });
                 var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title = $("<h2>", {class: "sectiontitle"});
                 $title.text("My Message");
                 $container.append($title);
+                console.log(JSON.stringify(data));
                 for (var i = 0; i < data[0].length; i++) {
-                    var $msgwindows = $("<dl>", {class: "msgwindows"});
-                    var $sender = $("<dt>", {class: "sender"});
-                    var $msg = $("<dd>", {class: "message"});
+                    var date = new Date(data[0][i].time);
+                    var $msgwindows = $("<p>", {class: "msgwindows"});
+                    var $sender = $("<h3>", {class: "sender"});
+                    var $time = $("<h4>", {class: "sendtime"});
+                    var $msg = $("<h4>", {class: "message"});
                     $sender.text("From: " + data[0][i].user1);
+                    $time.text("Time: " + date.toLocaleString());
                     $msg.text("Text: " + data[0][i].message);
                     $msgwindows.append($sender);
+                    $msgwindows.append($time);
                     $msgwindows.append($msg);
                     $msgwindows.append("<br>");
                     $container.append($msgwindows);
