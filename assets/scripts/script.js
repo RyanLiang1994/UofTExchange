@@ -270,6 +270,7 @@ function getAddingForms() {
     var $courseform = $("#searchCourseForm").clone().prop("id", "addCourseForm");
     $bookform.attr("action","add_book");
     $courseform.attr("action", "add_course");
+    $courseform.attr("method", "post");
     $bookform.find("#search-book").text("Add Book!");
     $courseform.find("#search-course").text("Add Course!");
     $container.append($title1);
