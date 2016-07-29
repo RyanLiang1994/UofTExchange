@@ -423,18 +423,18 @@ app.get('/signout', function(req, res) {
 
 app.post('/feedback', function(req, res) {
     var feedback = req.body.feedback.substring(0, 200);
-    console.log("ssss" +feedback);
+    var time = new Date(Date.now()).toString();
     if (feedback) {
-        db.run('INSERT INTO feedbacks (feedback) VALUES (?)', [ feedback ], function (err){
+        db.run('INSERT INTO feedbacks (feedback, time) VALUES (?, ?)', [ feedback, time ], function (err){
             if (err) {
                 req.session.errmsg = "Feedback submit err";
                 req.session.msg = "";
-                res.redirect('/');
+                res.redirect(page);
                 req.session.errmsg = "";
             } else {
                 req.session.msg = "Feedback submit success! Thank you for your feedback.";
                 req.session.errmsg = "";
-                res.redirect('/');
+                res.redirect(page);
                 req.session.msg = "";
             }
         });
@@ -511,7 +511,7 @@ app.post('/sendmsg', function(req, res) {
             if (rows.length > 0) {
                 var result = [];
                 db.run('INSERT INTO messages (user1, user2, message, time) VALUES (?, ?, ?, ?)', [ username, receiver, message, new Date(Date.now()).toString()], function (err){
-                	console.log(new Date(Date.now()).toString());
+
                     if (err) {
                         req.session.errmsg = "Send message failed";
                         req.session.msg = "";
@@ -717,6 +717,18 @@ app.post("/changeInfo", function(req, res) {
         }
     }
 })
+
+app.post("/getFeedback", function(req, res) {
+    if (req.session.is_admin === 1) {
+
+        db.all("SELECT feedback, time FROM feedbacks", function(err, rows) {
+            res.status(200);
+            res.end(JSON.stringify(rows));
+        });
+    } else {
+        res.status(403).send("You are not admin, cannot access this page.");
+    }
+});
 
 function updateInfo(password, birthday, phone, year, major, username, req, res) {
     db.all("UPDATE users SET password=?, birthday=?, phone=?, year_of_study=?, major=? WHERE email=?", [ password, birthday, phone, year, major, username ],function(err, rows) {

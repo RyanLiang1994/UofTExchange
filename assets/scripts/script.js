@@ -227,6 +227,13 @@ $('#btn-follows').click(function() {
 });
 
 
+$('#btn-veiwFeedback').click(function() {
+    removeLoggedInSection();
+    $('section').hide();
+    $('.errmsg').remove();
+    $('.msg').remove();
+    getFeedbacklist();
+});
 
 $('nav#navbar').click(function() {
     $('#container').remove();
@@ -568,7 +575,7 @@ function getCourse() {
 
             var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
             $container.append($title);
-            if (data[1].lengt > 0) {
+            if (data[1].length > 0) {
                 for (var i = 0; i < data[1].length; i++) {
                     $book_title = $("<h3>", {
                         class: "queries",
@@ -725,6 +732,51 @@ function changeUser(username) {
             var $button = $("<button>", {type: "submit"}).text("Save Information");
             $form.append($button);
             $container.append($form);
+            $container.insertBefore($("footer"));
+        }
+    });
+}
+
+
+function getFeedbacklist() {
+    $.ajax({
+        url: "/getFeedback",
+        method: "POST",
+        dataType: "json",
+        success: function(data) {
+            data.sort(function (obj1, obj2) {
+                var date1 = new Date(obj1.time);
+                var date2 = new Date(obj2.time);
+                if (date1.getTime() > date2.getTime()) {
+                    return -1;
+                }
+                if (date1.getTime() < date2.getTime()) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
+            var $title = $("<h2>", {class: "sectiontitle", text: "User's Feedbacks"});
+            $container.append($title);
+            for (var i = 0; i < data.length; i++) {
+                var date = new Date(data[i].time);
+                $time = $("<h3>", {
+                    class: "queries",
+                    text: "Submit Time: " + date.toLocaleString()
+                });
+
+                $feedback = $("<h4>", {
+                    class: "queries",
+                    text: "Feedback: " + checkNull(data[i].feedback)
+                });
+
+                $container.append($time);
+                $container.append($feedback);
+                $container.append("<hr>");
+
+            }
+
             $container.insertBefore($("footer"));
         }
     });

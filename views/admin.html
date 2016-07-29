@@ -32,15 +32,16 @@
     <div id="alreadySignedIn">
         <h2 id="greeting"></h2>
         <br><br><button type="button" name="profile" id="btn-profile">Profile</button>
-        {% if not session.is_admin %}
-        {% else %}
-            <br><br><button type="button" name="changeuser" id="btn-changeUser">Change Users Info</button>
-        {% endif %}
         <br><br><button type="button" name="add" id="btn-add">Add Books/Courses</button>
         <br><br><button type="button" name="message" id="btn-message">Message</button>
         <br><br><button type="button" name="sendmessage" id="btn-send">Send Message</button>
         <br><br><button type="button" name="follow" id="btn-follow">Follow Friends</button>
         <br><br><button type="button" name="follows" id="btn-follows">Follower/Following</button>
+        {% if not session.is_admin %}
+        {% else %}
+            <br><br><button type="button" name="changeuser" id="btn-changeUser">Change Users Info</button>
+            <br><br><button type="button" name="viewfeedback" id="btn-veiwFeedback">View Feedback</button>
+        {% endif %}
         <br><br><a href="/signout" >Sign out</a>
     </div>
     {% endif %}
