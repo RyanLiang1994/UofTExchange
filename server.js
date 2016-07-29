@@ -594,7 +594,7 @@ app.post('/add_book', function(req, res) {
                 });
             } else {
                 // cannot find this user
-                req.session.errmsg = "Add book failed. You've already offered this book";
+                req.session.errmsg = "Add book failed.";
                 req.session.msg = "";
                 res.redirect('/');
                 req.session.errmsg = "";
