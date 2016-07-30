@@ -677,6 +677,13 @@ function getBooks() {
                     $container.append($booka_author);
                     $container.append($book_publisher);
                     $container.append($contact_info);
+                    if ($("#alreadySignedIn").length > 0) {
+                        $comment = $("<button>", {
+                            text: "Comment", 
+                            class: "btn-comment"
+                        });
+                        $container.append($comment);
+                    }
                     $container.append("<hr>");
                 }
             } else {
