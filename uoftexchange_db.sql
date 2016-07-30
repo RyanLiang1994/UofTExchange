@@ -45,8 +45,8 @@ CREATE TABLE follows (
 	CHECK(user1 <> user2)
 );
 
- DROP TABLE IF EXISTS book_comments;
- CREATE TABLE book_comments (
+DROP TABLE IF EXISTS book_comments;
+CREATE TABLE book_comments (
  	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
  	title VARCHAR(64),
 	author VARCHAR(32),
@@ -55,6 +55,27 @@ CREATE TABLE follows (
 	time DATE,
 	PRIMARY KEY (email, title, author, time)
 );
+
+DROP TABLE IF EXISTS course_comments;
+CREATE TABLE course_comments (
+	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
+	dept CHAR(3) CHECK(LENGTH(dept) = 3),
+	num INT check(num BETWEEN 100 AND 499),
+	user VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
+	comments TEXT,
+	time DATE,
+	PRIMARY KEY (email, dept, num, time)
+);
+
+DROP TABLE IF EXISTS course_likes;
+CREATE TABLE course_likes (
+	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
+	dept CHAR(3) CHECK(LENGTH(dept) = 3),
+	num INT check(num BETWEEN 100 AND 499),
+	user VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
+	PRIMARY KEY (email, dept, num, user)
+);
+
 
 DROP TABLE IF EXISTS book_likes;
 CREATE TABLE book_likes (

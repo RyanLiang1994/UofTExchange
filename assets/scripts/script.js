@@ -641,8 +641,9 @@ function getCourse() {
                 for (var i = 0; i < data[0].length; i++) {
                     $course_code = $("<h3>", {
                         class: "queries",
-                        text: data[0][i].dept.toUpperCase() + data[0][i].num
-                    }).addClass("query_course_" + i);
+                        text: data[0][i].dept.toUpperCase() + data[0][i].num,
+                        id: "course_id_" + i
+                    });
 
                     $course_title = $("<h4>", {
                         class: "queries",
@@ -655,8 +656,9 @@ function getCourse() {
 
                     $contact_info = $("<p>", {
                         class: "queries",
-                        text: "Contact Information: " + data[0][i].email
-                    }).addClass("query_contact_" + i);
+                        text: "Contact Information: " + data[0][i].email,
+                        id: "course_contact_" + i
+                    })
 
                     $container.append($course_code);
                     $container.append($course_title);
@@ -664,12 +666,39 @@ function getCourse() {
                     $container.append($contact_info);
                     if ($("#alreadySignedIn").length > 0) {
                         $comment = $("<button>", {
-                            text: "Comment", 
-                            class: "btn-comment",
-                            id: "btn-comment_" + i
+                            text: "Comment",
+                            class: "course-comment",
+                            id: "btn-course-comment_" + i
+                        }).click(function() {
+                            var clicked = this.id;
+                            var query_num = clicked.substring(clicked.length - 1, clicked.length);
+                            var email = "course_contact_" + query_num,
+                                course = "course_id_" + query_num;
+                            
+                            $('section').hide();
+                            $('.errmsg').remove();
+                            $('.msg').remove();
+                            get_course_comment(email, course);
+                            removeLoggedInSection();
                         });
+                        $like = $("<button>", {
+                            text: "Like",
+                            id: "btn-like_" + i
+                        }).click(function(){
+                            var clicked = this.id;
+                            var query_num = clicked.substring(clicked.length - 1, clicked.length);
+                            var email = "course_contact_" + query_num,
+                                course = "course_id_" + query_num;
+
+                            $('section').hide();
+                            $('.errmsg').remove();
+                            $('.msg').remove();
+                            course_like(email, course);
+                            removeLoggedInSection();
+                        });
+                        $container.append($like);
                         $container.append($comment);
-                    }
+                    } 
                     $container.append("<hr>");
 
                 }
@@ -721,6 +750,85 @@ function getCourse() {
         },
     });
 
+}
+
+function get_course_comment(email, course) {
+    $.ajax({
+        url: "get_course_comment",
+        method: "POST",
+        dataType: "json",
+        data: {
+            email: $("#" + email).text(),
+            course: $("#" + course).text()
+        },
+        success: function(data) {
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
+            var $title = $("<h2>", {class: "sectiontitle", text: "Comments"});
+            $container.append($title);
+            console.log(data)
+            if (!data.email){
+                for (var i = 0; i < data.length; i++) {
+                    var $from = $("<h3>", {
+                        text: "From :" + data[i].user
+                    });
+
+                    var $time = $("<h4>", {
+                        text: "Time: " + data[i].time
+                    });
+
+                    var $comment = $("<p>", {
+                        text: "Comment: " + checkNull(data[i].comments)
+                    });
+                    $container.append($from);
+                    $container.append($time);
+                    $container.append($comment);
+                    $container.append("<hr>");
+                }
+            } else {
+                $no_comment = $("<p>", {
+                    text: "Be the first one to comment!"
+                });
+                $container.append($no_comment);
+            }
+
+            var $comment_area = $("<textarea>", {
+                rows: "10",
+                column: "79",
+                name: "comment_course"
+            });
+
+            var $comment_button = $("<button>", {
+                text: "Submit!",
+                id: "submit-comment"
+            });
+
+            var $comment_form = $("<form>", {
+                id: "user_comment"
+            });
+
+            $comment_form.click(function() {
+                var email, dept, num;
+                if (!data.email) {
+                    email = data[0].email;
+                    dept = data[0].dept;
+                    num = data[0].num;
+                } else {
+                    email = data.email;
+                    dept = data.dept;
+                    num = data.num;
+                }
+                var $userComment = $comment_area.val();
+                if ($userComment) {
+                    postCourseComment(email, dept, num, $userComment);
+                }
+            });
+
+            $comment_form.append($comment_area);
+            $comment_form.append($comment_button);
+            $container.append($comment_form);
+            $container.insertBefore($("footer"));
+        }
+    });
 }
 
 function get_book_comment(email, title, author) {
@@ -805,6 +913,27 @@ function get_book_comment(email, title, author) {
     });
 }
 
+function postCourseComment(email, dept, num, comment) {
+    $.ajax({
+        url: "post_course_comment",
+        method: "POST",
+        dataType: "json",
+        data: {
+            email: email,
+            dept: dept,
+            num: num,
+            comment: comment
+        },
+        success: function() {
+            removeLoggedInSection();
+            $('section').hide();
+            $('.errmsg').remove();
+            $('.msg').remove();
+            location.reload();
+        }
+    });
+}
+
 function postBookComment(email, title, author, comment) {
     $.ajax({
         url: "post_book_comment",
@@ -821,6 +950,35 @@ function postBookComment(email, title, author, comment) {
             $('section').hide();
             $('.errmsg').remove();
             $('.msg').remove();
+        }
+    });
+}
+
+function course_like(email, course) {
+    $.ajax({
+        url: "course_like",
+        method: "POST",
+        dataType: "json",
+        data: {
+            email: $("#" + email).text(),
+            course: $("#" + course).text()
+        },
+        success: function(data) {
+            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
+            var $title = $("<h2>", {class: "sectiontitle", text: "Likes (" + data.length +")"});
+            $container.append($title);
+            var $user_list = $("<ul>", {
+                id: "liked_users"
+            });
+            for (var i = 0; i < data.length; i++) {
+                var $user = $("<li>", {
+                    text: data[i].user,
+                    class: "liked_user"
+                });
+                $user_list.append($user);
+            }
+            $container.append($user_list);
+            $container.insertBefore($("footer"));
         }
     });
 }
@@ -928,9 +1086,6 @@ function getBooks() {
                             var email = "book_contact_" + query_num,
                                 bookTitle = "book_title_" + query_num,
                                 bookAuthor = "book_author_" + query_num;
-
-                            console.log(email, bookTitle, bookAuthor);
-
                             
                             $('section').hide();
                             $('.errmsg').remove();

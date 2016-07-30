@@ -362,7 +362,31 @@ app.post('/search_books', function(req, res) {
 	}
 
 });
+app.post('/course_like', function(req, res) {
 
+    var emailText = req.body.email,
+        courseText = req.body.course;
+    var email = emailText.substring(21, emailText.length),
+        dept = courseText.substring(0, 3).toLowerCase(),
+        num = Number(courseText.substring(3, 6));
+        user = req.session.username;
+
+    db.run("insert into course_likes (email, dept, num, user) values (?, ?, ?, ?)", [email, dept, num, user], function(err) {
+        if (err) console.log(err);
+    });
+
+    db.all("select user from course_likes where email = ? and lower(dept) = ? and num = ?", [email, dept, num], function(err, rows) {
+
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(rows);
+            res.end(JSON.stringify(rows));
+        }
+
+    });
+
+});
 
 app.post('/like', function(req, res) {
     var emailText = req.body.email,
@@ -410,9 +434,58 @@ app.post('/get_book_comment', function(req, res) {
             empty_result = {"email": email, "title": bookTitle, "author": bookAuthor};
             console.log(JSON.stringify(empty_result));
             res.end(JSON.stringify(empty_result));
-
         }
     });
+});
+
+app.post('/get_course_comment', function(req, res) {
+    var emailText = req.body.email,
+        courseText = req.body.course;
+    var email = emailText.substring(21, emailText.length),
+        dept = courseText.substring(0, 3).toLowerCase(),
+        num = Number(courseText.substring(3, 6));
+
+    db.all("select * from course_comments where email = ? and lower(dept) = ? and num = ?", [email, dept, num], function(err, rows) {
+        if (err) throw err;
+        if (rows.length > 0) {
+            console.log("COMMENTS:", rows)
+            res.end(JSON.stringify(rows));
+        } else {
+            empty_result = {"email": email, "dept": dept, "num": num};
+            console.log(JSON.stringify(empty_result));
+            res.end(JSON.stringify(empty_result));
+        }
+    });
+});
+
+app.post("/post_course_comment", function(req, res){
+    var user = req.session.username,
+        email = req.body.email,
+        dept = req.body.dept,
+        num = req.body.num,
+        comment = req.sanitize('comment').escape();
+
+        console.log(email, dept, num);
+
+    var time = new Date(Date.now()).toString()
+
+    db.run("insert into course_comments(email, dept, num, user, comments, time) values(?, ?, ?, ?, ?, ?)", [email, dept, num, user, comment, time], function(err) {
+        if (err) {
+            res.status(400);
+            req.session.errmsg = "Comment failed.";
+            req.session.msg = "";
+            res.redirect(page);
+            req.session.errmsg = "";
+        } else {
+            res.status(200);
+            req.session.msg = "Comment successfully";
+            req.session.errmsg = "";
+            res.redirect(page);
+            req.session.msg = "";
+        }
+    });
+    
+
 });
 
 app.post("/post_book_comment", function(req, res) {
