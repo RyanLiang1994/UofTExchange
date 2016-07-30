@@ -47,7 +47,7 @@ nav#navbar ul li#btn-home {
 
 div#profile {
 	float: left;
-	margin-left: 35px;
+	margin-left: 25px;
 	padding-top: 10px;
 }
 
@@ -73,7 +73,7 @@ div#alreadySignedIn ul#feature_list li{
 	display: block;
 	text-align: center;
 	padding: 5px;
-	background-color: #996600;
+	background-color: #FF6600;
 	border-radius: 12px;
 	font-size: 70%
 	font-weight: bolder;
