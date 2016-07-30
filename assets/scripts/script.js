@@ -277,7 +277,6 @@ function getProfile() {
         method: "GET",
         dataType: "json",
         success: function(data) {
-            console.log(data);
             if (data.length > 0) {
                 var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
                 var $title1 = $("<h2>", {id: "info"});
@@ -299,7 +298,9 @@ function getProfile() {
                 $form.append("<br>");
                 var $password = $("<label>");
                 $password.text("Password: ");
-                var $password_input = $("<input>", {name: "user_password", type: "password", placeholder: "If change password please enter otherwise blank"});
+                var $password_input = $("<input>", {name: "user_password",
+                                                    type: "password",
+                                                    placeholder: "If change password please enter otherwise blank"});
                 $password.append($password_input);
                 $form.append($password);
                 $form.append("<br>")
@@ -313,21 +314,29 @@ function getProfile() {
 
                 var $phone = $("<label>");
                 $phone.text("Phone: ");
-                var $phone_input = $("<input>", {name: "user_phone", value: checkNull(data[0][0].phone)});
+                var $phone_input = $("<input>", {name: "user_phone",
+                                                 value: checkNull(data[0][0].phone),
+                                                 placeholder: "Phone: 10 numbers"});
                 $phone.append($phone_input);
                 $form.append($phone);
                 $form.append("<br>")
 
                 var $year_of_study = $("<label>");
                 $year_of_study.text("Year of Study: ");
-                var $year_of_study_input = $("<input>", {name: "user_year_of_study", type: "number", value: checkNull(data[0][0].year_of_study)});
+                var $year_of_study_input = $("<input>", {name: "user_year_of_study",
+                        type: "number",
+                        value: checkNull(data[0][0].year_of_study),
+                            placeholder: "major"});
                 $year_of_study.append($year_of_study_input);
                 $form.append($year_of_study);
                 $form.append("<br>")
 
                 var $major = $("<label>");
                 $major.text("Major: ");
-                var $major_input = $("<input>", {name: "user_major", value: checkNull(data[0][0].major)});
+                var $major_input = $("<input>", {name: "user_major",
+                                                 value: checkNull(data[0][0].major),
+                                                 pattern: "[0-9A-Za-z]{3}[0-9A-Za-z]*",
+                                                 placeholder: "major(at least 3 characher)"});
                 $major.append($major_input);
                 $form.append($major);
                 $form.append("<br>")
@@ -537,7 +546,7 @@ function followFriend() {
         text: "Find User",
         id: "getUserProfile"});
 
-    
+
     $button.text("Follow!");
     $lable.text("Target Email: ");
     $form.append($lable);
@@ -581,7 +590,7 @@ function followFriend() {
                     $userArticle.append($studyYear);
                     $userArticle.append($major);
                     $userArticle.append("<br>");
-                    
+
                     $books = $("<h3>", {
                         text: "Offer Books"
                     });
@@ -664,7 +673,7 @@ function getCourse() {
                     $container.append($contact_info);
                     if ($("#alreadySignedIn").length > 0) {
                         $comment = $("<button>", {
-                            text: "Comment", 
+                            text: "Comment",
                             class: "btn-comment",
                             id: "btn-comment_" + i
                         });
@@ -793,7 +802,7 @@ function get_book_comment(email, title, author) {
                 var $userComment = $comment_area.val();
 
                 postBookComment(email,bookTitle, bookAuthor, $userComment);
-                
+
             });
 
             $comment_form.append($comment_area);
@@ -911,13 +920,13 @@ function getBooks() {
                             var email = "book_contact_" + query_num,
                                 bookTitle = "book_title_" + query_num,
                                 bookAuthor = "book_author_" + query_num;
-                            
+
                             $('section').hide();
                             $('.errmsg').remove();
                             $('.msg').remove();
                             get_book_comment(email, bookTitle, bookAuthor);
                             removeLoggedInSection();
-                            
+
                         });
                         $like = $("<button>", {
                             text: "Like",
@@ -931,7 +940,7 @@ function getBooks() {
 
                             console.log(email, bookTitle, bookAuthor);
 
-                            
+
                             $('section').hide();
                             $('.errmsg').remove();
                             $('.msg').remove();
@@ -940,7 +949,7 @@ function getBooks() {
                         });
                         $container.append($like);
                         $container.append($comment);
-                    } 
+                    }
                     $container.append("<hr>");
                 }
             } else {

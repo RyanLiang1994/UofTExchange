@@ -69,6 +69,13 @@ app.use(expressValidator({
 
 
 		},
+        
+        isPhone: function(value) {
+            // Validation here:
+            var reg = /\d{10}|\(\d{3}\)\d{7}|\(\d{3}\)\d{3}-\d{4}|\d{3}-\d{3}-\d{4}/
+            var result = String(value).search(reg);
+            return result >= 0;
+        },
 
         isBirthday: function(value) {
             var reg = /^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/;
@@ -905,7 +912,7 @@ function updateInfo(password, birthday, phone, year, major, username, req, res) 
                 [ bcrypt.hashSync(password, 10), birthday,
                     phone, year, major, username ],function(err, rows) {
                 if (err) {
-                    req.session.errmsg = "Update failed. " + err + " Please contact the admin";
+                    req.session.errmsg = "Update failed. Please Check Your Input";
                     req.session.msg = "";
                     res.status(400);
                     res.redirect(page);
@@ -923,7 +930,7 @@ function updateInfo(password, birthday, phone, year, major, username, req, res) 
                 "year_of_study=?, major=? WHERE email=?",
                 [ birthday, phone, year, major, username ],function(err, rows) {
                 if (err) {
-                    req.session.errmsg = "Update failed. " + err + " Please contact the admin";
+                    req.session.errmsg = "Update failed. Please Check Your Input";
                     req.session.msg = "";
                     res.status(400);
                     res.redirect(page);

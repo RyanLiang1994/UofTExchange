@@ -35,8 +35,8 @@
     </div>
     {% else %}
     <div id="alreadySignedIn">
-        <h2 id="greeting"></h2>
-        <br><br><button type="button" name="profile" id="btn-profile">Profile</button>
+        <h4 id="greeting">Hi, <br> {{session.username}}</h4>
+        <button type="button" name="profile" id="btn-profile">Profile</button>
         <br><br><button type="button" name="add" id="btn-add">Add Books/Courses</button>
         <br><br><button type="button" name="message" id="btn-message">Message</button>
         <br><br><button type="button" name="sendmessage" id="btn-send">Send Message</button>
