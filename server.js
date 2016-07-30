@@ -168,9 +168,9 @@ function create_user(username, password, dob, callback) {
             return;
 
         } else {
-            db.run('INSERT INTO users (email, password, unhash_password, ' +
-            'birthday, is_admin) VALUES (?, ?, ?, ?, ?)',
-            [username, bcrypt.hashSync(password, 10), password, dob, 0], function (err) {
+            db.run('INSERT INTO users (email, password, ' +
+            'birthday, is_admin) VALUES (?, ?, ?, ?)',
+            [username, bcrypt.hashSync(password, 10), dob, 0], function (err) {
                 callback(err);
             });
         }
@@ -384,18 +384,15 @@ app.post('/signin', function(req, res) {
     } else {
 		//submit the data to database
         var username = req.body.mail;
-        db.all("SELECT email, password, unhash_password, birthday, is_admin FROM users WHERE email = ?",  [ username ], function(err, rows) {
+        db.all("SELECT email, password, birthday, is_admin FROM users WHERE email = ?",  [ username ], function(err, rows) {
             if (err) {
                 throw err;
             }
             if(!rows || rows.length > 1) {
                 throw "this shouldn't happen";
             }
-            console.log(req.body.password === rows[0].unhash_password);
-            console.log(rows[0].unhash_password);
-            console.log(req.body.password);
-            if (rows.length === 1 && req.body.password === rows[0].unhash_password
-                && bcrypt.compareSync(req.body.password, rows[0].password)
+
+            if (rows.length === 1 && bcrypt.compareSync(req.body.password, rows[0].password)
                 && req.body.dob === rows[0].birthday) {
 
                 if (rows[0].is_admin === 0) {
@@ -457,7 +454,7 @@ app.get('/profile', function(req, res) {
         var result = [];
         var username = req.session.username;
 
-        db.all("SELECT email, unhash_password, birthday, phone, year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
+        db.all("SELECT email, password, birthday, phone, year_of_study, major FROM users WHERE email = ?",  [ username ], function(err, rows) {
             result.push(rows);
         });
 
@@ -696,7 +693,7 @@ app.post("/userInfo", function(req, res) {
     if (req.session.is_admin === 1) {
         var target = req.body.target;
         console.log(target);
-        db.all("SELECT email, unhash_password, birthday, phone, year_of_study, major FROM users WHERE email=?", [ target ],function(err, rows) {
+        db.all("SELECT email, password, birthday, phone, year_of_study, major FROM users WHERE email=?", [ target ],function(err, rows) {
 
             res.end(JSON.stringify(rows));
         });
@@ -738,9 +735,9 @@ app.post("/getFeedback", function(req, res) {
 });
 
 function updateInfo(password, birthday, phone, year, major, username, req, res) {
-    db.all("UPDATE users SET password=?, unhash_password=?, birthday=?, phone=?, " +
+    db.all("UPDATE users SET password=?, birthday=?, phone=?, " +
         "year_of_study=?, major=? WHERE email=?",
-        [ bcrypt.hashSync(password, 10), password, birthday,
+        [ bcrypt.hashSync(password, 10), birthday,
             phone, year, major, username ],function(err, rows) {
         if (err) {
             req.session.errmsg = "Update failed. " + err + " Please contact the admin";
