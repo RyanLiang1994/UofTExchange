@@ -4,11 +4,13 @@
   "description": "This is an webpage for csc309 assignment 4",
   "main": "server.js",
   "directories": {
-    "test": "test"
+    "test": "node ./node_modules/mocha/bin/mocha"
   },
   "dependencies": {
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
+    "chai": "^3.5.0",
+    "expect": "^1.20.2",
     "express": "^4.14.0",
     "express-session": "^1.14.0",
     "express-validator": "^2.20.8",
