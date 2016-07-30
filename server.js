@@ -380,7 +380,7 @@ app.post('/signin', function(req, res) {
 
     } else {
 		//submit the data to database
-        var username = req.body.mail;
+        var username = req.sanitize('mail').escape().trim();
         db.all("SELECT email, password, birthday, is_admin FROM users WHERE email = ?",  [ username ], function(err, rows) {
             if (err) {
                 throw err;
@@ -389,8 +389,8 @@ app.post('/signin', function(req, res) {
                 throw "this shouldn't happen";
             }
 
-            if (rows.length === 1 && bcrypt.compareSync(req.body.password, rows[0].password)
-                && req.body.dob === rows[0].birthday) {
+            if (rows.length === 1 && bcrypt.compareSync(req.sanitize('password').escape().trim(), rows[0].password)
+                && req.sanitize('dob').escape().trim() === rows[0].birthday) {
 
                 if (rows[0].is_admin === 0) {
                     req.session.username = username;
@@ -423,7 +423,8 @@ app.get('/signout', function(req, res) {
 });
 
 app.post('/feedback', function(req, res) {
-    var feedback = req.body.feedback.substring(0, 200);
+    var feedback = req.sanitize('feedback').escape().trim();
+    feedback.substring(0, 500);
     var time = new Date(Date.now()).toString();
     if (feedback) {
         db.run('INSERT INTO feedbacks (feedback, time) VALUES (?, ?)', [ feedback, time ], function (err){
@@ -495,7 +496,6 @@ app.post('/follows', function(req, res) {
         });
         db.all("SELECT user1, user2 FROM follows WHERE user2 = ?",  [ username ], function(err, rows) {
             result.push(rows);
-
             res.end(JSON.stringify(result));
         });
     }
@@ -505,9 +505,9 @@ app.post('/sendmsg', function(req, res) {
     if (!req.session.username) {
         res.sendStatus(404);
     } else {
-        var receiver = req.body.receiver;
+        var receiver = req.sanitize('receiver').escape().trim();
         var username = req.session.username;
-        var message = req.body.mymessage;
+        var message = req.sanitize('mymessage').escape().trim();
         db.all("SELECT email FROM users WHERE email = ?",  [ receiver ], function(err, rows) {
             if (rows.length > 0) {
                 var result = [];
@@ -541,7 +541,7 @@ app.post('/follow', function(req, res) {
     if (!req.session.username) {
         res.sendStatus(404);
     } else {
-        var receiver = req.body.friend;
+        var receiver = req.sanitize('friend').escape().trim();
         var username = req.session.username;
         db.all("SELECT email FROM users WHERE email = ?",  [ receiver ], function(err, rows) {
             if (rows.length > 0) {
@@ -573,12 +573,12 @@ app.post('/add_book', function(req, res) {
     if (!req.session.username) {
         res.sendStatus(404);
     } else {
-        var title = req.body.title;
-        var author = req.body.author;
-        var publisher = req.body.publisher;
+        var title = req.sanitize('title').escape().trim();
+        var author = req.sanitize('author').escape().trim();
+        var publisher = req.sanitize('publisher').escape().trim();
         var username = req.session.username;
-        var dept = req.body.dept;
-        var num = req.body.num;
+        var dept = req.sanitize('dept').escape().trim();
+        var num = req.sanitize('num').escape().trim();
 
         db.all("SELECT email, title, author FROM offers_book WHERE email = ? AND title = ? AND author = ?",  [ username, title, author ], function(err, rows) {
             console.log(JSON.stringify(rows));
@@ -632,11 +632,11 @@ app.post('/add_course', function(req, res) {
     if (!req.session.username) {
         res.sendStatus(404);
     } else {
-        var dept = req.body.department;
-        var code = req.body.code;
-        var section = req.body.section;
+        var dept = req.sanitize('department').escape().trim();
+        var code = req.sanitize('code').escape().trim();
+        var section = req.sanitize('section').escape().trim();
         var username = req.session.username;
-        var course_title = req.body.course_title;
+        var course_title = req.sanitize('course_title').escape().trim();
 
         db.all("SELECT email, dept, num FROM offers_course WHERE email = ? AND dept = ? AND num = ?",  [ username, dept, code ], function(err, rows) {
             if (!(rows.length > 0)) {
@@ -700,12 +700,12 @@ app.post("/userInfo", function(req, res) {
 });
 
 app.post("/changeInfo", function(req, res) {
-    var username = req.body.user_email;
-    var password =  emptyStringToNull(req.body.user_password);
-    var birthday =  emptyStringToNull(req.body.user_birthday);
-    var phone =  emptyStringToNull(req.body.user_phone);
-    var year =  emptyStringToNull(req.body.user_year_of_study);
-    var major =  emptyStringToNull(req.body.user_major);
+    var username = req.sanitize('user_email').escape().trim();
+    var password =  emptyStringToNull(req.sanitize('user_password').escape().trim());
+    var birthday =  emptyStringToNull(req.sanitize('user_birthday').escape().trim());
+    var phone =  emptyStringToNull(req.sanitize('user_phone').escape().trim());
+    var year =  emptyStringToNull(req.sanitize('user_year_of_study').escape().trim());
+    var major =  emptyStringToNull(req.sanitize('user_major').escape().trim());
     if (req.session.is_admin === 1) {
         updateInfo(password, birthday, phone, year, major, username, req, res);
     } else {
