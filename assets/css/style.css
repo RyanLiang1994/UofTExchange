@@ -7,6 +7,11 @@ h1#title {
 	padding-top: 10px;
 }
 
+h4#greeting {
+	margin: 0;
+	padding: 5px;
+}
+
 nav#navbar ul {
 	list-style-type: none;
 	margin: 0;
@@ -43,7 +48,7 @@ nav#navbar ul li#btn-home {
 div#profile {
 	float: left;
 	margin-left: 35px;
-	padding-top: 20px;
+	padding-top: 10px;
 }
 
 div#profile ul {
@@ -56,9 +61,21 @@ div#profile ul li#btn-signup{
 	font-family: 'Orbitron', sans-serif;
 	display: block;
 	text-align: center;
-	padding: 15px;
+	padding: 12px;
 	background-color: Gold;
 	border-radius: 12px;
+	font-weight: bolder;
+	cursor: pointer;
+}
+
+div#alreadySignedIn ul#feature_list li{
+	font-family: 'Orbitron', sans-serif;
+	display: block;
+	text-align: center;
+	padding: 5px;
+	background-color: #996600;
+	border-radius: 12px;
+	font-size: 70%
 	font-weight: bolder;
 	cursor: pointer;
 }
@@ -181,6 +198,8 @@ section textarea {
 	width: 100%;
 
 }
+
+h2.sectiontitle
 .queries {
 	padding-left: 20px;
 }
