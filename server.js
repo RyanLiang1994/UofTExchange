@@ -103,13 +103,10 @@ app.post('/signup', function(req, res) {
 
 	var err = req.validationErrors();
     var mappedErrors = req.validationErrors(true);
-    console.log("0");
+
     if (err) // If errors exist, send them back to the form:
     {
-        console.log(err);
-        console.log(req.body.email);
-        console.log(req.body.confirm);
-        console.log(req.body.birth);
+
         var msgs = { "errors": {} };
 
 
@@ -145,7 +142,7 @@ app.post('/signup', function(req, res) {
                 req.session.username = username;
                 req.session.msg = "Signup successfully!";
                 req.session.errmsg = "";
-                res.redirect('/');
+                res.redirect(page);
                 req.session.msg = "";
             }
         });
@@ -217,7 +214,7 @@ app.post('/search_courses', function(req, res) {
 		db.all(query_offers_course, function(err, rows) {
 			if (err) throw err;
 			result_list.push(rows);
-			console.log(rows);
+
 
 			var recommend_textbook;
 			if (lenDept) {
@@ -229,7 +226,7 @@ app.post('/search_courses', function(req, res) {
 					db.all(recommend_textbook, function(err, rows) {
 						if (err) throw err;
 						result_list.push(rows);
-						console.log(result_list);
+
 						res.end(JSON.stringify(result_list));
 					});
 				} else {
@@ -253,7 +250,7 @@ app.post('/search_courses', function(req, res) {
 	    							 		  (rows[0].year_of_study * 100 + 99) +
 	    							 		  " and email <> '" + username + "'"
 	    			}
-	    			console.log(recommend_textbook);
+
 	            	db.all(recommend_textbook, function(err, rec) {
 	            		if (err) console.log(err);
 		       			result_list.push(rec);
@@ -446,7 +443,7 @@ app.post('/feedback', function(req, res) {
 });
 
 app.get('/profile', function(req, res) {
-    console.log(req.session.username);
+
     if (!req.session.username) {
         // hasn't login yet
         res.sendStatus(404);
@@ -498,7 +495,7 @@ app.post('/follows', function(req, res) {
         });
         db.all("SELECT user1, user2 FROM follows WHERE user2 = ?",  [ username ], function(err, rows) {
             result.push(rows);
-            console.log(JSON.stringify(result));
+
             res.end(JSON.stringify(result));
         });
     }
@@ -519,12 +516,12 @@ app.post('/sendmsg', function(req, res) {
                     if (err) {
                         req.session.errmsg = "Send message failed";
                         req.session.msg = "";
-                        res.redirect('/');
+                        res.redirect(page);
                         req.session.errmsg = "";
                     } else {
                         req.session.msg = "Send successfully!";
                         req.session.errmsg = "";
-                        res.redirect('/');
+                        res.redirect(page);
                         req.session.msg = "";
                     }
                 });
@@ -532,7 +529,7 @@ app.post('/sendmsg', function(req, res) {
                 // cannot find this user
                 req.session.errmsg = "Send message failed, cannot find this receiver.";
 
-                res.redirect('/');
+                res.redirect(page);
                 req.session.errmsg = "";
             }
         });
@@ -552,12 +549,12 @@ app.post('/follow', function(req, res) {
                     if (err) {
                         req.session.errmsg = "Follow failed, you're already friends";
                         req.session.msg = "";
-                        res.redirect('/');
+                        res.redirect(page);
                         req.session.errmsg = "";
                     } else {
                         req.session.msg = "Follow successfully!";
                         req.session.errmsg = "";
-                        res.redirect('/');
+                        res.redirect(page);
                         req.session.msg = "";
                     }
                 });
@@ -565,7 +562,7 @@ app.post('/follow', function(req, res) {
                 // cannot find this user
                 req.session.errmsg = "Follow friend failed, cannot find this user.";
                 req.session.msg = "";
-                res.redirect('/');
+                res.redirect(page);
                 req.session.errmsg = "";
             }
         });
@@ -583,20 +580,21 @@ app.post('/add_book', function(req, res) {
         var dept = req.body.dept;
         var num = req.body.num;
 
-        db.all("SELECT email, title, author FROM offers_book WHERE email = ? AND title = ? AND author",  [ username, title, author], function(err, rows) {
+        db.all("SELECT email, title, author FROM offers_book WHERE email = ? AND title = ? AND author = ?",  [ username, title, author ], function(err, rows) {
+            console.log(JSON.stringify(rows));
             if (!(rows.length > 0)) {
 
                 db.run('INSERT INTO offers_book (email, title, author, publisher) VALUES (?, ?, ?, ?)', [ username, title, author, publisher], function (err){
                     if (err) {
                         req.session.errmsg = "Add failed. " + err;
                         req.session.msg = "";
-                        res.redirect('/');
+                        res.redirect(page);
                         req.session.errmsg = "";
                     } else {
                         if (!dept || !num) {
                             req.session.msg = "Add offered book successfully!";
                             req.session.errmsg = "";
-                            res.redirect('/');
+                            res.redirect(page);
                             req.session.msg = "";
                         } else if (dept && num) {
                             db.run('INSERT INTO course_textbook (dept, num, title, author) VALUES (?, ?, ?, ?)', [ dept, num, title, author ], function (err) {
@@ -605,7 +603,7 @@ app.post('/add_book', function(req, res) {
                                 }
                                 req.session.msg = "Add offered book successfully!";
                                 req.session.errmsg = "";
-                                res.redirect('/');
+                                res.redirect(page);
                                 req.session.msg = "";
 
                             });
@@ -613,7 +611,7 @@ app.post('/add_book', function(req, res) {
                         } else {
                             req.session.errmsg = "Add failed. ";
                             req.session.msg = "";
-                            res.redirect('/');
+                            res.redirect(page);
                             req.session.errmsg = "";
                         }
 
@@ -623,7 +621,7 @@ app.post('/add_book', function(req, res) {
                 // cannot find this user
                 req.session.errmsg = "Add book failed.";
                 req.session.msg = "";
-                res.redirect('/');
+                res.redirect(page);
                 req.session.errmsg = "";
             }
         });
@@ -646,12 +644,12 @@ app.post('/add_course', function(req, res) {
                     if (err) {
                         req.session.errmsg = "Add failed. " + err;
                         req.session.msg = "";
-                        res.redirect('/');
+                        res.redirect(page);
                         req.session.errmsg = "";
                     } else {
                         req.session.msg = "Add offered course successfully!";
                         req.session.errmsg = "";
-                        res.redirect('/');
+                        res.redirect(page);
                         req.session.msg = "";
                     }
                 });
@@ -659,7 +657,7 @@ app.post('/add_course', function(req, res) {
                 // cannot find this user
                 req.session.errmsg = "Add course failed. You've already offered this course";
                 req.session.msg = "";
-                res.redirect('/');
+                res.redirect(page);
                 req.session.errmsg = "";
             }
         });
@@ -692,9 +690,8 @@ app.post("/userInfo", function(req, res) {
 
     if (req.session.is_admin === 1) {
         var target = req.body.target;
-        console.log(target);
-        db.all("SELECT email, password, birthday, phone, year_of_study, major FROM users WHERE email=?", [ target ],function(err, rows) {
 
+        db.all("SELECT email, password, birthday, phone, year_of_study, major FROM users WHERE email=?", [ target ],function(err, rows) {
             res.end(JSON.stringify(rows));
         });
     } else {
@@ -712,7 +709,7 @@ app.post("/changeInfo", function(req, res) {
     if (req.session.is_admin === 1) {
         updateInfo(password, birthday, phone, year, major, username, req, res);
     } else {
-        console.log(username);
+
         if (req.session.username === username) {
             updateInfo(password, birthday, phone, year, major, username, req, res);
         } else {
@@ -735,22 +732,48 @@ app.post("/getFeedback", function(req, res) {
 });
 
 function updateInfo(password, birthday, phone, year, major, username, req, res) {
-    db.all("UPDATE users SET password=?, birthday=?, phone=?, " +
-        "year_of_study=?, major=? WHERE email=?",
-        [ bcrypt.hashSync(password, 10), birthday,
-            phone, year, major, username ],function(err, rows) {
-        if (err) {
-            req.session.errmsg = "Update failed. " + err + " Please contact the admin";
-            req.session.msg = "";
-            res.redirect('/');
-            req.session.errmsg = "";
+    if (birthday) {
+        if (password) {
+            db.all("UPDATE users SET password=?, birthday=?, phone=?, " +
+                "year_of_study=?, major=? WHERE email=?",
+                [ bcrypt.hashSync(password, 10), birthday,
+                    phone, year, major, username ],function(err, rows) {
+                if (err) {
+                    req.session.errmsg = "Update failed. " + err + " Please contact the admin";
+                    req.session.msg = "";
+                    res.redirect(page);
+                    req.session.errmsg = "";
+                } else {
+                    req.session.msg = "Update successfully!";
+                    req.session.errmsg = "";
+                    res.redirect(page);
+                    req.session.msg = "";
+                }
+            });
         } else {
-            req.session.msg = "Update successfully!";
-            req.session.errmsg = "";
-            res.redirect(page);
-            req.session.msg = "";
+            db.all("UPDATE users SET birthday=?, phone=?, " +
+                "year_of_study=?, major=? WHERE email=?",
+                [ birthday, phone, year, major, username ],function(err, rows) {
+                if (err) {
+                    req.session.errmsg = "Update failed. " + err + " Please contact the admin";
+                    req.session.msg = "";
+                    res.redirect(page);
+                    req.session.errmsg = "";
+                } else {
+                    req.session.msg = "Update successfully!";
+                    req.session.errmsg = "";
+                    res.redirect(page);
+                    req.session.msg = "";
+                }
+            });
         }
-    });
+    } else {
+        req.session.errmsg = "Update failed. Birthday cannot be empty";
+        req.session.msg = "";
+        res.redirect(page);
+        req.session.errmsg = "";
+    }
+
 }
 function emptyStringToNull(value) {
     if (value === "") {
