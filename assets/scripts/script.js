@@ -298,7 +298,7 @@ function getProfile() {
                 $form.append("<br>");
                 var $password = $("<label>");
                 $password.text("Password: ");
-                var $password_input = $("<input>", {name: "user_password", type: "password", value: checkNull(data[0][0].unhash_password)});
+                var $password_input = $("<input>", {name: "user_password", type: "password", value: checkNull(data[0][0].password)});
                 $password.append($password_input);
                 $form.append($password);
                 $form.append("<br>")
@@ -791,7 +791,7 @@ function changeUser(username) {
 
             var $password = $("<label>");
             $password.text("Password: ");
-            var $password_input = $("<input>", {name: "user_password", value: checkNull(data[0].unhash_password)});
+            var $password_input = $("<input>", {name: "user_password", value: checkNull(data[0].password)});
             $password.append($password_input);
             $form.append($password);
             $form.append("<br>")
