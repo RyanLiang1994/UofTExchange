@@ -580,7 +580,8 @@ app.post('/add_book', function(req, res) {
         var dept = req.body.dept;
         var num = req.body.num;
 
-        db.all("SELECT email, title, author FROM offers_book WHERE email = ? AND title = ? AND author",  [ username, title, author], function(err, rows) {
+        db.all("SELECT email, title, author FROM offers_book WHERE email = ? AND title = ? AND author = ?",  [ username, title, author ], function(err, rows) {
+            console.log(JSON.stringify(rows));
             if (!(rows.length > 0)) {
 
                 db.run('INSERT INTO offers_book (email, title, author, publisher) VALUES (?, ?, ?, ?)', [ username, title, author, publisher], function (err){
@@ -731,25 +732,43 @@ app.post("/getFeedback", function(req, res) {
 });
 
 function updateInfo(password, birthday, phone, year, major, username, req, res) {
-    if (password && birthday) {
-        db.all("UPDATE users SET password=?, birthday=?, phone=?, " +
-            "year_of_study=?, major=? WHERE email=?",
-            [ bcrypt.hashSync(password, 10), birthday,
-                phone, year, major, username ],function(err, rows) {
-            if (err) {
-                req.session.errmsg = "Update failed. " + err + " Please contact the admin";
-                req.session.msg = "";
-                res.redirect(page);
-                req.session.errmsg = "";
-            } else {
-                req.session.msg = "Update successfully!";
-                req.session.errmsg = "";
-                res.redirect(page);
-                req.session.msg = "";
-            }
-        });
+    if (birthday) {
+        if (password) {
+            db.all("UPDATE users SET password=?, birthday=?, phone=?, " +
+                "year_of_study=?, major=? WHERE email=?",
+                [ bcrypt.hashSync(password, 10), birthday,
+                    phone, year, major, username ],function(err, rows) {
+                if (err) {
+                    req.session.errmsg = "Update failed. " + err + " Please contact the admin";
+                    req.session.msg = "";
+                    res.redirect(page);
+                    req.session.errmsg = "";
+                } else {
+                    req.session.msg = "Update successfully!";
+                    req.session.errmsg = "";
+                    res.redirect(page);
+                    req.session.msg = "";
+                }
+            });
+        } else {
+            db.all("UPDATE users SET birthday=?, phone=?, " +
+                "year_of_study=?, major=? WHERE email=?",
+                [ birthday, phone, year, major, username ],function(err, rows) {
+                if (err) {
+                    req.session.errmsg = "Update failed. " + err + " Please contact the admin";
+                    req.session.msg = "";
+                    res.redirect(page);
+                    req.session.errmsg = "";
+                } else {
+                    req.session.msg = "Update successfully!";
+                    req.session.errmsg = "";
+                    res.redirect(page);
+                    req.session.msg = "";
+                }
+            });
+        }
     } else {
-        req.session.errmsg = "Update failed. Password or birthday cannot be empty";
+        req.session.errmsg = "Update failed. Birthday cannot be empty";
         req.session.msg = "";
         res.redirect(page);
         req.session.errmsg = "";
