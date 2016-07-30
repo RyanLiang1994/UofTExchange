@@ -586,7 +586,7 @@ function getCourse() {
                     $container.append($contact_info);
                     if ($("#alreadySignedIn").length > 0) {
                         $comment = $("<button>", {
-                            text: "Comment", 
+                            text: "Comment",
                             class: "btn-comment",
                             id: "btn-comment_" + i
                         });
@@ -688,7 +688,7 @@ function get_book_comment(email, title, author) {
 
             var $comment_area = $("<textarea>", {
                 rows: "10",
-                column: "79",
+                column: "300",
                 name: "comment_book"
             });
 
@@ -721,7 +721,7 @@ function get_book_comment(email, title, author) {
                     $('.msg').remove();
                     postBookComment(email,bookTitle, bookAuthor, $userComment);
                 }
-                
+
             });
 
             $comment_form.append($comment_area);
@@ -833,13 +833,13 @@ function getBooks() {
                             var email = "book_contact_" + query_num,
                                 bookTitle = "book_title_" + query_num,
                                 bookAuthor = "book_author_" + query_num;
-                            
+
                             $('section').hide();
                             $('.errmsg').remove();
                             $('.msg').remove();
                             get_book_comment(email, bookTitle, bookAuthor);
                             removeLoggedInSection();
-                            
+
                         });
                         $like = $("<button>", {
                             text: "Like",
@@ -853,7 +853,7 @@ function getBooks() {
 
                             console.log(email, bookTitle, bookAuthor);
 
-                            
+
                             $('section').hide();
                             $('.errmsg').remove();
                             $('.msg').remove();
@@ -862,7 +862,7 @@ function getBooks() {
                         });
                         $container.append($like);
                         $container.append($comment);
-                    } 
+                    }
                     $container.append("<hr>");
                 }
             } else {

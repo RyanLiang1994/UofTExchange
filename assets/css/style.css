@@ -174,8 +174,13 @@ p.errmsg {
 textarea#msgbox {
 	height: 150px;
 
+
 }
 
+section textarea {
+	width: 100%;
+
+}
 .queries {
 	padding-left: 20px;
 }
