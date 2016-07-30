@@ -79,7 +79,16 @@ app.use(expressValidator({
 
 }));
 
-app.get(url_list[0] || url_list[1], function(req, res) {
+app.get(url_list[0], function(req, res) {
+    res.render('index.html', {  // Note that .html is assumed.
+        "errors": ''
+    });
+
+
+//	res.sendFile(__dirname + '/index.html');
+});
+
+app.get(url_list[1], function(req, res) {
     res.render('index.html', {  // Note that .html is assumed.
         "errors": ''
     });
@@ -124,6 +133,7 @@ app.post('/signup', function(req, res) {
             msgs.errors.error_birth = mappedErrors.birth.msg;
 
         // res.sendFile(__dirname + '/index.html');
+        res.status(400);
         res.render('index.html', msgs);
 
 
@@ -136,12 +146,14 @@ app.post('/signup', function(req, res) {
             if (err) {
                 req.session.errmsg = err;
                 req.session.msg = "";
+                res.status(400);
                 res.render('index.html');
                 req.session.errmsg = "";
             } else {
                 req.session.username = username;
                 req.session.msg = "Signup successfully!";
                 req.session.errmsg = "";
+                res.status(200);
                 res.redirect(page);
                 req.session.msg = "";
             }
