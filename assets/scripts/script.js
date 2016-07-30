@@ -319,7 +319,7 @@ function getProfile() {
 
                 var $year_of_study = $("<label>");
                 $year_of_study.text("Year of Study: ");
-                var $year_of_study_input = $("<input>", {name: "user_year_of_study", value: checkNull(data[0][0].year_of_study)});
+                var $year_of_study_input = $("<input>", {name: "user_year_of_study", type: "number", value: checkNull(data[0][0].year_of_study)});
                 $year_of_study.append($year_of_study_input);
                 $form.append($year_of_study);
                 $form.append("<br>")
@@ -656,22 +656,22 @@ function getBooks() {
                 for (var i = 0; i < data[0].length; i++) {
                     $book_title = $("<h3>", {
                         class: "queries",
-                        text: data[0][i].title});
+                        text: data[0][i].title}).addClass("query_title_" + i);
 
                     $booka_author = $("<h4>", {
                         class: "queries ",
                         text: "By: " + data[0][i].author
-                    });
+                    }).addClass("query_author_" + i);
 
                     $book_publisher = $("<h5>", {
                         class: "queries",
                         text: "Publisher: " + checkNull(data[0][i].publisher)
-                    });
+                    }).addClass("query_publisher_" + i);
 
                     $contact_info = $("<p>", {
                         class: "queries",
                         text: "Contact Information: " + data[0][i].email
-                    });
+                    }).addClass("query_contact_" + i);
 
                     $container.append($book_title);
                     $container.append($booka_author);
