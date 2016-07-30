@@ -110,7 +110,7 @@ section.menu-item form input, section#signup form input, section.logged-in-menu-
 	width: 50%;
 }
 
-section.menu-item form button, section#signup form button, section.logged-in-menu-item  form button{
+section.menu-item form button, section#signup form button, section.logged-in-menu-item  form button, #getUserProfile{
 	margin-top: 25px;
 	margin-left: 20%;
 	padding-top: 10px;
@@ -179,6 +179,7 @@ textarea#msgbox {
 .queries {
 	padding-left: 20px;
 }
+
 @media screen and (max-width: 1024px) {
 	div#profile {
 		margin-left: 20px;
