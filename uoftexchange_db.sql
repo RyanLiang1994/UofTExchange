@@ -21,8 +21,8 @@ CREATE TABLE offers_book (
 DROP TABLE IF EXISTS offers_course;
 CREATE TABLE offers_course (
 	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
-	dept CHAR(3),
-	num INT,
+	dept CHAR(3) CHECK(LENGTH(dept) = 3),
+	num INT check(num BETWEEN 100 AND 499),
 	title VARCHAR(32),
 	sect VARCHAR(16),
 	PRIMARY KEY (email, dept, num)
@@ -30,8 +30,8 @@ CREATE TABLE offers_course (
 
 DROP TABLE IF EXISTS course_textbook;
 CREATE TABLE course_textbook (
-	dept CHAR(3),
-	num INT,
+	dept CHAR(3) CHECK(LENGTH(dept) = 3),
+	num INT check(num BETWEEN 100 AND 499),
 	title VARCHAR(64),
 	author VARCHAR(32),
 	PRIMARY KEY (dept, num, title, author)
@@ -43,6 +43,26 @@ CREATE TABLE follows (
 	user2 VARCHAR(64) REFERENCES users(email) ON DELETE CASCADE,
 	PRIMARY KEY (user1, user2),
 	CHECK(user1 <> user2)
+);
+
+ DROP TABLE IF EXISTS book_comments;
+ CREATE TABLE book_comments (
+ 	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
+ 	title VARCHAR(64),
+	author VARCHAR(32),
+	user VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
+	comments TEXT,
+	time DATE,
+	PRIMARY KEY (email, title, author, time)
+);
+
+DROP TABLE IF EXISTS book_likes;
+CREATE TABLE book_likes (
+	email VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
+	title VARCHAR(64),
+	author VARCHAR(32),
+	user VARCHAR(32) REFERENCES users(email) ON DELETE CASCADE,
+	PRIMARY KEY (email, title, author, user)
 );
 
 DROP TABLE IF EXISTS messages;

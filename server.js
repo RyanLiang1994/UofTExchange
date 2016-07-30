@@ -317,7 +317,7 @@ app.post('/search_books', function(req, res) {
 		if (offers_book.length && !course_textbook.length) {
 			result = query_offers_book;
 		} else if (!offers_book.length && course_textbook.length) {
-			result = query_course_textbook;
+			result = query_join_offer_textbook;
 		} else if (offers_book.length && course_textbook.length) {
 			result = query_offers_book + " intersect " + query_join_offer_textbook;
 		}
@@ -331,7 +331,8 @@ app.post('/search_books', function(req, res) {
 
             if (!req.session.username) {
 				result_list.push([]);
-				// console.log(result_list);
+                result_list.push([]);
+				
 				res.end(JSON.stringify(result_list));
 			} else {
 				var username = req.session.username;
@@ -340,7 +341,6 @@ app.post('/search_books', function(req, res) {
 	    			var recommend = "select * from offers_course where lower(dept) = '" + rows[0].major + "' and num between " + rows[0].year_of_study * 100 + " and " + (rows[0].year_of_study * 100 + 99) + " and email <> '" + username + "'";
 	            	db.all(recommend, function(err, rec) {
 		       			result_list.push(rec);
-		       			// console.log(rec);
 		       			res.end(JSON.stringify(result_list));
 	       			});
 	       		});
@@ -350,6 +350,87 @@ app.post('/search_books', function(req, res) {
 
 });
 
+
+app.post('/like', function(req, res) {
+    var emailText = req.body.email,
+        bookTitleText = req.body.title,
+        bookAuthorText = req.body.author;
+
+    var email = emailText.substring(21, emailText.length),
+        bookTitle = bookTitleText.toLowerCase(),
+        bookAuthor = bookAuthorText.substring(4, bookAuthorText.length).toLowerCase(),
+        user = req.session.username;
+
+    db.run("insert into book_likes(email, title, author, user) values (?, ?, ?, ?)", [email, bookTitle, bookAuthor, user], function(err) {
+        if (err) console.log(err);
+    });
+
+    db.all("select user from book_likes where email = ? and lower(title) = ? and lower(author) = ?", [email, bookTitle, bookAuthor], function(err, rows) {
+        
+        if (err) { 
+            console.log(err)
+        } else {
+            console.log(rows);
+            res.end(JSON.stringify(rows));
+        }
+        
+    });
+
+});
+
+app.post('/get_book_comment', function(req, res) {
+
+    var emailText = req.body.email,
+        bookTitleText = req.body.title,
+        bookAuthorText = req.body.author;
+
+
+    var email = emailText.substring(21, emailText.length),
+        bookTitle = bookTitleText.toLowerCase(),
+        bookAuthor = bookAuthorText.substring(4, bookAuthorText.length).toLowerCase();
+
+    db.all("select * from book_comments where email = ? and lower(title) = ? and lower(author) = ?", [email, bookTitle, bookAuthor], function(err, rows) {
+        if (err) throw err;
+        if (rows.length > 0) {
+            res.end(JSON.stringify(rows));
+        } else {
+            empty_result = {"email": email, "title": bookTitle, "author": bookAuthor};
+            console.log(JSON.stringify(empty_result));
+            res.end(JSON.stringify(empty_result));
+
+        }
+    });
+});
+
+app.post("/post_book_comment", function(req, res) {
+    var user = req.session.username,
+        email = req.body.email,
+        bookTitle = req.body.title,
+        bookAuthor = req.body.author,
+        comment = req.sanitize('comment').escape();
+
+    var time = new Date(Date.now()).toString();
+
+    db.run("insert into book_comments(email, title, author, user, comments, time) values(?, ?, ?, ?, ?, ?)", [email, bookTitle, bookAuthor, user, comment, time], function(err) {
+        if (err) {
+            res.status(400);
+            req.session.errmsg = "Comment failed.";
+            req.session.msg = "";
+            res.redirect(page);
+            req.session.errmsg = "";
+        } else {    
+            console.log("redirect?")
+            res.status(200);
+            req.session.msg = "Comment successfully";
+            req.session.errmsg = "";
+            res.redirect(page);
+            req.session.msg = "";
+        }
+
+
+    });
+
+});
 
 
 app.post('/signin', function(req, res) {
