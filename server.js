@@ -865,6 +865,26 @@ app.post("/changeInfo", function(req, res) {
     }
 })
 
+app.post("/get_user_profile", function(req, res) {
+    var email = req.sanitize('email').escape().trim();
+
+    var result = [];
+    db.all("SELECT email, phone, year_of_study, major FROM users WHERE email = ?",  [ email ], function(err, rows) {
+        result.push(rows);
+    });
+
+    db.all("SELECT email, dept, num, title, sect FROM offers_course WHERE email = ?",  [ email ], function(err, rows) {
+        result.push(rows);
+    });
+
+    db.all("SELECT email, title, author, publisher FROM offers_book WHERE email = ?",  [ email ], function(err, rows) {
+        result.push(rows);
+        res.status(200);
+        console.log(result);
+        res.end(JSON.stringify(result));
+    });
+});
+
 app.post("/getFeedback", function(req, res) {
     if (req.session.is_admin === 1) {
 
@@ -933,19 +953,9 @@ function emptyStringToNull(value) {
         return value;
     }
 }
+
 var server = app.listen(process.env.PORT || 3000, function()
 {
   var port = server.address().port;
   console.log('Running on 127.0.0.1:%s', port);
 });
-
-//
-// app.get('/googlelogin', function(req, res) {
-//     req.session.username = "Ryan";
-//     res.render('index.html');
-// });
-//
-// app.get("/googlelogout", function(req, res) {
-//     req.session.destroy();
-//     res.redirect('/');
-// })

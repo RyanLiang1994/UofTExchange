@@ -533,14 +533,92 @@ function followFriend() {
     var $receiver = $("<input>", {name: "friend", id: "receiver", placeholder: "Email"});
     var $button = $("<button>", {type: "submit", id: "submitmsg"});
     var $form = $("<form>", {action: "/follow", method: "post"});
+    var $info = $("<button>", {
+        text: "Find User",
+        id: "getUserProfile"});
+
+    
     $button.text("Follow!");
     $lable.text("Target Email: ");
     $form.append($lable);
     $form.append($receiver);
+    $form.append("<br>");
     $form.append($button);
     $container.append($title);
     $container.append($form);
+    $container.append($info);
     $container.insertBefore($("footer"));
+
+    $info.click(function() {
+        $.ajax({
+            url: "get_user_profile",
+            method: "POST",
+            dataType: "json",
+            data: {
+                email: $receiver.val()
+            },
+            success: function(data) {
+                $('#userInformation').remove();
+                $userArticle = $("<article>", {
+                    id: "userInformation"
+                });
+                $userArticle.append("<hr>");
+                if (data[0].length) {
+                    var $user = $("<h3>", {
+                        text: data[0][0].email
+                    });
+                    var $phone = $("<h4>", {
+                        text: "Phone: " + checkNull(data[0][0].phone)
+                    });
+                    var $studyYear = $("<p>", {
+                        text: "Year of Study: " + checkNull(data[0][0].year_of_study)
+                    });
+                    var $major = $("<p>", {
+                        text: "Major: " + checkNull(data[0][0].major)
+                    });
+                    $userArticle.append($user);
+                    $userArticle.append($phone);
+                    $userArticle.append($studyYear);
+                    $userArticle.append($major);
+                    $userArticle.append("<br>");
+                    
+                    $books = $("<h3>", {
+                        text: "Offer Books"
+                    });
+                    $userArticle.append($books);
+                    $book_info = $("<p>");
+                    for (var j = 0; j < data[2].length; j++) {
+                        $book_info.append("Title: " + checkNull(data[2][j].title) + "<br>" +
+                                            "Author: " + checkNull(data[2][j].author) + "<br>" +
+                                            "Publisher: " + checkNull(data[2][j].publisher) + "<br>"
+                                            );
+                        $book_info.append("<hr>");
+                    }
+                    $userArticle.append($book_info);
+
+                    $courses = $("<h3>", {
+                        text: "Offer Books"
+                    });
+                    $userArticle.append($courses);
+                    // $container.append("<br>");
+                    $course_info = $("<p>");
+                    for (var i = 0; i < data[1].length; i++) {
+                        $course_info.append("Course: " + checkNull(data[1][i].title) + "<br>" +
+                                            "Section: " + checkNull(data[1][i].sect) + "<br>" +
+                                            "Department: " + checkNull(data[1][i].dept) + "<br>" +
+                                            "Code: " + checkNull(data[1][i].num));
+                        $course_info.append("<hr>");
+                    }
+                    $userArticle.append($course_info);
+                } else {
+                    $userArticle.append($("<p>", {
+                        text: "No user under this ID was found!"
+                    }));
+                }
+                $userArticle.appendTo($container);
+            }
+        });
+    });
 }
 
 function getCourse() {
@@ -611,7 +689,7 @@ function getCourse() {
                         class: "queries",
                         text: data[1][i].title});
 
-                    $booka_author = $("<h4>", {
+                    $book_author = $("<h4>", {
                         class: "queries",
                         text: "By: " + data[1][i].author
                     });
@@ -627,7 +705,7 @@ function getCourse() {
                     });
 
                     $container.append($book_title);
-                    $container.append($booka_author);
+                    $container.append($book_author);
                     $container.append($book_publisher);
                     $container.append($contact_info);
                     $container.append("<hr>");
