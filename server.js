@@ -10,6 +10,7 @@ var path = require('path');
 var nunjucks = require('nunjucks');
 var session = require('express-session');
 var sequelize = require('sequelize');
+var compress = require('compression');
 
 // Code for Heroku, need to change to fit in our app
 // app.set('port', (process.env.PORT || 3000));
@@ -42,7 +43,7 @@ app.use(express.static(__dirname + '/assets'));
 // app.engine('.html', require('ejs').__express);
 // app.set('views', __dirname);
 // app.set('view engine', 'html');
-app.use(session({ secret: 'Who is Ryan', resave: false, saveUninitialized: false }));
+app.use(session({ secret: 'Who is Ryan', resave: false, saveUninitialized: false, cookie: { maxAge: 60000 } }));
 // Expose session variables to views
 app.use(function(req, res, next) {
   res.locals.session = req.session;
@@ -53,7 +54,7 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-
+app.use(compress());
 app.use(expressValidator({
 	customValidators: {
 		// isUserName: function(value) {
@@ -344,7 +345,7 @@ app.post('/search_books', function(req, res) {
             if (!req.session.username) {
 				result_list.push([]);
                 result_list.push([]);
-				
+
 				res.end(JSON.stringify(result_list));
 			} else {
 				var username = req.session.username;
@@ -378,14 +379,14 @@ app.post('/like', function(req, res) {
     });
 
     db.all("select user from book_likes where email = ? and lower(title) = ? and lower(author) = ?", [email, bookTitle, bookAuthor], function(err, rows) {
-        
-        if (err) { 
+
+        if (err) {
             console.log(err)
         } else {
             console.log(rows);
             res.end(JSON.stringify(rows));
         }
-        
+
     });
 
 });
@@ -430,7 +431,7 @@ app.post("/post_book_comment", function(req, res) {
             req.session.msg = "";
             res.redirect(page);
             req.session.errmsg = "";
-        } else {    
+        } else {
             console.log("redirect?")
             res.status(200);
             req.session.msg = "Comment successfully";
