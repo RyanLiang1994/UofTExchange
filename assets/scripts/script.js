@@ -659,7 +659,7 @@ function getBooks() {
                         text: data[0][i].title});
 
                     $booka_author = $("<h4>", {
-                        class: "queries",
+                        class: "queries ",
                         text: "By: " + data[0][i].author
                     });
 
