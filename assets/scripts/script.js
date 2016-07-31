@@ -22,7 +22,7 @@ var images = [
     }
 ];
 
-/* Run this after the document is ready */
+/* Run this function after the document is ready */
 $(document).ready(function() {
 
     $('section').hide();
@@ -40,9 +40,11 @@ $(document).ready(function() {
 
 });
 
+/* A slider shown on the home page */
+/* Grabbed from the lab */
 function slider() {
 
-    // Init
+    // Initialization
     var $gallery = $("#gallery");
     var $slider = $('<ul/>');
     var leftOffset = 0;
@@ -84,8 +86,10 @@ function slider() {
     $("div#gallery").append($controller);
 }
 
+/* Display of each slide */
 function slide() {
 
+    /* If the slider reaches the leftmost/rightmost: change direction */
     if (slider_index == images.length - 1) slide_direction = "left";
     else if (slider_index == 0) slide_direction = "right";
     if (slide_direction == "right") slider_index ++;
@@ -119,6 +123,8 @@ function slide() {
     setTimeout(slide, 2000);
 }
 
+/* After clicking on certain button:
+    Show related contents and hide/remove others */
 $('#btn-home').click(function() {
     $('section').hide();
     $('#home').show();
@@ -269,6 +275,7 @@ function stickyNav(){
 
 /* Get profile */
 function getProfile() {
+    
     $.ajax({
         url: "profile",
         method: "GET",
@@ -311,29 +318,34 @@ function getProfile() {
 
                 var $phone = $("<label>");
                 $phone.text("Phone: ");
-                var $phone_input = $("<input>", {name: "user_phone",
-                                                 value: checkNull(data[0][0].phone),
-                                                 placeholder: "Phone: 10 numbers"});
+                var $phone_input = $("<input>", {
+                    name: "user_phone",
+                    value: checkNull(data[0][0].phone),
+                    placeholder: "Phone: 10 numbers"}
+                );
                 $phone.append($phone_input);
                 $form.append($phone);
                 $form.append("<br>")
 
                 var $year_of_study = $("<label>");
                 $year_of_study.text("Year of Study: ");
-                var $year_of_study_input = $("<input>", {name: "user_year_of_study",
-                        type: "number",
-                        value: checkNull(data[0][0].year_of_study),
-                            placeholder: "major"});
+                var $year_of_study_input = $("<input>", {
+                    name: "user_year_of_study",
+                    type: "number",
+                    value: checkNull(data[0][0].year_of_study),
+                    placeholder: "major"
+                });
                 $year_of_study.append($year_of_study_input);
                 $form.append($year_of_study);
                 $form.append("<br>")
 
                 var $major = $("<label>");
                 $major.text("Major: ");
-                var $major_input = $("<input>", {name: "user_major",
-                                                 value: checkNull(data[0][0].major),
-                                                 pattern: "[0-9A-Za-z]{3}[0-9A-Za-z]*",
-                                                 placeholder: "major(at least 3 characher)"});
+                var $major_input = $("<input>", {
+                    name: "user_major",
+                    value: checkNull(data[0][0].major),
+                    pattern: "[0-9A-Za-z]{3}[0-9A-Za-z]*",
+                    placeholder: "major(at least 3 characher)"});
                 $major.append($major_input);
                 $form.append($major);
                 $form.append("<br>")
@@ -364,10 +376,16 @@ function getProfile() {
                 if (data.length > 2) {
                     var $paragraph3 = $("<p>", {id: "profileparagraph"});
                     for (var j = 0; j < data[2].length; j++) {
-                        $paragraph3.append("Title: " + checkNull(data[2][j].title) + "<br>" +
-                                            "Author: " + checkNull(data[2][j].author) + "<br>" +
-                                            "Publisher: " + checkNull(data[2][j].publisher) + "<br>"
-                                            );
+                        $paragraph3.append(
+                            "Title: " +
+                            checkNull(data[2][j].title) +
+                            "<br>" +
+                            "Author: " + checkNull(data[2][j].author) +
+                            "<br>" +
+                            "Publisher: " +
+                            checkNull(data[2][j].publisher) +
+                            "<br>"
+                        );
                         $paragraph3.append("<hr>");
                     }
                     $container.append($paragraph3);
@@ -384,8 +402,9 @@ function getProfile() {
     });
 }
 
-
+/* Get */
 function getAddingForms() {
+
     var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
     var $title1 = $("<h2>", {class: "sectiontitle"});
     var $title2 = $("<h2>", {class: "sectiontitle"});
@@ -416,6 +435,7 @@ function getAddingForms() {
     $container.append($title2);
     $container.append($courseform);
     $container.insertBefore($("footer"));
+
 }
 
 function getFollows() {
@@ -425,8 +445,10 @@ function getFollows() {
         dataType: "json",
         success: function(data) {
             if (data.length > 0) {
-                console.log(JSON.stringify(data));
-                var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
+                var $container = $("<section>", {
+                    id: "container",
+                    class: "logged-in-menu-item"
+                });
                 var $title = $("<h2>", {class: "sectiontitle"});
                 var $following_list = $("<ul>", {id: "following_list"});
                 $title.text("Following");
@@ -438,7 +460,10 @@ function getFollows() {
                 }
                 $container.append($following_list);
                 $container.append("<hr>");
-                var $title = $("<h2>", {class: "sectiontitle", text: "Followers"});
+                var $title = $("<h2>", {
+                    class: "sectiontitle",
+                    text: "Followers"}
+                );
                 $container.append($title);
                 var $follower_list = $("<ul>", {id: "follower_list"});
                 for (var i = 0; i < data[1].length; i++) {
@@ -458,7 +483,9 @@ function getFollows() {
     });
 }
 
+/* Get message */
 function getMessage() {
+
     $.ajax(
     {
         url: "message",
@@ -477,11 +504,13 @@ function getMessage() {
                     }
                     return 0;
                 });
-                var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
+                var $container = $("<section>", {
+                    id: "container",
+                    class: "logged-in-menu-item"
+                });
                 var $title = $("<h2>", {class: "sectiontitle"});
                 $title.text("My Message");
                 $container.append($title);
-                console.log(JSON.stringify(data));
                 for (var i = 0; i < data[0].length; i++) {
                     var date = new Date(data[0][i].time);
                     var $msgwindows = $("<p>", {class: "msgwindows"});
@@ -509,6 +538,7 @@ function getMessage() {
     });
 }
 
+/* Send a message */
 function sendMessage() {
     var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
     var $title = $("<h2>", {class: "sectiontitle"});
@@ -529,6 +559,7 @@ function sendMessage() {
     $container.insertBefore($("footer"));
 }
 
+/* Follow a friend */
 function followFriend() {
     var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
     var $title = $("<h2>", {class: "sectiontitle"});
@@ -539,8 +570,8 @@ function followFriend() {
     var $form = $("<form>", {action: "/follow", method: "post"});
     var $info = $("<button>", {
         text: "Find User",
-        id: "getUserProfile"});
-
+        id: "getUserProfile"
+    });
 
     $button.text("Follow!");
     $lable.text("Target Email: ");
@@ -592,10 +623,17 @@ function followFriend() {
                     $userArticle.append($books);
                     $book_info = $("<p>");
                     for (var j = 0; j < data[2].length; j++) {
-                        $book_info.append("Title: " + checkNull(data[2][j].title) + "<br>" +
-                                            "Author: " + checkNull(data[2][j].author) + "<br>" +
-                                            "Publisher: " + checkNull(data[2][j].publisher) + "<br>"
-                                            );
+                        $book_info.append(
+                            "Title: " +
+                            checkNull(data[2][j].title) +
+                            "<br>" +
+                            "Author: " +
+                            checkNull(data[2][j].author) +
+                            "<br>" +
+                            "Publisher: "
+                            + checkNull(data[2][j].publisher)
+                            + "<br>"
+                        );
                         $book_info.append("<hr>");
                     }
                     $userArticle.append($book_info);
@@ -607,10 +645,16 @@ function followFriend() {
                     // $container.append("<br>");
                     $course_info = $("<p>");
                     for (var i = 0; i < data[1].length; i++) {
-                        $course_info.append("Course: " + checkNull(data[1][i].title) + "<br>" +
-                                            "Section: " + checkNull(data[1][i].sect) + "<br>" +
-                                            "Department: " + checkNull(data[1][i].dept) + "<br>" +
-                                            "Code: " + checkNull(data[1][i].num));
+                        $course_info.append(
+                            "Course: " + checkNull(data[1][i].title) +
+                            "<br>" +
+                            "Section: " + checkNull(data[1][i].sect) +
+                            "<br>" +
+                            "Department: " + checkNull(data[1][i].dept) +
+                            "<br>" +
+                            "Code: " +
+                            checkNull(data[1][i].num)
+                        );
                         $course_info.append("<hr>");
                     }
                     $userArticle.append($course_info);
@@ -625,6 +669,7 @@ function followFriend() {
     });
 }
 
+/* Get the course */
 function getCourse() {
 
     $.ajax({
@@ -641,7 +686,6 @@ function getCourse() {
             var $title = $("<h2>", {class: "sectiontitle", text: "Offering Courses"});
             $container.append($title);
             if (data[0].length > 0) {
-                console.log(data);
                 for (var i = 0; i < data[0].length; i++) {
                     $course_code = $("<h3>", {
                         class: "queries",
@@ -675,7 +719,8 @@ function getCourse() {
                             id: "btn-course-comment_" + i
                         }).click(function() {
                             var clicked = this.id;
-                            var query_num = clicked.substring(clicked.length - 1, clicked.length);
+                            var query_num = clicked.substring(
+                                clicked.length - 1, clicked.length);
                             var email = "course_contact_" + query_num,
                                 course = "course_id_" + query_num;
 
@@ -714,10 +759,13 @@ function getCourse() {
                     $container.append("<hr>");
             }
 
-            var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
+            var $title = $("<h2>", {
+                class: "sectiontitle",
+                text: "Recommendations"
+            });
             $container.append($title);
             if (data[1].length > 0) {
-                for (var i = 0; i < data[1].length; i++) {
+                for (var i = 0; i < data[1].length; i ++) {
                     $book_title = $("<h3>", {
                         class: "queries",
                         text: data[1][i].title});
@@ -745,7 +793,8 @@ function getCourse() {
                 }
             } else {
                 $no_result = $("<p>", {
-                        text: "Please provide more information to optimize your experience."
+                        text:
+                "Please provide more information to optimize your experience."
                 });
                 $container.append($no_result);
                 $container.append("<hr>");
@@ -756,6 +805,7 @@ function getCourse() {
 
 }
 
+/* Get comments about the course */
 function get_course_comment(email, course) {
     $.ajax({
         url: "get_course_comment",
@@ -769,7 +819,6 @@ function get_course_comment(email, course) {
             var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
             var $title = $("<h2>", {class: "sectiontitle", text: "Comments"});
             $container.append($title);
-            console.log(data)
             if (!data.email){
                 for (var i = 0; i < data.length; i++) {
                     var $from = $("<h3>", {
@@ -835,6 +884,7 @@ function get_course_comment(email, course) {
     });
 }
 
+/* Get comment from the book */
 function get_book_comment(email, title, author) {
 
     $.ajax({
@@ -850,7 +900,6 @@ function get_book_comment(email, title, author) {
             var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
             var $title = $("<h2>", {class: "sectiontitle", text: "Comments"});
             $container.append($title);
-            console.log(data)
             if (!data.email){
                 for (var i = 0; i < data.length; i++) {
                     var $from = $("<h3>", {
@@ -917,7 +966,9 @@ function get_book_comment(email, title, author) {
     });
 }
 
+/* Post comments on courses */
 function postCourseComment(email, dept, num, comment) {
+
     $.ajax({
         url: "post_course_comment",
         method: "POST",
@@ -938,7 +989,9 @@ function postCourseComment(email, dept, num, comment) {
     });
 }
 
+/* Post comments on books */
 function postBookComment(email, title, author, comment) {
+
     $.ajax({
         url: "post_book_comment",
         method: "POST",
@@ -958,7 +1011,9 @@ function postBookComment(email, title, author, comment) {
     });
 }
 
+/* Course like */
 function course_like(email, course) {
+
     $.ajax({
         url: "course_like",
         method: "POST",
@@ -989,6 +1044,7 @@ function course_like(email, course) {
 
 /* Implementation of the functionality "like" */
 function like(email, title, author) {
+
     $.ajax({
         url: "like",
         method: "POST",
@@ -1020,6 +1076,7 @@ function like(email, title, author) {
 
 /* Get books */
 function getBooks() {
+
     $.ajax({
         url: "search_books",
         method: "POST",
@@ -1032,8 +1089,14 @@ function getBooks() {
             num: $("#num").val()
         },
         success: function(data) {
-            var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
-            var $title = $("<h2>", {class: "sectiontitle", text: "Offering Books"});
+            var $container = $("<section>", {
+                id: "container",
+                class: "logged-in-menu-item"
+            });
+            var $title = $("<h2>", {
+                class: "sectiontitle",
+                text: "Offering Books"}
+            );
             $container.append($title);
             if (data[0].length > 0) {
                 for (var i = 0; i < data[0].length; i++) {
@@ -1106,12 +1169,16 @@ function getBooks() {
                 }
             } else {
                 $no_result = $("<p>", {
-                    text: "Sorry! Nothing was found. Please try a different query"
+                    text:
+                    "Sorry! Nothing was found. Please try a different query"
                 });
                 $container.append($no_result);
             }
 
-            var $title = $("<h2>", {class: "sectiontitle", text: "Recommendations"});
+            var $title = $("<h2>", {
+                class: "sectiontitle",
+                text: "Recommendations"
+            });
             $container.append($title);
             if (data[1].length > 0) {
                 for (var i = 0; i < data[1].length; i++) {
@@ -1143,7 +1210,8 @@ function getBooks() {
                 }
             } else {
                 $no_result = $("<p>", {
-                    text: "Please provide more information to optimize your experience."
+                    text:
+                "Please provide more information to optimize your experience."
                 });
                 $container.append($no_result);
             }
@@ -1154,6 +1222,7 @@ function getBooks() {
 
 /* Display users */
 function displayUsers(){
+
     $.ajax({
         url: "userList",
         method: "POST",
@@ -1163,8 +1232,6 @@ function displayUsers(){
             var $title = $("<h2>");
             $title.text("User List");
             $container.append($title);
-            console.log(data.length);
-            console.log(data);
             for (var i=0; i < data.length; i++) {
 
                 var $paragraph = $("<p>", {id: "user_" + (i+1), class: "user"});
@@ -1296,13 +1363,10 @@ function getFeedbacklist() {
                     class: "queries",
                     text: "Feedback: " + checkNull(data[i].feedback)
                 });
-
                 $container.append($time);
                 $container.append($feedback);
                 $container.append("<hr>");
-
             }
-
             $container.insertBefore($("footer"));
         }
     });
