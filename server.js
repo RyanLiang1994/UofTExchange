@@ -1,3 +1,4 @@
+/* Global Variables */
 var http = require("http");
 var fs = require("fs");
 var express = require("express");
@@ -11,102 +12,61 @@ var nunjucks = require('nunjucks');
 var session = require('express-session');
 var sequelize = require('sequelize');
 var compress = require('compression');
-
-// Code for Heroku, need to change to fit in our app
-// app.set('port', (process.env.PORT || 3000));
-// // app.use(express.static(__dirname + '/public'));
-// // views is directory for all template files
-// app.set('views', __dirname + '/views');
-// app.set('view engine', 'nunjucks');
-// app.get('/', function(request, response) {
-//   response.render('pages/index')
-// });
-// app.get('/cool', function(request, response) {
-//   response.send(cool());
-// });
-// app.listen(app.get('port'), function() {
-//   console.log('Node app is running on port', app.get('port'));
-// });
-
-/*
-	this is a list of url to save url which we
-	might receive request later
-*/
 var url_list = ['/', '/index.html'];
+var page = "/";
+
+/* Initialization */
 var db = new sqlite3.Database('db.sqlite');
 db.serialize();
 nunjucks.configure('views', { autoescape: true, express: app });
-
-var page = "/";
-
 app.use(express.static(__dirname + '/assets'));
-// app.engine('.html', require('ejs').__express);
-// app.set('views', __dirname);
-// app.set('view engine', 'html');
 app.use(session({ secret: 'Who is Ryan', resave: false, saveUninitialized: false, cookie: { maxAge: 60000 } }));
-// Expose session variables to views
 app.use(function(req, res, next) {
-  res.locals.session = req.session;
-  next();
+    // Expose session variables to views
+    res.locals.session = req.session;
+    next();
 });
-
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
 app.use(compress());
 app.use(expressValidator({
 	customValidators: {
-		// isUserName: function(value) {
-		// 	var reg = /^[0-9A-Za-z_]{1,32}$/;
-        //
-		// 	return String(value).search(reg) >= 0;
-		// },
 
+        /* Check if is password */
 		isPassword: function(value) {
 			var reg = /^[a-zA-Z0-9]{8,32}$/;
 			return String(value).search(reg) >= 0;
-
-
 		},
-        
+
+        /* Check if is phone */
         isPhone: function(value) {
-            // Validation here:
             var reg = /\d{10}|\(\d{3}\)\d{7}|\(\d{3}\)\d{3}-\d{4}|\d{3}-\d{3}-\d{4}/
             var result = String(value).search(reg);
             return result >= 0;
         },
 
+        /* Check if is birthday */
         isBirthday: function(value) {
             var reg = /^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/;
             return String(value).search(reg) >= 0;
         }
-
 	}
-
 
 }));
 
+/* Get URLs */
 app.get(url_list[0], function(req, res) {
     res.render('index.html', {  // Note that .html is assumed.
         "errors": ''
     });
-
-
-//	res.sendFile(__dirname + '/index.html');
 });
-
 app.get(url_list[1], function(req, res) {
     res.render('index.html', {  // Note that .html is assumed.
         "errors": ''
     });
-
-
-//	res.sendFile(__dirname + '/index.html');
 });
 
-
-
+/* POST: signup */
 app.post('/signup', function(req, res) {
 	req.assert('email', 'Username is required').notEmpty();
 	req.assert('pword', 'Password is required').notEmpty();
@@ -121,13 +81,9 @@ app.post('/signup', function(req, res) {
 	var err = req.validationErrors();
     var mappedErrors = req.validationErrors(true);
 
-    if (err) // If errors exist, send them back to the form:
-    {
-
+    if (err) {
+        /* If errors exist, send them back to the form: */
         var msgs = { "errors": {} };
-
-
-
         if ( mappedErrors.email )
             msgs.errors.error_email = mappedErrors.email.msg;
 
@@ -140,13 +96,11 @@ app.post('/signup', function(req, res) {
         if ( mappedErrors.birth )
             msgs.errors.error_birth = mappedErrors.birth.msg;
 
-        // res.sendFile(__dirname + '/index.html');
         res.status(400);
         res.render('index.html', msgs);
 
-
     } else {
-		//submit the data to database
+		/* Submit the data to database */
         var username = req.body.email.toLowerCase();
         var password = req.body.pword;
         var dob = req.body.birth;
@@ -169,7 +123,7 @@ app.post('/signup', function(req, res) {
 	}
 });
 
-
+/* Create User */
 function create_user(username, password, dob, callback) {
 
     db.all('SELECT email FROM users WHERE email = ?', [username], function(err, rows) {
@@ -194,7 +148,9 @@ function create_user(username, password, dob, callback) {
     });
 }
 
+/* POST: search_courses */
 app.post('/search_courses', function(req, res) {
+
 	var lenDept = req.body.department.trim().length,
 		lenNum = req.body.code.trim().length,
 		lenSect = req.body.section.trim().length;
@@ -234,8 +190,6 @@ app.post('/search_courses', function(req, res) {
 		db.all(query_offers_course, function(err, rows) {
 			if (err) throw err;
 			result_list.push(rows);
-
-
 			var recommend_textbook;
 			if (lenDept) {
 				recommend_textbook = "select o.email as email, o.title as title, o.author as author, o.publisher as publisher from offers_book o, course_textbook c where o.title like c.title and o.author like c.author and lower(c.dept) like '%" + req.sanitize('department').escape().toLowerCase().trim() + "%'"
@@ -284,7 +238,7 @@ app.post('/search_courses', function(req, res) {
 
 });
 
-
+/* POST: search_books */
 app.post('/search_books', function(req, res) {
 
 	var lenTitle = req.body.title.trim().length,
@@ -292,12 +246,9 @@ app.post('/search_books', function(req, res) {
 		lenPublisher = req.body.publisher.trim().length,
 		lenDept = req.body.dept.trim().length,
 		lenNum = req.body.num.trim().length;
-
 	var msgs = {"errors": {}};
-
-	if (!lenTitle && !lenAuthor && !lenPublisher && !lenDept && !lenNum) {
-
-	} else {
+	if (!lenTitle && !lenAuthor && !lenPublisher && !lenDept && !lenNum) {}
+    else {
 
 		var offers_book = "";
 		if (lenTitle) {
@@ -369,6 +320,8 @@ app.post('/search_books', function(req, res) {
 	}
 
 });
+
+/* POST: course_like */
 app.post('/course_like', function(req, res) {
 
     var emailText = req.body.email,
@@ -395,6 +348,7 @@ app.post('/course_like', function(req, res) {
 
 });
 
+/* POST: like */
 app.post('/like', function(req, res) {
     var emailText = req.body.email,
         bookTitleText = req.body.title,
@@ -422,6 +376,7 @@ app.post('/like', function(req, res) {
 
 });
 
+/* POST: get_book_comment */
 app.post('/get_book_comment', function(req, res) {
 
     var emailText = req.body.email,
@@ -445,6 +400,7 @@ app.post('/get_book_comment', function(req, res) {
     });
 });
 
+/* POST: get_course_comment */
 app.post('/get_course_comment', function(req, res) {
     var emailText = req.body.email,
         courseText = req.body.course;
@@ -465,17 +421,15 @@ app.post('/get_course_comment', function(req, res) {
     });
 });
 
+/* POST: post_course_comment */
 app.post("/post_course_comment", function(req, res){
     var user = req.session.username,
         email = req.body.email,
         dept = req.body.dept,
         num = req.body.num,
         comment = req.sanitize('comment').escape();
-
         console.log(email, dept, num);
-
     var time = new Date(Date.now()).toString()
-
     db.run("insert into course_comments(email, dept, num, user, comments, time) values(?, ?, ?, ?, ?, ?)", [email, dept, num, user, comment, time], function(err) {
         if (err) {
             res.status(400);
@@ -491,10 +445,9 @@ app.post("/post_course_comment", function(req, res){
             req.session.msg = "";
         }
     });
-    
-
 });
 
+/* POST: post_book_comment */
 app.post("/post_book_comment", function(req, res) {
     var user = req.session.username,
         email = req.body.email,
@@ -525,7 +478,7 @@ app.post("/post_book_comment", function(req, res) {
 
 });
 
-
+/* POST: signin */
 app.post('/signin', function(req, res) {
 	req.assert('mail', 'Username is required').notEmpty();
 	req.assert('password', 'Password is required').notEmpty();
@@ -597,8 +550,7 @@ app.post('/signin', function(req, res) {
 	}
 });
 
-
-
+/* GET: signout */
 app.get('/signout', function(req, res) {
     req.session.destroy();
     page = '/'
@@ -606,6 +558,7 @@ app.get('/signout', function(req, res) {
     res.redirect(page);
 });
 
+/* POST: feedback */
 app.post('/feedback', function(req, res) {
     req.assert('feedback', 'Username is required').notEmpty();
 	var err = req.validationErrors();
@@ -639,6 +592,7 @@ app.post('/feedback', function(req, res) {
     }
 });
 
+/* GET: profile */
 app.get('/profile', function(req, res) {
 
     if (!req.session.username) {
@@ -666,6 +620,7 @@ app.get('/profile', function(req, res) {
     }
 });
 
+/* POST: message */
 app.post('/message', function(req, res) {
     if (!req.session.username) {
         res.status(400);
@@ -681,6 +636,7 @@ app.post('/message', function(req, res) {
     }
 });
 
+/* POST: follows */
 app.post('/follows', function(req, res) {
     if (!req.session.username) {
         res.status(400);
@@ -699,6 +655,7 @@ app.post('/follows', function(req, res) {
     }
 });
 
+/* POST: sendmsg */
 app.post('/sendmsg', function(req, res) {
     if (!req.session.username) {
         res.status(400);
@@ -747,7 +704,7 @@ app.post('/sendmsg', function(req, res) {
     }
 });
 
-
+/* POST: follow */
 app.post('/follow', function(req, res) {
     if (!req.session.username) {
         res.sendStatus(404);
@@ -783,6 +740,7 @@ app.post('/follow', function(req, res) {
     }
 });
 
+/* POST: add_book */
 app.post('/add_book', function(req, res) {
     if (!req.session.username) {
         res.status(404);
@@ -848,6 +806,7 @@ app.post('/add_book', function(req, res) {
     }
 });
 
+/* POST: add_course */
 app.post('/add_course', function(req, res) {
     if (!req.session.username) {
         res.status(404);
@@ -888,6 +847,7 @@ app.post('/add_course', function(req, res) {
     }
 });
 
+/* POST: admin */
 app.get("/admin", function(req, res) {
     if (req.session.is_admin === 1) {
         res.render('admin.html', {
@@ -899,7 +859,7 @@ app.get("/admin", function(req, res) {
     }
 });
 
-
+/* POST: userList */
 app.post("/userList", function(req, res) {
     if (req.session.is_admin === 1) {
         db.all("SELECT email FROM users WHERE is_admin <> 1", function(err, rows) {
@@ -911,6 +871,7 @@ app.post("/userList", function(req, res) {
     }
 });
 
+/* POST: userInfo */
 app.post("/userInfo", function(req, res) {
 
     if (req.session.is_admin === 1) {
@@ -925,6 +886,7 @@ app.post("/userInfo", function(req, res) {
     }
 });
 
+/* POST: changeInfo */
 app.post("/changeInfo", function(req, res) {
     var username = req.sanitize('user_email').escape().trim();
     var password =  emptyStringToNull(req.sanitize('user_password').escape().trim());
@@ -945,6 +907,7 @@ app.post("/changeInfo", function(req, res) {
     }
 })
 
+/* POST: get_user_profile */
 app.post("/get_user_profile", function(req, res) {
     var email = req.sanitize('email').escape().trim();
 
@@ -965,9 +928,9 @@ app.post("/get_user_profile", function(req, res) {
     });
 });
 
+/* POST: getFeedback */
 app.post("/getFeedback", function(req, res) {
     if (req.session.is_admin === 1) {
-
         db.all("SELECT feedback, time FROM feedbacks", function(err, rows) {
             res.status(200);
             res.end(JSON.stringify(rows));
@@ -977,6 +940,7 @@ app.post("/getFeedback", function(req, res) {
     }
 });
 
+/* Update Infomation */
 function updateInfo(password, birthday, phone, year, major, username, req, res) {
     if (birthday) {
         if (password) {
@@ -1024,8 +988,9 @@ function updateInfo(password, birthday, phone, year, major, username, req, res) 
         res.redirect(page);
         req.session.errmsg = "";
     }
-
 }
+
+/* If a value is "", change it to null */
 function emptyStringToNull(value) {
     if (value === "") {
         return null;
@@ -1034,8 +999,8 @@ function emptyStringToNull(value) {
     }
 }
 
-var server = app.listen(process.env.PORT || 3000, function()
-{
+/* Listen to Server */
+var server = app.listen(process.env.PORT || 3000, function() {
   var port = server.address().port;
   console.log('Running on 127.0.0.1:%s', port);
 });

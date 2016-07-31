@@ -310,34 +310,7 @@ div#gallery ul li.hidden {
 div#gallery ul li.showcase {
     width: 500px;
 }
-
 div#gallery ul li img {
     margin: 5px;
     width: 100%;
-}
-
-/* Start of slider controller */
-.ui-widget-content {
-    background: #000;
-    border: none;
-    margin: 3rem auto 0;
-    width: 33.333%;
-}
-.ui-slider-horizontal {
-    height: 5px;
-}
-
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-    border: none;
-    border-radius: 100%;
-    background: #36d7b7;
-}
-.ui-slider .ui-slider-handle {
-    cursor: pointer;
-    outline: none;
-    width: 30px;
-    height: 30px;
-}
-.ui-slider-horizontal .ui-slider-handle {
-    top: -15px;
 }

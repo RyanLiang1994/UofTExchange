@@ -1,3 +1,4 @@
+/* Images */
 var images = [
     {
         "title": "Introduction to Algorithms",
@@ -21,16 +22,15 @@ var images = [
     }
 ];
 
+/* Run this after the document is ready */
 $(document).ready(function() {
 
     $('section').hide();
     $('#home').show();
 
-    $(window).resize(function()
-    {
+    $(window).resize(function() {
        if ($(window).width() >= 768) {
             stickyNav();
-
             $(window).scroll(function() {
                 stickyNav();
             });
@@ -70,10 +70,8 @@ function slider() {
     $gallery.append($slider);
 
     // Make first image bigger than others
-
     $("div#gallery ul li:first-child").css("width", "500px");
-    // Calculate step size
-    // var step_size = 100 / (images.length - 1);
+
     // Create slide controller
     var $controller = $('<div/>', {
         id: "controller"
@@ -257,8 +255,7 @@ $('#search-book').click(function(event) {
     getBooks();
 });
 
-
-
+/* Get a sticky navigation bar */
 function stickyNav(){
     var navPosition = $('#navbar').position();
     var scrollTop = $(window).scrollTop();
@@ -270,9 +267,9 @@ function stickyNav(){
     }
 };
 
+/* Get profile */
 function getProfile() {
-    $.ajax(
-    {
+    $.ajax({
         url: "profile",
         method: "GET",
         dataType: "json",
@@ -419,8 +416,6 @@ function getAddingForms() {
     $container.append($title2);
     $container.append($courseform);
     $container.insertBefore($("footer"));
-
-
 }
 
 function getFollows() {
@@ -683,7 +678,7 @@ function getCourse() {
                             var query_num = clicked.substring(clicked.length - 1, clicked.length);
                             var email = "course_contact_" + query_num,
                                 course = "course_id_" + query_num;
-                            
+
                             $('section').hide();
                             $('.errmsg').remove();
                             $('.msg').remove();
@@ -707,7 +702,7 @@ function getCourse() {
                         });
                         $container.append($like);
                         $container.append($comment);
-                    } 
+                    }
                     $container.append("<hr>");
 
                 }
@@ -992,6 +987,7 @@ function course_like(email, course) {
     });
 }
 
+/* Implementation of the functionality "like" */
 function like(email, title, author) {
     $.ajax({
         url: "like",
@@ -1022,6 +1018,7 @@ function like(email, title, author) {
     });
 }
 
+/* Get books */
 function getBooks() {
     $.ajax({
         url: "search_books",
@@ -1155,6 +1152,7 @@ function getBooks() {
     });
 }
 
+/* Display users */
 function displayUsers(){
     $.ajax({
         url: "userList",
@@ -1192,11 +1190,14 @@ function displayUsers(){
     });
 }
 
+/* Remove the section */
 function removeLoggedInSection() {
     $(".logged-in-menu-item").remove();
 }
 
+/* Change the user */
 function changeUser(username) {
+
     $.ajax({
         url: "userInfo",
         method: "POST",
@@ -1261,8 +1262,9 @@ function changeUser(username) {
     });
 }
 
-
+/* Get a list of feedbacks */
 function getFeedbacklist() {
+
     $.ajax({
         url: "/getFeedback",
         method: "POST",
@@ -1306,6 +1308,7 @@ function getFeedbacklist() {
     });
 }
 
+/* If the value is null, return "" */
 function checkNull(value) {
     if (value === null) {
         return "";
