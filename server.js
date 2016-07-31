@@ -16,9 +16,12 @@ var url_list = ['/', '/index.html'];
 var page = "/";
 
 /* Initialization */
+app.use(compress());
 var db = new sqlite3.Database('db.sqlite');
 db.serialize();
+
 nunjucks.configure('views', { autoescape: true, express: app });
+
 app.use(express.static(__dirname + '/assets'));
 app.use(session({ secret: 'Who is Ryan', resave: false, saveUninitialized: false, cookie: { maxAge: 60000 } }));
 app.use(function(req, res, next) {
@@ -28,7 +31,7 @@ app.use(function(req, res, next) {
 });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(compress());
+
 app.use(expressValidator({
 	customValidators: {
 
