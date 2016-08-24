@@ -13,7 +13,7 @@ var session = require('express-session');
 var sequelize = require('sequelize');
 var compress = require('compression');
 var url_list = ['/', '/index.html'];
-var page = "/";
+var page = "index.html";
 
 /* Initialization */
 app.use(compress()); /*using compression*/
@@ -72,6 +72,11 @@ app.get(url_list[1], function(req, res) {
     });
 });
 
+app.get('/signup_sheet', function(req, res) {
+    console.log("blah")
+    res.render('signup.html', {});
+});
+
 /* POST: signup */
 app.post('/signup', function(req, res) {
 	req.assert('email', 'Username is required').notEmpty();
@@ -103,7 +108,7 @@ app.post('/signup', function(req, res) {
             msgs.errors.error_birth = mappedErrors.birth.msg;
 
         res.status(400);
-        res.render('index.html', msgs);
+        res.render('signup.html', msgs);
 
     } else {
 		/* Submit the data to database */
@@ -124,7 +129,7 @@ app.post('/signup', function(req, res) {
                 req.session.msg = "Signup successfully!";
                 req.session.errmsg = "";
                 res.status(200);
-                res.redirect(page);
+                res.render(page);
                 req.session.msg = "";
             }
         });
@@ -133,6 +138,7 @@ app.post('/signup', function(req, res) {
 
 /* Create User and insert information to the database */
 function create_user(username, password, dob, callback) {
+    
     db.all('SELECT email FROM users WHERE email = ?', [username],
         function(err, rows) {
         if (err) {
@@ -157,7 +163,7 @@ function create_user(username, password, dob, callback) {
 
 /* POST: search_courses */
 app.post('/search_courses', function(req, res) {
-
+    console.log(req.session.username);
 	var lenDept = req.body.department.trim().length,
 		lenNum = req.body.code.trim().length,
 		lenSect = req.body.section.trim().length;
@@ -270,7 +276,7 @@ app.post('/search_courses', function(req, res) {
 
 /* POST: search_books */
 app.post('/search_books', function(req, res) {
-
+    console.log(req.session.username);
 	var lenTitle = req.body.title.trim().length,
 		lenAuthor = req.body.author.trim().length,
 		lenPublisher = req.body.publisher.trim().length,
@@ -381,7 +387,7 @@ app.post('/search_books', function(req, res) {
     display how many likes for the specific course
 */
 app.post('/course_like', function(req, res) {
-
+    console.log(req.session.username);
     var emailText = req.body.email,
         courseText = req.body.course;
     var email = emailText.substring(21, emailText.length),
@@ -412,6 +418,7 @@ app.post('/course_like', function(req, res) {
     Like the specific book
 */
 app.post('/like', function(req, res) {
+    console.log(req.session.username);
     var emailText = req.body.email,
         bookTitleText = req.body.title,
         bookAuthorText = req.body.author;
@@ -442,7 +449,7 @@ app.post('/like', function(req, res) {
     display the comment of specific book
 */
 app.post('/get_book_comment', function(req, res) {
-
+    console.log(req.session.username);
     var emailText = req.body.email,
         bookTitleText = req.body.title,
         bookAuthorText = req.body.author;
@@ -471,6 +478,7 @@ app.post('/get_book_comment', function(req, res) {
     display the comment of specific course
 */
 app.post('/get_course_comment', function(req, res) {
+    console.log(req.session.username);
     var emailText = req.body.email,
         courseText = req.body.course;
     var email = emailText.substring(21, emailText.length),
@@ -509,13 +517,13 @@ app.post("/post_course_comment", function(req, res){
             res.status(400);
             req.session.errmsg = "Comment failed.";
             req.session.msg = "";
-            res.redirect(page);
+            res.render(page);
             req.session.errmsg = "";
         } else {
             res.status(200);
             req.session.msg = "Comment successfully";
             req.session.errmsg = "";
-            res.redirect(page);
+            res.render(page);
             req.session.msg = "";
         }
     });
@@ -525,6 +533,7 @@ app.post("/post_course_comment", function(req, res){
     write the comment for specific book
 */
 app.post("/post_book_comment", function(req, res) {
+    console.log(req.session.username);
     var user = req.session.username,
         email = req.body.email,
         bookTitle = req.body.title,
@@ -540,13 +549,13 @@ app.post("/post_book_comment", function(req, res) {
             res.status(400);
             req.session.errmsg = "Comment failed.";
             req.session.msg = "";
-            res.redirect(page);
+            res.render(page);
             req.session.errmsg = "";
         } else {
             res.status(200);
             req.session.msg = "Comment successfully";
             req.session.errmsg = "";
-            res.redirect(page);
+            res.render(page);
             req.session.msg = "";
         }
 
@@ -559,6 +568,7 @@ app.post("/post_book_comment", function(req, res) {
     signin to the system as specific user
 */
 app.post('/signin', function(req, res) {
+    console.log(req.session.username);
 	req.assert('mail', 'Username is required').notEmpty();
 	req.assert('password', 'Password is required').notEmpty();
 	req.checkBody('mail', 'Username is not valid').isEmail();
@@ -588,12 +598,12 @@ app.post('/signin', function(req, res) {
                 "WHERE email = ?",  [ username ], function(err, rows) {
             if (err) {
                 res.status(400);
-                res.redirect(page);
+                res.render(page);
             }
             if(!rows || rows.length > 1) {
                 // cannot find this user
                 res.status(400);
-                res.redirect(page);
+                res.render(page);
             }
 
             if (rows.length === 1 && bcrypt.compareSync(
@@ -605,18 +615,18 @@ app.post('/signin', function(req, res) {
                     req.session.username = username;
                     req.session.is_admin = 0;
                     res.status(200);
-                    res.redirect(page);
+                    res.render(page);
                 } else if (rows[0].is_admin === 1) {
                     /*signin as admin */
                     req.session.username = username;
                     req.session.is_admin = 1;
                     res.status(200);
-                    page = "/admin"
-                    res.redirect(page);
+                    page = "admin.html"
+                    res.render(page);
                 } else {
                     /* this shouldn't happen */
                     res.sendStatus(404);
-                    res.redirect(page);
+                    res.render(page);
                 }
             } else {
                 /* input incorrect, could be wrong password, username or dob */
@@ -634,10 +644,11 @@ app.post('/signin', function(req, res) {
     signout from the system
 */
 app.get('/signout', function(req, res) {
+    console.log(req.session.username);
     req.session.destroy();
-    page = '/'
+    page = 'index.html'
     res.status(200);
-    res.redirect(page);
+    res.render(page);
 });
 
 /* POST: feedback
@@ -645,13 +656,14 @@ app.get('/signout', function(req, res) {
     feedback can only be viewed by admins
 */
 app.post('/feedback', function(req, res) {
+    console.log(req.session.username);
     req.assert('feedback', 'Username is required').notEmpty();
 	var err = req.validationErrors();
     if (err) {
         req.session.errmsg = "Feedback submit err, cannot be empty";
         req.session.msg = "";
         res.status(400);
-        res.redirect(page);
+        res.render(page);
         req.session.errmsg = "";
     } else {
         var feedback = req.sanitize('feedback').escape().trim();
@@ -664,14 +676,14 @@ app.post('/feedback', function(req, res) {
                     req.session.errmsg = "Feedback submit err";
                     req.session.msg = "";
                     res.status(400);
-                    res.redirect(page);
+                    res.render(page);
                     req.session.errmsg = "";
                 } else {
                     req.session.msg = "Feedback submit success! " +
                                       "Thank you for your feedback.";
                     req.session.errmsg = "";
                     res.status(200);
-                    res.redirect(page);
+                    res.render(page);
                     req.session.msg = "";
                 }
             });
@@ -683,11 +695,11 @@ app.post('/feedback', function(req, res) {
     Get the Information of currently login user
 */
 app.get('/profile', function(req, res) {
-
+    console.log(req.session.username);
     if (!req.session.username) {
         // hasn't login yet
         res.status(400);
-        res.redirect(page);
+        res.render(page);
     } else {
         var result = [];
         var username = req.session.username;
@@ -717,6 +729,7 @@ app.get('/profile', function(req, res) {
     view the all private message of current user
 */
 app.post('/message', function(req, res) {
+    console.log(req.session.username);
     if (!req.session.username) {
         res.status(400);
     } else {
@@ -736,6 +749,7 @@ app.post('/message', function(req, res) {
     View the followers and following user of the currently login user
 */
 app.post('/follows', function(req, res) {
+    console.log(req.session.username);
     if (!req.session.username) {
         /* user hasn't login yet */
         res.status(400);
@@ -760,6 +774,7 @@ app.post('/follows', function(req, res) {
     Send private message to the target user
 */
 app.post('/sendmsg', function(req, res) {
+    console.log(req.session.username);
     if (!req.session.username) {
         res.status(400);
     } else {
@@ -770,7 +785,7 @@ app.post('/sendmsg', function(req, res) {
             req.session.errmsg = "Send message failed";
             req.session.msg = "";
             res.status(400);
-            res.redirect(page);
+            res.render(page);
             req.session.errmsg = "";
         } else {
             var receiver = req.sanitize('receiver').escape().trim();
@@ -789,13 +804,13 @@ app.post('/sendmsg', function(req, res) {
                             req.session.errmsg = "Send message failed";
                             req.session.msg = "";
                             res.status(400);
-                            res.redirect(page);
+                            res.render(page);
                             req.session.errmsg = "";
                         } else {
                             req.session.msg = "Send successfully!";
                             req.session.errmsg = "";
                             res.status(200);
-                            res.redirect(page);
+                            res.render(page);
                             req.session.msg = "";
                         }
                     });
@@ -804,7 +819,7 @@ app.post('/sendmsg', function(req, res) {
                     req.session.errmsg = "Send message failed, " +
                                     "cannot find this receiver.";
                     res.status(400);
-                    res.redirect(page);
+                    res.render(page);
                     req.session.errmsg = "";
                 }
             });
@@ -817,6 +832,7 @@ app.post('/sendmsg', function(req, res) {
     notice that this is an one way action
 */
 app.post('/follow', function(req, res) {
+    console.log(req.session.username);
     if (!req.session.username) {
         res.sendStatus(404);
     } else {
@@ -832,13 +848,13 @@ app.post('/follow', function(req, res) {
                                             "you're already friends";
                         req.session.msg = "";
                         res.status(400);
-                        res.redirect(page);
+                        res.render(page);
                         req.session.errmsg = "";
                     } else {
                         req.session.msg = "Follow successfully!";
                         res.status(200);
                         req.session.errmsg = "";
-                        res.redirect(page);
+                        res.render(page);
                         req.session.msg = "";
                     }
                 });
@@ -848,7 +864,7 @@ app.post('/follow', function(req, res) {
                                     "cannot find this user.";
                 res.status(400);
                 req.session.msg = "";
-                res.redirect(page);
+                res.render(page);
                 req.session.errmsg = "";
             }
         });
@@ -859,9 +875,10 @@ app.post('/follow', function(req, res) {
     add the book that current user wants to offer
 */
 app.post('/add_book', function(req, res) {
+    console.log(req.session.username);
     if (!req.session.username) {
         res.status(404);
-        res.redirect(page);
+        res.render(page);
     } else {
         var title = req.sanitize('title').escape().trim();
         var author = req.sanitize('author').escape().trim();
@@ -882,14 +899,14 @@ app.post('/add_book', function(req, res) {
                         req.session.errmsg = "Add failed. " + err;
                         req.session.msg = "";
                         res.status(400);
-                        res.redirect(page);
+                        res.render(page);
                         req.session.errmsg = "";
                     } else {
                         if (!dept || !num) {
                             req.session.msg = "Add offered book successfully!";
                             req.session.errmsg = "";
                             res.status(200);
-                            res.redirect(page);
+                            res.render(page);
                             req.session.msg = "";
                         } else if (dept && num) {
                             db.run('INSERT INTO course_textbook (dept, num, ' +
@@ -901,7 +918,7 @@ app.post('/add_book', function(req, res) {
                                 req.session.msg = "Add offered book successfully!";
                                 req.session.errmsg = "";
                                 res.status(200);
-                                res.redirect(page);
+                                res.render(page);
                                 req.session.msg = "";
 
                             });
@@ -910,7 +927,7 @@ app.post('/add_book', function(req, res) {
                             req.session.errmsg = "Add failed. ";
                             res.status(400);
                             req.session.msg = "";
-                            res.redirect(page);
+                            res.render(page);
                             req.session.errmsg = "";
                         }
 
@@ -921,7 +938,7 @@ app.post('/add_book', function(req, res) {
                 req.session.errmsg = "Add book failed.";
                 req.session.msg = "";
                 res.status(400);
-                res.redirect(page);
+                res.render(page);
                 req.session.errmsg = "";
             }
         });
@@ -932,9 +949,10 @@ app.post('/add_book', function(req, res) {
     add course which user want to offer
 */
 app.post('/add_course', function(req, res) {
+    console.log(req.session.username);
     if (!req.session.username) {
         res.status(404);
-        res.redirect(page);
+        res.render(page);
     } else {
         var dept = req.sanitize('department').escape().trim();
         var code = req.sanitize('code').escape().trim();
@@ -954,13 +972,13 @@ app.post('/add_course', function(req, res) {
                         req.session.errmsg = "Add failed. " + err;
                         req.session.msg = "";
                         res.status(400);
-                        res.redirect(page);
+                        res.render(page);
                         req.session.errmsg = "";
                     } else {
                         req.session.msg = "Add offered course successfully!";
                         req.session.errmsg = "";
                         res.status(200);
-                        res.redirect(page);
+                        res.render(page);
                         req.session.msg = "";
                     }
                 });
@@ -970,7 +988,7 @@ app.post('/add_course', function(req, res) {
                     "Add course failed. You've already offered this course";
                 res.status(400);
                 req.session.msg = "";
-                res.redirect(page);
+                res.render(page);
                 req.session.errmsg = "";
             }
         });
@@ -978,7 +996,7 @@ app.post('/add_course', function(req, res) {
 });
 
 /* POST: admin */
-app.get("/admin", function(req, res) {
+app.get("admin.html", function(req, res) {
     if (req.session.is_admin === 1) {
         res.render('admin.html', {
             "errors": ''
@@ -994,6 +1012,7 @@ app.get("/admin", function(req, res) {
     Only can be access by admin
 */
 app.post("/userList", function(req, res) {
+    console.log(req.session.username);
     if (req.session.is_admin === 1) {
         db.all("SELECT email FROM users WHERE is_admin <> 1", function(err, rows) {
             res.status(200);
@@ -1009,7 +1028,7 @@ app.post("/userList", function(req, res) {
     Only can be access by admin
 */
 app.post("/userInfo", function(req, res) {
-
+    console.log(req.session.username);
     if (req.session.is_admin === 1) {
         var target = req.body.target;
 
@@ -1026,6 +1045,7 @@ app.post("/userInfo", function(req, res) {
     Change the Information for the specific user
 */
 app.post("/changeInfo", function(req, res) {
+    console.log(req.session.username);
     var username = req.sanitize('user_email').escape().trim();
     var password =  emptyStringToNull(req.sanitize('user_password').escape().trim());
     var birthday =  emptyStringToNull(req.sanitize('user_birthday').escape().trim());
@@ -1039,6 +1059,7 @@ app.post("/changeInfo", function(req, res) {
         if (req.session.username === username) {
             updateInfo(password, birthday, phone, year, major, username, req, res);
         } else {
+            console.log(req.session.username);
             //should not be happened, unless hacker trying to access
             res.status(403).send("You are not admin, cannot access this page.");
         }
@@ -1049,6 +1070,7 @@ app.post("/changeInfo", function(req, res) {
     Get the profile information of the user
 */
 app.post("/get_user_profile", function(req, res) {
+    console.log(req.session.username);
     var email = req.sanitize('email').escape().trim();
 
     var result = [];
@@ -1076,6 +1098,7 @@ app.post("/get_user_profile", function(req, res) {
 
 */
 app.post("/getFeedback", function(req, res) {
+    console.log(req.session.username);
     if (req.session.is_admin === 1) {
         db.all("SELECT feedback, time FROM feedbacks", function(err, rows) {
             res.status(200);
@@ -1090,6 +1113,7 @@ app.post("/getFeedback", function(req, res) {
     Helper function used to change information
 */
 function updateInfo(password, birthday, phone, year, major, username, req, res){
+    console.log(req.session.username);
     if (birthday) {
         if (password) {
             db.all("UPDATE users SET password=?, birthday=?, phone=?, " +
@@ -1100,13 +1124,13 @@ function updateInfo(password, birthday, phone, year, major, username, req, res){
                     req.session.errmsg = "Update failed. Please Check Your Input";
                     req.session.msg = "";
                     res.status(400);
-                    res.redirect(page);
+                    res.render(page);
                     req.session.errmsg = "";
                 } else {
                     req.session.msg = "Update successfully!";
                     req.session.errmsg = "";
                     res.status(200);
-                    res.redirect(page);
+                    res.render(page);
                     req.session.msg = "";
                 }
             });
@@ -1118,13 +1142,13 @@ function updateInfo(password, birthday, phone, year, major, username, req, res){
                     req.session.errmsg = "Update failed. Please Check Your Input";
                     req.session.msg = "";
                     res.status(400);
-                    res.redirect(page);
+                    res.render(page);
                     req.session.errmsg = "";
                 } else {
                     req.session.msg = "Update successfully!";
                     res.status(200);
                     req.session.errmsg = "";
-                    res.redirect(page);
+                    res.render(page);
                     req.session.msg = "";
                 }
             });
@@ -1133,13 +1157,14 @@ function updateInfo(password, birthday, phone, year, major, username, req, res){
         req.session.errmsg = "Update failed. Notice that birthday cannot be empty";
         req.session.msg = "";
         res.status(400);
-        res.redirect(page);
+        res.render(page);
         req.session.errmsg = "";
     }
 }
 
 /* If a value is "", change it to null */
 function emptyStringToNull(value) {
+
     if (value === "") {
         return null;
     } else {

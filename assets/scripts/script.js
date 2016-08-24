@@ -27,7 +27,7 @@ $(document).ready(function() {
 
     $('section').hide();
     $('#home').show();
-
+    $('#signup').show();
     $(window).resize(function() {
        if ($(window).width() >= 768) {
             stickyNav();
@@ -165,13 +165,13 @@ $('#btn-contact').click(function() {
     $('.msg').remove();
 });
 
-$('#btn-signup').click(function() {
-    $('section').hide();
-    $('#profile').hide();
-    $('#signup').show();
-    $('.errmsg').remove();
-    $('.msg').remove();
-});
+// $('#btn-signup').click(function() {
+//     $('section').hide();
+//     $('#profile').hide();
+//     $('#signup').show();
+//     $('.errmsg').remove();
+//     $('.msg').remove();
+// });
 
 $('#btn-add').click(function() {
     removeLoggedInSection();

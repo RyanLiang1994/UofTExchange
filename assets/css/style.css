@@ -1,12 +1,17 @@
 h1#title {
-	font-family: 'Orbitron', sans-serif;
-	margin-left: 15%;
-	margin-right: 15%;
+	font-family: 'Baloo Paaji', cursive;
+	margin: 0;
+	padding: 20px;
 	font-size: 30pt;
+	background-color: #003B6F;
+	color: #FEFAF9;
 	text-align: center;
-	padding-top: 10px;
+	top: 0;
 }
 
+body {
+	margin: 0;
+}
 h4#greeting {
 	margin: 0;
 	padding: 5px;
@@ -20,7 +25,7 @@ nav#navbar ul {
 }
 
 nav#navbar ul li {
-	font-family: 'Orbitron', sans-serif;
+	font-family: 'Inconsolata', monospace;
 	display: inline-block;
 	padding: 15px;
 	color: white;
