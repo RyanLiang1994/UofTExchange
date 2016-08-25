@@ -25,7 +25,7 @@ nunjucks.configure('views', { autoescape: true, express: app });
 
 app.use(express.static(__dirname + '/assets'));
 app.use(session({ secret: 'Who is Ryan', resave: false,
-            saveUninitialized: false, cookie: { maxAge: 60000 } }));
+            saveUninitialized: false, cookie: { maxAge: 1200000 } }));
 app.use(function(req, res, next) {
     // Expose session variables to views
     res.locals.session = req.session;
@@ -398,6 +398,7 @@ app.post('/course_like', function(req, res) {
     db.run("insert into course_likes (email, dept, num, user) values " +
             "(?, ?, ?, ?)", [email, dept, num, user], function(err) {
         if (err) ;
+        req.session.username = user;
     });
 
     db.all("select user from course_likes where email = ? and " +
@@ -408,6 +409,7 @@ app.post('/course_like', function(req, res) {
 
         } else {
             res.end(JSON.stringify(rows));
+            req.session.username = user;
         }
 
     });
@@ -430,6 +432,8 @@ app.post('/like', function(req, res) {
 
     db.run("insert into book_likes(email, title, author, user) values (?, ?, ?, ?)", [email, bookTitle, bookAuthor, user], function(err) {
         if (err) console.log(err);
+        req.session.username = user;
+
     });
 
     db.all("select user from book_likes where email = ? and lower(title) = ? and lower(author) = ?", [email, bookTitle, bookAuthor], function(err, rows) {
@@ -440,6 +444,7 @@ app.post('/like', function(req, res) {
             console.log(rows);
             res.end(JSON.stringify(rows));
         }
+        req.session.username = user;
 
     });
 

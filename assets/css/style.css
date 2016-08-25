@@ -46,6 +46,8 @@ nav#navbar ul li:hover {
 	cursor: pointer;
 }
 
+
+
 nav#navbar ul li#btn-home {
 	margin-left: 18.75%;
 }
@@ -94,9 +96,20 @@ div#profile form#signin input {
 	padding: 10px;
 }
 
-div#profile form#signin button {
+/*div#profile button {
 	margin: 10px;
 	padding: 10px;
+}*/
+
+button#btn-signin {
+	background-color: #25BD9A;
+	border: 0;
+	color: white;
+	padding: 15px;
+	padding-left: 35px;
+	padding-right: 35px;
+	border-radius: 12px;
+	margin-left: 20px;
 }
 
 section.menu-item, section.logged-in-menu-item, section#signup{
