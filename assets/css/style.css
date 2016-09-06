@@ -206,14 +206,35 @@ p.errmsg {
 	position: relative;
 }
 
-textarea#msgbox {
-	height: 150px;
-
-
-}
 
 section textarea {
 	width: 100%;
+
+}
+
+textarea#msgbox {
+	margin: 30px;
+	height: 150px;
+	width: 75%;
+	display: inline-block;
+	border: solid black thin;
+}
+
+button#submitmsg {
+	display: inline-block;
+	top: 0;
+	background-color: #25BD9A;
+	border: 0;
+	color: white;
+	padding: 15px;
+	padding-left: 35px;
+	padding-right: 35px;
+	padding-top: 75px;
+	padding-bottom: 75px;
+	border-radius: 12px;
+	margin-left: 10px;
+	margin-right: 20px;
+	float: right;
 
 }
 
@@ -222,6 +243,114 @@ h2.sectiontitle
 	padding-left: 20px;
 }
 
+h2#mymessagetitle, h2#sendmsgtitle, h2#folloringtitle, h2#follorertitle{
+	margin-left: 400px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	margin-bottom: 15px;
+}
+
+p.msgwindows {
+	margin-left: 20px;
+	margin-right: 20px;
+	border: 3px;
+	border-style: dotted;
+	border-color: rgb(39, 72, 98);
+
+}
+
+div.msgwrapper {
+	background-color: rgb(39, 72, 98);
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 8px;
+}
+
+h3.sender {
+	display: inline-block;
+	font-size: 90%;
+	margin: 0;
+	color:#DCECF5;
+}
+
+h4.sendtime {
+	display: inline-block;
+	float: right;
+	font-size: 90%;
+	margin: 0;
+	color:#DCECF5;
+}
+
+h4.message {
+	margin: 0;
+	padding: 15px;
+	font-size: 90%;
+}
+
+form#sendmsgform {
+	margin-left: 20px;
+	margin-right: 20px;
+	padding: 0;
+	border: 3px;
+	border-style: dotted;
+	border-color: rgb(39, 72, 98);
+}
+
+lable#sendmsglabel {
+	display: block;
+	background-color: rgb(39, 72, 98);
+	margin-top: 0;
+	margin-bottom: 0;
+
+	padding: 8px;
+	padding-left: 200px;
+	color:#DCECF5;
+}
+
+
+div#user_wrapper {
+	border: thin grey solid;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	margin: 10px;
+	margin-bottom: 20px; 
+	margin-right: 30px;
+	-moz-box-shadow: 5px 5px 2px #000000;
+	-webkit-box-shadow: 5px 5px 2px #000000;
+	box-shadow: 5px 5px 2px #000000;
+}
+
+img#user_avatar {
+	margin: 8px;
+	border: thin solid black;
+}
+span#username {
+	padding: 15px;
+	padding-top: 10px;
+	padding-left: 8px;
+	display: inline-block;
+	vertical-align: top;
+	font-family: 'Inconsolata', monospace;
+}
+
+button#startchat {
+	float: right;
+	display: inline-block;
+	top: 0;
+	background-color: #25BD9A;
+	border: 0;
+	color: white;
+	padding: 15px;
+	padding-left: 35px;
+	padding-right: 35px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	border-radius: 12px;
+	margin: 10px;
+	margin-right: 40px;
+	font-size: 80%;
+
+}
 @media screen and (max-width: 1024px) {
 	div#profile {
 		margin-left: 20px;

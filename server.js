@@ -1,8 +1,10 @@
 /* Global Variables */
-var http = require("http");
+
 var fs = require("fs");
 var express = require("express");
 var app = express();
+var http = require("http").Server(app);
+var io = require('socket.io')(http);
 var expressValidator = require("express-validator");
 var bodyParser = require('body-parser');
 var sqlite3 = require('sqlite3').verbose();
@@ -70,6 +72,10 @@ app.get(url_list[1], function(req, res) {
     res.render('index.html', {  // Note that .html is assumed.
         "errors": ''
     });
+});
+
+io.on('connection', function(socket){
+  console.log('a user connected');
 });
 
 app.get('/signup_sheet', function(req, res) {
@@ -1178,7 +1184,7 @@ function emptyStringToNull(value) {
 }
 
 /* Listen to Server */
-var server = app.listen(process.env.PORT || 3000, function() {
+var server = http.listen(process.env.PORT || 3000, function() {
   var port = server.address().port;
   console.log('Running on 127.0.0.1:%s', port);
 });

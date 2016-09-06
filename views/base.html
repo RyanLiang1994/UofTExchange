@@ -10,13 +10,14 @@
         <!-- JQuery UI -->
         <link href="/jquery-ui/css/jquery-ui.css" type="text/css" rel="stylesheet">
         <script src="/jquery-ui/scripts/jquery-ui.min.js" type="text/javascript" defer></script>
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
         <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
         <!-- Title -->
         <title>UofT Exchange</title>
     </head>
-
+    
     <body>
         <h1 id="title">UofT Exchange</h1>
         <nav id="navbar">
@@ -172,6 +173,12 @@
             <footer>
                 <small>Copyright &copy; 2016. All Rights Reserved.</small>
             </footer>
+
+            <form action="">
+              <input id="m" autocomplete="off" /><button>Send</button>
+              <button onclick="notifyMe()">Notify me!</button>
+            </form>
+
     </body>
 
 </html>

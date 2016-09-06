@@ -22,6 +22,7 @@ var images = [
     }
 ];
 
+var default_avatar = "../img/avatar/minion1.jpg";
 /* Run this function after the document is ready */
 $(document).ready(function() {
 
@@ -37,8 +38,58 @@ $(document).ready(function() {
         }
     });
     slider();
+    var socket = io.connect();
+
+    // socket
+    socket.connect();
+
+    socket.on('connect', function(){
+        console.log('connected');
+        socket.send('hi!'); 
+    });
+
+    socket.on('message', function(data){ 
+        console.log('message recived: ' + data);
+    });
+
+    socket.on('disconnect', function(){
+        console.log('disconected');
+    });
+    // socket
+
 
 });
+
+function notifyMe() {
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+  else if (Notification.permission === "granted") {
+        var options = {
+                body: "This is the body of the notification",
+                icon: "icon.jpg",
+                dir : "ltr"
+             };
+          var notification = new Notification("Hi there",options);
+  }
+  else if (Notification.permission !== 'denied') {
+    Notification.requestPermission(function (permission) {
+      if (!('permission' in Notification)) {
+        Notification.permission = permission;
+      }
+    
+      if (permission === "granted") {
+        var options = {
+              body: "This is the body of the notification",
+              icon: "icon.jpg",
+              dir : "ltr"
+          };
+        var notification = new Notification("Hi there",options);
+      }
+    });
+  }
+  console.log("balh")
+}
 
 /* A slider shown on the home page */
 /* Grabbed from the lab */
@@ -449,26 +500,58 @@ function getFollows() {
                     id: "container",
                     class: "logged-in-menu-item"
                 });
-                var $title = $("<h2>", {class: "sectiontitle"});
-                var $following_list = $("<ul>", {id: "following_list"});
-                $title.text("Following");
+                var $title = $("<h2>", {class: "sectiontitle", 
+                                        id: "folloringtitle"});
+                var $following_list = $("<section>", {id: "following_list"});
+                $title.text("Following Friends");
                 $container.append($title);
                 for (var i = 0; i < data[0].length; i++) {
-                    var $following_user = $("<li>", {class: "following_user"});
-                    $following_user.text(data[0][i].user2);
+                    var cur_user = data[0][i].user2;
+                    // this part should be change if user can upload their touxiang
+                    var $avatar = $("<img>", {id: "user_avatar", 
+                                            src: default_avatar,
+                                            height: "50px",
+                                            width: "50px"});
+                    //
+                    var $wrapper = $("<div>", {id: "user_wrapper"});
+                    var $name = $("<span>", {id: "username"}).text(cur_user);
+                    var $following_user = $("<div>", {class: "following_user"});
+                    var $livechat = $("<button>", {id: 'startchat'}).click(startchat(cur_user));
+                    $livechat.text("Live Chat!");
+                    $wrapper.append($avatar);
+                    $wrapper.append($name);
+                    $wrapper.append($livechat);
+                    $following_user.append($wrapper);
                     $following_list.append($following_user);
                 }
                 $container.append($following_list);
                 $container.append("<hr>");
                 var $title = $("<h2>", {
                     class: "sectiontitle",
-                    text: "Followers"}
+                    id: "follorertitle",
+                    text: "My Followers"}
                 );
                 $container.append($title);
-                var $follower_list = $("<ul>", {id: "follower_list"});
+                var $follower_list = $("<section>", {id: "follower_list"});
                 for (var i = 0; i < data[1].length; i++) {
-                    var $follower_user = $("<li>", {class: "follower_user"});
-                    $follower_user.text(data[1][i].user1);
+                    var cur_user = data[0][i].user1;
+                    // this part should be change if user can upload their touxiang
+
+                    var $avatar = $("<img>", {id: "user_avatar", 
+                                            src: default_avatar,
+                                            height: "50px",
+                                            width: "50px"});
+                    //
+                    var $wrapper = $("<div>", {id: "user_wrapper"});
+                    var $name = $("<span>", {id: "username"}).text(cur_user);
+                    var $follower_user = $("<div>", {class: "following_user"});
+                    var $livechat = $("<button>", {id: 'startchat'}).click(startchat(cur_user));
+                    $livechat.text("Live Chat!");
+                    $wrapper.append($avatar);
+                    $wrapper.append($name);
+                    $wrapper.append($livechat);
+                    $follower_user.append($wrapper);
+                    
                     $follower_list.append($follower_user);
                 }
                 $container.append($follower_list);
@@ -508,10 +591,11 @@ function getMessage() {
                     id: "container",
                     class: "logged-in-menu-item"
                 });
-                var $title = $("<h2>", {class: "sectiontitle"});
+                var $title = $("<h2>", {class: "sectiontitle", id: "mymessagetitle"});
                 $title.text("My Message");
                 $container.append($title);
                 for (var i = 0; i < data[0].length; i++) {
+                    var $wrapper = $("<div>", {class: "msgwrapper"});
                     var date = new Date(data[0][i].time);
                     var $msgwindows = $("<p>", {class: "msgwindows"});
                     var $sender = $("<h3>", {class: "sender"});
@@ -519,13 +603,12 @@ function getMessage() {
                     var $msg = $("<h4>", {class: "message"});
                     $sender.text("From: " + data[0][i].user1);
                     $time.text("Time: " + date.toLocaleString());
-                    $msg.text("Text: " + data[0][i].message);
-                    $msgwindows.append($sender);
-                    $msgwindows.append($time);
+                    $msg.text(data[0][i].message);
+                    $wrapper.append($sender);
+                    $wrapper.append($time);
+                    $msgwindows.append($wrapper);
                     $msgwindows.append($msg);
-                    $msgwindows.append("<br>");
                     $container.append($msgwindows);
-                    $container.append("<hr>");
                 }
                 $container.insertBefore($("footer"));
 
@@ -541,17 +624,17 @@ function getMessage() {
 /* Send a message */
 function sendMessage() {
     var $container = $("<section>", {id: "container", class: "logged-in-menu-item"});
-    var $title = $("<h2>", {class: "sectiontitle"});
-    $title.text("Send Message");
-    var $lable = $("<lable>", {class: "label"});
+    var $title = $("<h2>", {class: "sectiontitle", id: "sendmsgtitle"});
+    $title.text("Leave a Message");
+    var $lable = $("<lable>", {class: "label", id: "sendmsglabel"});
     var $receiver = $("<input>", {name: "receiver", id: "receiver", placeholder: "receiver"});
     var $textbox = $("<textarea>", {name: "mymessage", row: "15", cols: "79", id: "msgbox"});
     var $button = $("<button>", {type: "submit", id: "submitmsg"});
-    var $form = $("<form>", {action: "/sendmsg", method: "post"});
+    var $form = $("<form>", {action: "/sendmsg", method: "post", id: "sendmsgform"});
     $button.text("Send");
     $lable.text("Receiver: ");
+    $lable.append($receiver);
     $form.append($lable);
-    $form.append($receiver);
     $form.append($textbox);
     $form.append($button);
     $container.append($title);
@@ -1370,6 +1453,16 @@ function getFeedbacklist() {
             $container.insertBefore($("footer"));
         }
     });
+}
+
+
+function startchat(target) {
+
+
+
+
+
+    ///////////////////////////////////
 }
 
 /* If the value is null, return "" */
