@@ -76,6 +76,15 @@ app.get(url_list[1], function(req, res) {
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
+
+  socket.on('disconnect', function() {
+    socket.disconnect();
+    console.log('a user disconnected');
+  })
+
 });
 
 app.get('/signup_sheet', function(req, res) {

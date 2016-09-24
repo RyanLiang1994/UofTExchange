@@ -351,6 +351,61 @@ button#startchat {
 	font-size: 80%;
 
 }
+
+article#chatwindow {
+	background-color: grey;
+	position: absolute;
+	width: 300px;
+	height: 400px;
+	bottom: 0;
+	right: 20px;
+}
+
+ul#livechat_msg {
+	list-style-type: none;
+
+	margin: 0;
+	margin-top: 30px;
+	padding: 0; 
+}
+
+#livechat_msg li { 
+	padding: 5px 10px; 
+}
+
+#livechat_msg li:nth-child(odd) { 
+	background: #eee; 
+}
+
+img#closewindow {
+	float: right;
+}
+
+form#chat_form {
+	bottom: 0;
+	background: black;
+	position: fixed;
+	width: 300px;
+}
+
+input#input_bar {
+	border: thin solid black;
+	padding: 10px; 
+	width: 210px; 
+	margin-right: .5%;
+}
+
+button#submit_livechat {
+	width: 60px; 
+	float: right;
+	background: rgb(130, 224, 255); 
+	border: none; 
+	padding: 10px;
+	width: 60px;
+	height: 32px;
+}
+
+
 @media screen and (max-width: 1024px) {
 	div#profile {
 		margin-left: 20px;

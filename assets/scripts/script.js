@@ -22,6 +22,7 @@ var images = [
     }
 ];
 
+var socket = io.connect();
 var default_avatar = "../img/avatar/minion1.jpg";
 /* Run this function after the document is ready */
 $(document).ready(function() {
@@ -38,25 +39,23 @@ $(document).ready(function() {
         }
     });
     slider();
-    var socket = io.connect();
-
+ 
     // socket
-    socket.connect();
-
     socket.on('connect', function(){
         console.log('connected');
         socket.send('hi!'); 
     });
 
-    socket.on('message', function(data){ 
-        console.log('message recived: ' + data);
+    socket.connect();
+
+    socket.on('chat message', function(msg){
+        $('#livechat_msg').append($('<li>').text(msg));
+        console.log("ha");
     });
 
     socket.on('disconnect', function(){
         console.log('disconected');
     });
-    // socket
-
 
 });
 
@@ -516,7 +515,8 @@ function getFollows() {
                     var $wrapper = $("<div>", {id: "user_wrapper"});
                     var $name = $("<span>", {id: "username"}).text(cur_user);
                     var $following_user = $("<div>", {class: "following_user"});
-                    var $livechat = $("<button>", {id: 'startchat'}).click(startchat(cur_user));
+                    var $livechat = $("<button>", {id: 'startchat'}).click(function(){
+                        startchat(cur_user)});
                     $livechat.text("Live Chat!");
                     $wrapper.append($avatar);
                     $wrapper.append($name);
@@ -545,7 +545,8 @@ function getFollows() {
                     var $wrapper = $("<div>", {id: "user_wrapper"});
                     var $name = $("<span>", {id: "username"}).text(cur_user);
                     var $follower_user = $("<div>", {class: "following_user"});
-                    var $livechat = $("<button>", {id: 'startchat'}).click(startchat(cur_user));
+                    var $livechat = $("<button>", {id: 'startchat'}).click(function(){
+                            startchat(cur_user)});
                     $livechat.text("Live Chat!");
                     $wrapper.append($avatar);
                     $wrapper.append($name);
@@ -1457,14 +1458,55 @@ function getFeedbacklist() {
 
 
 function startchat(target) {
+    
+
+    // socket
+    
+
+    
+
+    
 
 
+    var $container = $("<article>", {id: "chatwindow"});
+    var $close = $("<img>", {id: "closewindow", 
+                            src: "../img/delete.png",
+                            width: "30px",
+                            height: "30px"}).click(function() {
+                                close_chat_window();
+                            });
+    var $msg_lst = $("<ul>", {id: "livechat_msg"});
+    var $chat_form = $("<form>", {id: "chat_form"});
+    $chat_form.attr("action", "");
+    var $input = $("<input>", {id: "input_bar"});
+    var $button = $("<button>", {id: "submit_livechat"}).text("send");
+    $chat_form.submit(function() {
+        socket.emit('chat message', $('#input_bar').val());
+        $('#input_bar').val('');
+        console.log("blah");
+        return false;
+    })
+
+    
 
 
+    $chat_form.append($input);
+    $chat_form.append($button);
+    $container.append($close);
+    $container.append($msg_lst);
+    $container.append($chat_form);
 
-    ///////////////////////////////////
+    $container.insertBefore($("footer"));
+
+
+    
 }
 
+function close_chat_window() {
+    if ($('#chatwindow').length) {
+        $('#chatwindow').remove();
+    }
+}
 /* If the value is null, return "" */
 function checkNull(value) {
     if (value === null) {
