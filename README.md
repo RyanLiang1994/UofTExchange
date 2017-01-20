@@ -1,1 +1,2 @@
-# CSC309A4-Large-App
+# UofT Exchange
+CSC309 Assignment 4
